@@ -232,6 +232,7 @@
         }
 
         let originalPropName = propName.replace(this.selectedWidget.type + '-', '')  //去掉组件名称前缀-，如果有的话！！
+        // console.log(propName, editorName, originalPropName, this.selectedWidget, this.designer.hasConfig(this.selectedWidget, originalPropName))
         return this.designer.hasConfig(this.selectedWidget, originalPropName)
       },
 
@@ -239,6 +240,7 @@
         let originalPropName = propName.replace(this.selectedWidget.type + '-', '')  //去掉组件名称前缀-，如果有的话！！
         let ownPropEditorName = `${this.selectedWidget.type}-${originalPropName}-editor`
         //console.log(ownPropEditorName, this.$options.components[ownPropEditorName])
+        console.log(this.$options.components[ownPropEditorName], originalPropName, ownPropEditorName)
         if (!!this.$options.components[ownPropEditorName]) {  //局部注册的属性编辑器组件
           return ownPropEditorName
         }
@@ -260,7 +262,6 @@
             break
           }
         }
-
         return result
       },
 
