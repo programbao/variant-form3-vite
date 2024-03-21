@@ -169,6 +169,7 @@
       },
 
       getContainerWidgetName(widget) {
+        console.log(widget, '99999999999999')
         if (widget.type === 'grid') {  //grid-item跟VueGridLayout全局注册组件重名，故特殊处理！！
           return 'vf-grid-item'
         }
@@ -177,6 +178,7 @@
       },
 
       getWidgetName(widget) {
+        console.log(widget, '2830498234')
         return widget.type + '-widget'
       },
 
