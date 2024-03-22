@@ -34,6 +34,7 @@ export default {
       'tab-pane': 'TabPane',
       'data-table': 'DataTable',
       tree: 'Tree',
+      "object-group": "ObjectGroup",
 
       input: 'Input',
       textarea: 'Textarea',

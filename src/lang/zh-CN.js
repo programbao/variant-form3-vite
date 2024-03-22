@@ -33,7 +33,8 @@ export default {
       'tab-pane': '选项卡页',
       'data-table': '数据表格',
       tree: '树形',
-
+      "object-group": "对象容器",
+      
       input: '单行输入',
       textarea: '多行输入',
       number: '计数器',
