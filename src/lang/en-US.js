@@ -35,6 +35,8 @@ export default {
       'data-table': 'DataTable',
       tree: 'Tree',
       "object-group": "ObjectGroup",
+      "vf-dialog": "Dialog",
+
 
       input: 'Input',
       textarea: 'Textarea',

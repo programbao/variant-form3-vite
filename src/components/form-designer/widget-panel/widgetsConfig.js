@@ -186,19 +186,47 @@ export const containers = [
   },
 
   {
-    type: "object-group",
-    category: "container",
-    icon: "object-group",
+    type: 'object-group',
+    category: 'container',
+    icon: 'object-group',
     widgetList: [],
     options: {
-        name: "",
-        objectName: "testObj",
-        hidden: false,
-        customClass: "",
-        onCreated: "",
-        onMounted: ""
+      name: '',
+      objectName: 'testObj',
+      hidden: false,
+      customClass: '',
+      onCreated: '',
+      onMounted: ''
     }
-},
+  },
+
+  {
+    type: 'vf-dialog',
+    category: 'container',
+    icon: 'vf-dialog',
+    widgetList: [],
+    options: {
+      name: '',
+      title: '',
+      width: '50%',
+      fullscreen: false,
+      showModal: true,
+      showClose: true,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      center: false,
+      readMode: false,
+      disabledMode: false,
+      okButtonLabel: '',
+      okButtonHidden: false,
+      cancelButtonLabel: '',
+      cancelButtonHidden: false,
+      onOkButtonClick: '',
+      onCancelButtonClick: '',
+      onDialogOpened: '',
+      onDialogBeforeClose: ''
+    }
+  }
 ]
 
 export const basicFields = [

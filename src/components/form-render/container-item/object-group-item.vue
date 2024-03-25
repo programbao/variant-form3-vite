@@ -11,7 +11,7 @@
             :is="getComponentByContainer(subWidget)"
             :widget="subWidget"
             :key="swIdx"
-            :parent-list="tab.widgetList"
+            :parent-list="widget.widgetList"
             :index-of-parent-list="swIdx"
             :parent-widget="widget"
             :parent-object-name="widget.options.objectName"

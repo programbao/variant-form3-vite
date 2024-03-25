@@ -363,5 +363,8 @@
       padding: 6px 15px 12px 15px;
     }
   }
-
+  .el-button.button-text-highlight {
+    font-weight: 700;
+    color: var(--vf-color-primary, #409EFF)
+}
 </style>

@@ -9,26 +9,59 @@
 -->
 
 <template>
-  <el-form :label-position="labelPosition" :size="size" :class="[customClass]" class="render-form"
-           :label-width="labelWidth" :validate-on-rule-change="false"
-           :model="formDataModel" ref="renderForm"
-           @submit.prevent>
+  <el-form
+    :label-position="labelPosition"
+    :size="size"
+    :class="[customClass, readModeFlag ? 'readonly-mode-form' : '']"
+    class="render-form"
+    :label-width="labelWidth"
+    :validate-on-rule-change="false"
+    :model="formDataModel"
+    ref="renderForm"
+    @submit.prevent
+  >
     <template v-for="(widget, index) in widgetList">
       <template v-if="'container' === widget.category">
-        <component :is="getContainerWidgetName(widget)" :widget="widget" :key="widget.id" :parent-list="widgetList"
-                        :index-of-parent-list="index" :parent-widget="null">
+        <component
+          :is="getContainerWidgetName(widget)"
+          :widget="widget"
+          :key="widget.id"
+          :parent-list="widgetList"
+          :index-of-parent-list="index"
+          :parent-widget="null"
+        >
           <!-- 递归传递插槽！！！ -->
-          <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
-            <slot :name="slot" v-bind="scope"/>
+          <template
+            v-for="slot in Object.keys($slots)"
+            v-slot:[slot]="scope"
+          >
+            <slot
+              :name="slot"
+              v-bind="scope"
+            />
           </template>
         </component>
       </template>
       <template v-else>
-        <component :is="getWidgetName(widget)" :field="widget" :form-model="formDataModel" :designer="null" :key="widget.id" :parent-list="widgetList"
-                      :index-of-parent-list="index" :parent-widget="null">
+        <component
+          :is="getWidgetName(widget)"
+          :field="widget"
+          :form-model="formDataModel"
+          :designer="null"
+          :key="widget.id"
+          :parent-list="widgetList"
+          :index-of-parent-list="index"
+          :parent-widget="null"
+        >
           <!-- 递归传递插槽！！！ -->
-          <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
-            <slot :name="slot" v-bind="scope"/>
+          <template
+            v-for="slot in Object.keys($slots)"
+            v-slot:[slot]="scope"
+          >
+            <slot
+              :name="slot"
+              v-bind="scope"
+            />
           </template>
         </component>
       </template>
@@ -37,688 +70,852 @@
 </template>
 
 <script>
-  //import ElForm from 'element-ui/packages/form/src/form.vue'  /* 用于源码调试Element UI */
-  import emitter from '@/utils/emitter'
-  import './container-item/index'
-  import FieldComponents from '@/components/form-designer/form-widget/field-widget/index'
-  import {
-    generateId, deepClone, insertCustomCssToHead, insertGlobalFunctionsToHtml, getAllContainerWidgets,
-    getAllFieldWidgets, traverseFieldWidgets, buildDefaultFormJson
-  } from "@/utils/util"
-  import i18n, { changeLocale } from "@/utils/i18n"
+//import ElForm from 'element-ui/packages/form/src/form.vue'  /* 用于源码调试Element UI */
+import emitter from '@/utils/emitter'
+import './container-item/index'
+// import DynamicDialog from './dynamic-widget/dynamic-dialog.vue'
+import FieldComponents from '@/components/form-designer/form-widget/field-widget/index'
+import { createApp ,render, nextTick } from 'vue'
+import {
+  generateId,
+  deepClone,
+  insertCustomCssToHead,
+  insertGlobalFunctionsToHtml,
+  getAllContainerWidgets,
+  getAllFieldWidgets,
+  traverseFieldWidgets,
+  buildDefaultFormJson,
+  traverseFieldWidgetsOfContainer,
+  getFieldWidgetByName,
+  getFieldWidgetById,
+  getContainerWidgetByName,
+  setObjectValue,
+  getObjectValue,
+  hasPropertyOfObject,
+  deleteCustomStyleAndScriptNode,
+  cloneFormConfigWithoutEventHandler
+} from '@/utils/util'
+import i18n, { changeLocale } from '@/utils/i18n'
+import ElementPlus from 'element-plus'
 
-  export default {
-    name: "VFormRender",
-    componentName: 'VFormRender',
-    mixins: [emitter, i18n],
-    components: {
-      //ElForm,
+export default {
+  name: 'VFormRender',
+  componentName: 'VFormRender',
+  mixins: [emitter, i18n],
+  components: {
+    //ElForm,
 
-      ...FieldComponents,
+    ...FieldComponents
+  },
+  props: {
+    formJson: {
+      type: Object,
+      default: () => buildDefaultFormJson()
     },
-    props: {
-      formJson: { //prop传入的表单JSON配置
-        type: Object,
-        default: () => buildDefaultFormJson()
-      },
-      formData: { //prop传入的表单数据
-        type: Object,
-        default: () => ({})
-      },
-      optionData: { //prop传入的选项数据
-        type: Object,
-        default: () => ({})
-      },
-      previewState: { //是否表单预览状态
-        type: Boolean,
-        default: false
-      },
-      globalDsv: { // 全局数据源变量
-        type: Object,
-        default: () => ({})
-      },
+    formData: {
+      type: Object,
+      default: () => ({})
     },
-    provide() {
-      return {
-        refList: this.widgetRefList,
-        sfRefList: this.subFormRefList,  //收集SubForm引用
-        getFormConfig: () => this.formJsonObj.formConfig,  /* 解决provide传递formConfig属性的响应式更新问题！！ */
-        getGlobalDsv: () => this.globalDsv, // 全局数据源变量
-        globalOptionData: this.optionData,
-        getOptionData: () => this.optionData,  /* 该方法用于在异步更新option-data之后重新获取到最新值 */
-        globalModel: {
-          formModel: this.formDataModel,
-        },
-        previewState: this.previewState,
-      }
+    optionData: {
+      type: Object,
+      default: () => ({})
     },
-    data() {
-      return {
-        formJsonObj: this.formJson,
-
-        formDataModel: {
-          //
-        },
-
-        widgetRefList: {},
-        subFormRefList: {},
-        formId: null,  //表单唯一Id，用于区分页面上的多个v-form-render组件！！
-
-        externalComponents:  {},  //外部组件实例集合
-      }
+    previewState: {
+      type: Boolean,
+      default: !1
     },
-    computed: {
-      formConfig() {
-        return this.formJsonObj.formConfig
-      },
-
-      widgetList() {
-        return this.formJsonObj.widgetList
-      },
-
-      labelPosition() {
-        if (!!this.formConfig && !!this.formConfig.labelPosition) {
-          return this.formConfig.labelPosition
-        }
-
-        return 'left'
-      },
-
-      labelWidth() {
-        if (!!this.formConfig && !!this.formConfig.labelWidth) {
-          return this.formConfig.labelWidth + 'px'
-        }
-
-        return '80px'
-      },
-
-      size() {
-        if (!!this.formConfig && !!this.formConfig.size) {
-          return this.formConfig.size
-        }
-
-        return 'default'
-      },
-
-      customClass() {
-        return !!this.formConfig && !!this.formConfig.customClass ? this.formConfig.customClass : ''
-      },
-
+    disabledMode: {
+      type: Boolean,
+      default: !1
     },
-    watch: {
-      //
+    renderConfig: {
+      type: Object,
+      default: () => ({
+        languageName: 'zh-CN'
+      })
     },
-    created() {
-      this.buildFormModel(!this.formJsonObj ? null : this.formJsonObj.widgetList)
+    globalDsv: {
+      type: Object,
+      default: () => ({})
+    },
+    parentForm: {
+      type: Object,
+      default: null
+    },
+    dynamicCreation: {
+      type: Boolean,
+      default: !1
+    }
+  },
+  provide() {
+    return {
+      refList: this.widgetRefList,
+      sfRefList: this.subFormRefList,
+      getFormConfig: () => this.formJsonObj.formConfig,
+      getGlobalDsv: () => this.globalDsv,
+      globalOptionData: this.optionData,
+      getOptionData: () => this.optionData,
+      globalModel: {
+        formModel: this.formDataModel
+      },
+      previewState: this.previewState,
+      getReadMode: () => this.readModeFlag,
+      getSubFormFieldFlag: () => !1,
+      getSubFormName: () => '',
+      getObjectFieldFlag: () => !1,
+      getObjectName: () => '',
+      getDSResultCache: () => this.dsResultCache
+    }
+  },
+  data() {
+    return {
+      formJsonObj: this.formJson,
+      formDataModel: {},
+      widgetRefList: {},
+      subFormRefList: {},
+      formId: null,
+      externalComponents: {},
+      readModeFlag: !1,
+      dialogOrDrawerRef: null,
+      childFormRef: null,
+      dsResultCache: {}
+    }
+  },
+  computed: {
+    formConfig() {
+      return this.formJsonObj.formConfig
+    },
+    widgetList() {
+      return this.formJsonObj.widgetList
+    },
+    labelPosition() {
+      return !!this.formConfig && !!this.formConfig.labelPosition
+        ? this.formConfig.labelPosition
+        : 'left'
+    },
+    labelWidth() {
+      return !!this.formConfig && !!this.formConfig.labelWidth
+        ? this.formConfig.labelWidth + 'px'
+        : '80px'
+    },
+    size() {
+      return !!this.formConfig && !!this.formConfig.size
+        ? this.formConfig.size
+        : 'default'
+    },
+    customClass() {
+      return !!this.formConfig && !!this.formConfig.customClass
+        ? this.formConfig.customClass
+        : ''
+    }
+  },
+  watch: {},
+  created() {
+    this.buildFormModel(this.formJsonObj ? this.formJsonObj.widgetList : null),
       this.initFormObject()
-    },
-    mounted() {
-      this.initLocale()
-      this.handleOnMounted()
-    },
-    methods: {
-      initFormObject(insertHtmlCodeFlag = true) {
-        this.formId = 'vfRender' + generateId()
-        if (!!insertHtmlCodeFlag) {
-          this.insertCustomStyleAndScriptNode()
-        }
-        this.addFieldChangeEventHandler()
-        this.addFieldValidateEventHandler()
-        this.registerFormToRefList()
-        this.handleOnCreated()
-      },
-
-      getContainerWidgetName(widget) {
-        console.log(widget, '99999999999999')
-        if (widget.type === 'grid') {  //grid-item跟VueGridLayout全局注册组件重名，故特殊处理！！
-          return 'vf-grid-item'
-        }
-
-        return widget.type + '-item'
-      },
-
-      getWidgetName(widget) {
-        console.log(widget, '2830498234')
-        return widget.type + '-widget'
-      },
-
-      initLocale() {
-        let curLocale = localStorage.getItem('v_form_locale') || 'zh-CN'
-        this.changeLanguage(curLocale)
-      },
-
-      insertCustomStyleAndScriptNode() {
-        if (!!this.formConfig && !!this.formConfig.cssCode) {
-          insertCustomCssToHead(this.formConfig.cssCode,
-              !!this.previewState ? '' : this.formId)
-        }
-
-        if (!!this.formConfig && !!this.formConfig.functions) {
-          insertGlobalFunctionsToHtml(this.formConfig.functions,
-              !!this.previewState ? '' : this.formId)
-        }
-      },
-
-      buildFormModel(widgetList) {
-        if (!!widgetList && (widgetList.length > 0)) {
-          widgetList.forEach((wItem) => {
-            this.buildDataFromWidget(wItem)
+  },
+  mounted() {
+    this.initLocale(), this.initDataSetRequest(), this.handleOnMounted()
+  },
+  beforeUnmount() {
+    deleteCustomStyleAndScriptNode(this.previewState, this.formId)
+  },
+  methods: {
+    initFormObject(e = !0) {
+      ;(this.formId = 'vfRender' + generateId()),
+        !!e && !this.dynamicCreation && this.insertCustomStyleAndScriptNode(),
+        this.addFieldChangeEventHandler(),
+        this.addFieldValidateEventHandler(),
+        this.registerFormToRefList(),
+        this.handleOnCreated(),
+        this.disabledMode &&
+          this.$nextTick(() => {
+            this.disableForm()
           })
-        }
-      },
-
-      buildDataFromWidget(wItem) {
-        if (wItem.category === 'container') {
-          if (wItem.type === 'grid') {
-            if (!!wItem.cols && (wItem.cols.length > 0)) {
-              wItem.cols.forEach((childItem) => {
-                this.buildDataFromWidget(childItem)
+    },
+    getContainerWidgetName(e) {
+      return e.type === 'grid' ? 'vf-grid-item' : e.type + '-item'
+    },
+    getWidgetName(e) {
+      return e.type + '-widget'
+    },
+    initLocale() {
+      let e = localStorage.getItem('v_form_locale') || 'zh-CN'
+      this.changeLanguage(e)
+    },
+    insertCustomStyleAndScriptNode() {
+      !!this.formConfig &&
+        !!this.formConfig.cssCode &&
+        insertCustomCssToHead(
+          this.formConfig.cssCode,
+          this.previewState ? '' : this.formId
+        ),
+        !!this.formConfig &&
+          !!this.formConfig.functions &&
+          insertGlobalFunctionsToHtml(
+            this.formConfig.functions,
+            this.previewState ? '' : this.formId
+          )
+    },
+    buildFormModel(e) {
+      !!e &&
+        e.length > 0 &&
+        e.forEach((o) => {
+          this.buildDataFromWidget(o)
+        })
+    },
+    getFieldKeyName(e) {
+      let o = e.options.name
+      return (e.options.keyNameEnabled && e.options.keyName) || o
+    },
+    buildDataFromWidget(e) {
+      if (e.category === 'container') {
+        if (!(e.type === 'vf-dialog' || e.type === 'vf-drawer'))
+          if (e.type === 'grid')
+            !!e.cols &&
+              e.cols.length > 0 &&
+              e.cols.forEach((o) => {
+                this.buildDataFromWidget(o)
               })
-            }
-          } else if (wItem.type === 'table') {
-            if (!!wItem.rows && (wItem.rows.length > 0)) {
-              wItem.rows.forEach((rowItem) => {
-                if (!!rowItem.cols && (rowItem.cols.length > 0)) {
-                  rowItem.cols.forEach((colItem) => {
-                    this.buildDataFromWidget(colItem)
+          else if (e.type === 'table')
+            !!e.rows &&
+              e.rows.length > 0 &&
+              e.rows.forEach((o) => {
+                !!o.cols &&
+                  o.cols.length > 0 &&
+                  o.cols.forEach((t) => {
+                    this.buildDataFromWidget(t)
                   })
-                }
               })
-            }
-          } else if (wItem.type === 'tab') {
-            if (!!wItem.tabs && (wItem.tabs.length > 0)) {
-              wItem.tabs.forEach((tabItem) => {
-                if (!!tabItem.widgetList && (tabItem.widgetList.length > 0)) {
-                  tabItem.widgetList.forEach((childItem) => {
-                    this.buildDataFromWidget(childItem)
+          else if (e.type === 'tab')
+            !!e.tabs &&
+              e.tabs.length > 0 &&
+              e.tabs.forEach((o) => {
+                !!o.widgetList &&
+                  o.widgetList.length > 0 &&
+                  o.widgetList.forEach((t) => {
+                    this.buildDataFromWidget(t)
                   })
-                }
               })
+          else if (e.type === 'sub-form') {
+            let o = e.options.name
+            if (this.formData.hasOwnProperty(o)) {
+              let t = this.formData[o]
+              this.formDataModel[o] = deepClone(t)
+            } else {
+              let t = {}
+              e.options.showBlankRow
+                ? (e.widgetList.forEach((r) => {
+                    if (r.formItemFlag) {
+                      let n = this.getFieldKeyName(r)
+                      t[n] = r.options.defaultValue
+                    }
+                  }),
+                  (this.formDataModel[o] = [t]))
+                : (this.formDataModel[o] = [])
             }
-          } else if (wItem.type === 'sub-form') {
-            let subFormName = wItem.options.name
-            if (!this.formData.hasOwnProperty(subFormName)) {
-              let subFormDataRow = {}
-              if (wItem.options.showBlankRow) {
-                wItem.widgetList.forEach(subFormItem => {
-                  if (!!subFormItem.formItemFlag) {
-                    subFormDataRow[subFormItem.options.name] = subFormItem.options.defaultValue
-                  }
-                })
-
-                this.formDataModel[subFormName] = [subFormDataRow]
-              } else {
-                this.formDataModel[subFormName] = []
+          } else if (e.type === 'grid-sub-form') {
+            let o = e.options.name
+            if (this.formData.hasOwnProperty(o)) {
+              let t = this.formData[o]
+              this.formDataModel[o] = deepClone(t)
+            } else {
+              let t = []
+              traverseFieldWidgetsOfContainer(e, (l) => {
+                t.push(l)
+              })
+              let n = {}
+              e.options.showBlankRow
+                ? (t.forEach((l) => {
+                    let i = this.getFieldKeyName(l)
+                    n[i] = l.options.defaultValue
+                  }),
+                  (this.formDataModel[o] = [n]))
+                : (this.formDataModel[o] = [])
+            }
+          } else if (e.type === 'grid-col' || e.type === 'table-cell')
+            !!e.widgetList &&
+              e.widgetList.length > 0 &&
+              e.widgetList.forEach((o) => {
+                this.buildDataFromWidget(o)
+              })
+          else if (e.type === 'object-group') {
+            let o = []
+            traverseFieldWidgetsOfContainer(e, (r) => {
+              r.formItemFlag && o.push(r.options.name)
+            })
+            let t = e.options.objectName
+            o.forEach((r) => {
+              let n = getFieldWidgetByName(e.widgetList, r, !1),
+                l = t + '.' + this.getFieldKeyName(n)
+              if (!hasPropertyOfObject(this.formData, l))
+                setObjectValue(this.formDataModel, l, n.options.defaultValue)
+              else {
+                let i = getObjectValue(this.formData, l)
+                setObjectValue(this.formDataModel, l, i)
               }
-            } else {
-              let initialValue = this.formData[subFormName]
-              this.formDataModel[subFormName] = deepClone(initialValue)
-            }
-          } else if ((wItem.type === 'grid-col') || (wItem.type === 'table-cell')) {
-            if (!!wItem.widgetList && (wItem.widgetList.length > 0)) {
-              wItem.widgetList.forEach((childItem) => {
-                this.buildDataFromWidget(childItem)
+            })
+          } else
+            !!e.widgetList &&
+              e.widgetList.length > 0 &&
+              e.widgetList.forEach((o) => {
+                this.buildDataFromWidget(o)
               })
-            }
-          } else {  //自定义容器组件
-            if (!!wItem.widgetList && (wItem.widgetList.length > 0)) {
-              wItem.widgetList.forEach((childItem) => {
-                this.buildDataFromWidget(childItem)
-              })
-            }
-          }
-        } else if (!!wItem.formItemFlag) {
-          if (!this.formData.hasOwnProperty(wItem.options.name)) {
-            this.formDataModel[wItem.options.name] = wItem.options.defaultValue
-          } else {
-            let initialValue = this.formData[wItem.options.name]
-            this.formDataModel[wItem.options.name] = deepClone(initialValue)
-          }
+      } else if (e.formItemFlag) {
+        let o = this.getFieldKeyName(e)
+        if (!this.formData.hasOwnProperty(o))
+          this.formDataModel[o] = e.options.defaultValue
+        else {
+          let t = this.formData[o]
+          this.formDataModel[o] = deepClone(t)
         }
-      },
-
-      addFieldChangeEventHandler() {
-        this.off$('fieldChange')  //移除原有事件监听
-        this.on$('fieldChange', (fieldName, newValue, oldValue, subFormName, subFormRowIndex) => {
-          this.handleFieldDataChange(fieldName, newValue, oldValue, subFormName, subFormRowIndex)
-          this.$emit('formChange', fieldName, newValue, oldValue, this.formDataModel, subFormName, subFormRowIndex)
+      }
+    },
+    addFieldChangeEventHandler() {
+      this.off$('fieldChange'),
+        this.on$('fieldChange', ([e, o, t, r, n]) => {
+          this.handleFieldDataChange(e, o, t, r, n),
+            this.$emit('formChange', e, o, t, this.formDataModel, r, n)
         })
-      },
-
-      addFieldValidateEventHandler() {
-        this.off$('fieldValidation')  //移除原有事件监听
-        this.on$('fieldValidation', (fieldName) => {
-          this.$refs.renderForm.validateField(fieldName)
+    },
+    addFieldValidateEventHandler() {
+      this.off$('fieldValidation'),
+        this.on$('fieldValidation', (e) => {
+          this.$refs.renderForm && this.$refs.renderForm.validateField(e)
         })
-      },
-
-      registerFormToRefList() {
-        this.widgetRefList['v_form_ref'] = this
-      },
-
-      handleFieldDataChange(fieldName, newValue, oldValue, subFormName, subFormRowIndex) {
-        if (!!this.formConfig && !!this.formConfig.onFormDataChange) {
-          let customFunc = new Function('fieldName', 'newValue', 'oldValue', 'formModel', 'subFormName', 'subFormRowIndex',
-              this.formConfig.onFormDataChange)
-          customFunc.call(this, fieldName, newValue, oldValue, this.formDataModel, subFormName, subFormRowIndex)
-        }
-      },
-
-      handleOnCreated() {
-        if (!!this.formConfig && !!this.formConfig.onFormCreated) {
-          let customFunc = new Function(this.formConfig.onFormCreated)
-          customFunc.call(this)
-        }
-      },
-
-      handleOnMounted() {
-        if (!!this.formConfig && !!this.formConfig.onFormMounted) {
-          let customFunc = new Function(this.formConfig.onFormMounted)
-          customFunc.call(this)
-        }
-      },
-
-      findWidgetAndSetDisabled(widgetName, disabledFlag) {
-        let foundW = this.getWidgetRef(widgetName)
-        if (!!foundW) {
-          foundW.setDisabled(disabledFlag)
-        } else { //没找到，可能是子表单中的组件
-          this.findWidgetOfSubFormAndSetDisabled(widgetName, disabledFlag)
-        }
-      },
-
-      findWidgetOfSubFormAndSetDisabled(widgetName, disabledFlag) {
-        this.findWidgetNameInSubForm(widgetName).forEach(wn => {
-          let sw = this.getWidgetRef(wn)
-          if (!!sw) {
-            sw.setDisabled(disabledFlag)
-          }
+    },
+    registerFormToRefList() {
+      this.widgetRefList.v_form_ref = this
+    },
+    handleFieldDataChange(e, o, t, r, n) {
+      !!this.formConfig &&
+        !!this.formConfig.onFormDataChange &&
+        new Function(
+          'fieldName',
+          'newValue',
+          'oldValue',
+          'formModel',
+          'subFormName',
+          'subFormRowIndex',
+          this.formConfig.onFormDataChange
+        ).call(this, e, o, t, this.formDataModel, r, n)
+    },
+    handleOnCreated() {
+      !!this.formConfig &&
+        !!this.formConfig.onFormCreated &&
+        new Function(this.formConfig.onFormCreated).call(this)
+    },
+    handleOnMounted() {
+      !!this.formConfig &&
+        !!this.formConfig.onFormMounted &&
+        new Function(this.formConfig.onFormMounted).call(this)
+    },
+    findWidgetAndSetDisabled(e, o) {
+      let t = this.getWidgetRef(e)
+      !!t && !!t.setDisabled
+        ? t.setDisabled(o)
+        : this.findWidgetOfSubFormAndSetDisabled(e, o)
+    },
+    findWidgetOfSubFormAndSetDisabled(e, o) {
+      const t = getFieldWidgetByName(this.formJsonObj.widgetList, e, !0)
+      !!t &&
+        !!t.options &&
+        t.options.hasOwnProperty('disabled') &&
+        (t.options.disabled = o),
+        this.findWidgetNameInSubForm(e).forEach((r) => {
+          let n = this.getWidgetRef(r)
+          !!n && !!n.setDisabled && n.setDisabled(o)
         })
-      },
-
-      findWidgetAndSetHidden(widgetName, hiddenFlag) {
-        let foundW = this.getWidgetRef(widgetName)
-        if (!!foundW) {
-          foundW.setHidden(hiddenFlag)
-        } else { //没找到，可能是子表单中的组件
-          this.findWidgetOfSubFormAndSetHidden(widgetName, hiddenFlag)
-        }
-      },
-
-      findWidgetOfSubFormAndSetHidden(widgetName, hiddenFlag) {
-        this.findWidgetNameInSubForm(widgetName).forEach(wn => {
-          let sw = this.getWidgetRef(wn)
-          if (!!sw) {
-            sw.setHidden(hiddenFlag)
-          }
+    },
+    findWidgetAndSetHidden(e, o) {
+      let t = this.getWidgetRef(e)
+      !!t && !!t.setHidden
+        ? t.setHidden(o)
+        : this.findWidgetOfSubFormAndSetHidden(e, o)
+    },
+    findWidgetOfSubFormAndSetHidden(e, o) {
+      const t = getFieldWidgetByName(this.formJsonObj.widgetList, e, !0)
+      !!t &&
+        !!t.options &&
+        t.options.hasOwnProperty('hidden') &&
+        (t.options.hidden = o),
+        this.findWidgetNameInSubForm(e).forEach((r) => {
+          let n = this.getWidgetRef(r)
+          !!n && !!n.setHidden && n.setHidden(o)
         })
-      },
-
-      findWidgetNameInSubForm(widgetName) {
-        let result = []
-        let subFormName = null
-        let handlerFn = (field, parent) => {
-          if (!!field.options && (field.options.name === widgetName)) {
-            subFormName = parent.options.name
+    },
+    findWidgetNameInSubForm(e) {
+      let o = [],
+        t = null
+      if (
+        (Object.keys(this.subFormRefList).forEach((r) => {
+          const n = (i) => {
+              i.options.name === e && (t = r)
+            },
+            l = this.subFormRefList[r]
+          traverseFieldWidgetsOfContainer(l.widget, n)
+        }),
+        t)
+      ) {
+        let r = this.getWidgetRef(t)
+        if (r) {
+          let n = r.getRowIdData()
+          !!n &&
+            n.length > 0 &&
+            n.forEach((l) => {
+              o.push(e + '@row' + l)
+            })
+        }
+      }
+      return o
+    },
+    findFieldWidgetById(e, o) {
+      return getFieldWidgetById(this.formJsonObj.widgetList, e, o)
+    },
+    initDataSetRequest() {
+      let e = new Set()
+      this.getFieldWidgets().forEach((o) => {
+        !!o.field.options.dsEnabled &&
+          !!o.field.options.dsName &&
+          !!o.field.options.dataSetName &&
+          e.add(o.field.options.dsName)
+      }),
+        e.size > 0 &&
+          e.forEach(async (o) => {
+            let t = getDSByName(this.formConfig, o)
+            if (t) {
+              let r = new Object({})
+              overwriteObj(r, this.globalDsv || {})
+              let n = null
+              try {
+                ;(n = await runDataSourceRequest(
+                  t,
+                  r,
+                  this,
+                  !1,
+                  this.$message
+                )),
+                  (this.dsResultCache[o] = n),
+                  this.broadcast('FieldWidget', 'loadOptionItemsFromDataSet', o)
+              } catch (l) {
+                this.$message.error(l.message)
+              }
+            }
+          })
+    },
+    changeLanguage(e) {
+      changeLocale(e)
+    },
+    getLanguageName() {
+      return localStorage.getItem('v_form_locale') || 'zh-CN'
+    },
+    getNativeForm() {
+      return this.$refs.renderForm
+    },
+    getFormRef() {
+      return this
+    },
+    getWidgetRef(e, o = !1) {
+      let t = this.widgetRefList[e]
+      return (
+        !t &&
+          !!o &&
+          this.$message.error(this.i18nt('render.hint.refNotFound') + e),
+        t
+      )
+    },
+    clearFormDataModel() {
+      for (let e in this.formDataModel) delete this.formDataModel[e]
+    },
+    getFormJson() {
+      return this.formJsonObj
+    },
+    setFormJson(e) {
+      if (e)
+        if (typeof e == 'string' || e.constructor === Object) {
+          let o = null
+          if (
+            (typeof e == 'string' ? (o = JSON.parse(e)) : (o = e),
+            !o.formConfig || !o.widgetList)
+          ) {
+            this.$message.error('Invalid format of form json.')
+            return
           }
-        }
-        traverseFieldWidgets(this.widgetList, handlerFn)
-
-        if (!!subFormName) {
-          let subFormRef = this.getWidgetRef(subFormName)
-          if (!!subFormRef) {
-            let rowIds = subFormRef.getRowIdData()
-            if (!!rowIds && (rowIds.length > 0)) {
-              rowIds.forEach(rid => {
-                result.push( widgetName + '@row' + rid)
-              })
-            }
-          }
-        }
-
-        return result
-      },
-
-      //--------------------- 以下为组件支持外部调用的API方法 begin ------------------//
-      /* 提示：用户可自行扩充这些方法！！！ */
-
-      changeLanguage(langName) {
-        changeLocale(langName)
-      },
-
-      getNativeForm() { //获取原生form引用
-        return this.$refs['renderForm']
-      },
-
-      getFormRef() {
-        return this
-      },
-
-      getWidgetRef(widgetName, showError = false) {
-        let foundRef = this.widgetRefList[widgetName]
-        if (!foundRef && !!showError) {
-          this.$message.error(this.i18nt('render.hint.refNotFound') + widgetName)
-        }
-        return foundRef
-      },
-
-      clearFormDataModel() {
-        for (let pkey in this.formDataModel) {
-          delete this.formDataModel[pkey]
-        }
-      },
-
-      /**
-       * 动态加载表单JSON
-       * @param newFormJson
-       */
-      setFormJson(newFormJson) {
-        if (!!newFormJson) {
-          if ((typeof newFormJson === 'string') || (newFormJson.constructor === Object)) {
-            let newFormJsonObj = null
-            if (typeof newFormJson === 'string') {
-              newFormJsonObj = JSON.parse(newFormJson)
-            } else {
-              newFormJsonObj = newFormJson
-            }
-
-            if (!newFormJsonObj.formConfig || !newFormJsonObj.widgetList) {
-              this.$message.error('Invalid format of form json.')
-              return
-            }
-
-            /* formDataModel必须在widgetList赋值完成初始化，因为widgetList赋值意味着子组件开始创建！！！ */
-            //this.formDataModel = {}  //清空表单数据对象（有bug，会导致表单校验失败！！）
-            this.clearFormDataModel()  //上行代码有问题，会导致表单校验失败，故保留原对象引用只清空对象属性！！
-            this.buildFormModel(newFormJsonObj.widgetList)
-
-            this.formJsonObj['formConfig'] = newFormJsonObj.formConfig
-            this.formJsonObj['widgetList'] = newFormJsonObj.widgetList
-
-            this.insertCustomStyleAndScriptNode()  /* 必须先插入表单全局函数，否则VForm内部引用全局函数会报错！！！ */
+          this.clearFormDataModel(),
+            this.buildFormModel(o.widgetList),
+            (this.formJsonObj.formConfig = o.formConfig),
+            (this.formJsonObj.widgetList = o.widgetList),
+            this.insertCustomStyleAndScriptNode(),
             this.$nextTick(() => {
-              this.initFormObject(false)
-              this.handleOnMounted()
+              this.initFormObject(!1),
+                this.initDataSetRequest(),
+                this.handleOnMounted()
             })
-          } else {
-            this.$message.error('Set form json failed.')
-          }
-        }
-      },
-
-      /**
-       * 重新加载选项数据
-       * @param widgetNames 指定重新加载的组件名称或组件名数组，不传则重新加载所有选项字段
-       */
-      reloadOptionData(widgetNames) {
-        let eventParams = []
-        if (!!widgetNames && (typeof widgetNames === 'string')) {
-          eventParams = [widgetNames]
-        } else if (!!widgetNames && Array.isArray(widgetNames)) {
-          eventParams = [...widgetNames]
-        }
-        this.broadcast('FieldWidget', 'reloadOptionItems', eventParams)
-      },
-
-      getFormData(needValidation = true) {
-        if (!needValidation) {
-          return this.formDataModel
-        }
-
-        let callback = function nullFunc() {}
-        let promise = new window.Promise(function (resolve, reject) {
-          callback = function(formData, error) {
-            !error ? resolve(formData) : reject(error);
-          };
-        });
-
-        this.$refs['renderForm'].validate((valid) => {
-          if (valid) {
-            callback(this.formDataModel)
-          } else {
-            callback(this.formDataModel, this.i18nt('render.hint.validationFailed'))
-          }
-        })
-
-        return promise
-      },
-
-      setFormData(formData) { //设置表单数据
-        Object.keys(this.formDataModel).forEach(propName => {
-          if (!!formData && formData.hasOwnProperty(propName)) {
-            this.formDataModel[propName] = deepClone( formData[propName] )
-          }
-        })
-
-        // 通知SubForm组件：表单数据更新事件！！
-        this.broadcast('ContainerItem', 'setFormData', this.formDataModel)
-        // 通知FieldWidget组件：表单数据更新事件！！
-        this.broadcast('FieldWidget', 'setFormData', this.formDataModel)
-      },
-
-      getFieldValue(fieldName) { //单个字段获取值
-        let fieldRef = this.getWidgetRef(fieldName)
-        if (!!fieldRef && !!fieldRef.getValue) {
-          return fieldRef.getValue()
-        }
-
-        if (!fieldRef) { //如果是子表单字段
-          let result = []
-          this.findWidgetNameInSubForm(fieldName).forEach(wn => {
-            let sw = this.getWidgetRef(wn)
-            if (!!sw && !!sw.getValue) {
-              result.push( sw.getValue() )
-            }
-          })
-
-          return result
-        }
-      },
-
-      setFieldValue(fieldName, fieldValue) { //单个更新字段值
-        let fieldRef = this.getWidgetRef(fieldName)
-        if (!!fieldRef && !!fieldRef.setValue) {
-          fieldRef.setValue(fieldValue)
-        }
-
-        if (!fieldRef) { //如果是子表单字段
-          this.findWidgetNameInSubForm(fieldName).forEach(wn => {
-            let sw = this.getWidgetRef(wn)
-            if (!!sw && !!sw.setValue) {
-              sw.setValue(fieldValue)
-            }
-          })
-        }
-      },
-
-      getSubFormValues(subFormName, needValidation = true) {
-        let foundSFRef = this.subFormRefList[subFormName]
-        // if (!foundSFRef) {
-        //   return this.formDataModel[subFormName]
-        // }
-        return foundSFRef.getSubFormValues(needValidation)
-      },
-
-      disableForm() {
-        let wNameList = Object.keys(this.widgetRefList)
-        wNameList.forEach(wName => {
-          let foundW = this.getWidgetRef(wName)
-          if (!!foundW) {
-            if (!!foundW.widget && (foundW.widget.type === 'sub-form')) {
-              foundW.disableSubForm()
-            } else {
-              //!!foundW.setDisabled && foundW.setDisabled(true)
-              if (!!foundW.setDisabled) {
-                foundW.setDisabled(true)
-              }
-            }
-          }
-        })
-      },
-
-      enableForm() {
-        let wNameList = Object.keys(this.widgetRefList)
-        wNameList.forEach(wName => {
-          let foundW = this.getWidgetRef(wName)
-          if (!!foundW) {
-            if (!!foundW.widget && (foundW.widget.type === 'sub-form')) {
-              foundW.enableSubForm()
-            } else {
-              //!!foundW.setDisabled && foundW.setDisabled(false)
-              if (!!foundW.setDisabled) {
-                foundW.setDisabled(false)
-              }
-            }
-          }
-        })
-      },
-
-      resetForm() {  //重置表单
-        let subFormNames = Object.keys(this.subFormRefList)
-        subFormNames.forEach(sfName => {
-          if (!!this.subFormRefList[sfName].resetSubForm) {
-            this.subFormRefList[sfName].resetSubForm()
-          }
-        })
-
-        let wNameList = Object.keys(this.widgetRefList)
-        wNameList.forEach(wName => {
-          let foundW = this.getWidgetRef(wName)
-          if (!!foundW && !foundW.subFormItemFlag && !!foundW.resetField) { // 跳过子表单字段！！
-            foundW.resetField()
-          }
-        })
-
-        this.$nextTick(() => {
-          this.clearValidate()  /* 清除resetField方法触发的校验错误提示 */
-        })
-      },
-
-      clearValidate(props) {
-        this.$refs.renderForm.clearValidate(props)
-      },
-
-      /**
-       * 校验表单
-       * @param callback 回调函数
-       */
-      validateForm(callback) {
-        this.$refs['renderForm'].validate((valid) => {
-          callback(valid)
-        })
-      },
-
-      validateFields() {
-        //
-      },
-
-      disableWidgets(widgetNames) {
-        if (!!widgetNames) {
-          if (typeof widgetNames === 'string') {
-            this.findWidgetAndSetDisabled(widgetNames, true)
-          } else if (Array.isArray(widgetNames)) {
-            widgetNames.forEach(wn => {
-              this.findWidgetAndSetDisabled(wn, true)
-            })
-          }
-        }
-      },
-
-      enableWidgets(widgetNames) {
-        if (!!widgetNames) {
-          if (typeof widgetNames === 'string') {
-            this.findWidgetAndSetDisabled(widgetNames, false)
-          } else if (Array.isArray(widgetNames)) {
-            widgetNames.forEach(wn => {
-              this.findWidgetAndSetDisabled(wn, false)
-            })
-          }
-        }
-      },
-
-      hideWidgets(widgetNames) {
-        if (!!widgetNames) {
-          if (typeof widgetNames === 'string') {
-            this.findWidgetAndSetHidden(widgetNames, true)
-          } else if (Array.isArray(widgetNames)) {
-            widgetNames.forEach(wn => {
-              this.findWidgetAndSetHidden(wn, true)
-            })
-          }
-        }
-      },
-
-      showWidgets(widgetNames) {
-        if (!!widgetNames) {
-          if (typeof widgetNames === 'string') {
-            this.findWidgetAndSetHidden(widgetNames, false)
-          } else if (Array.isArray(widgetNames)) {
-            widgetNames.forEach(wn => {
-              this.findWidgetAndSetHidden(wn, false)
-            })
-          }
-        }
-      },
-
-      /**
-       * 获取所有字段组件
-       * @returns {*[]}
-       */
-      getFieldWidgets() {
-        return getAllFieldWidgets(this.formJsonObj.widgetList)
-      },
-
-      /**
-       * 获取所有容器组件
-       * @returns {*[]}
-       */
-      getContainerWidgets() {
-        return getAllContainerWidgets(this.formJsonObj.widgetList)
-      },
-
-      /**
-       * 增加外部组件引用，可通过getEC()方法获取外部组件，以便在VForm内部调用外部组件方法
-       * @param componentName 外部组件名称
-       * @param externalComponent 外部组件实例
-       */
-      addEC(componentName, externalComponent) {
-        this.externalComponents[componentName] = externalComponent
-      },
-
-      /**
-       * 判断外部组件是否可获取
-       * @param componentName 外部组件名称
-       * @returns {boolean}
-       */
-      hasEC(componentName) {
-        return this.externalComponents.hasOwnProperty(componentName)
-      },
-
-      /**
-       * 获取外部组件实例
-       * @param componentName
-       * @returns {*}
-       */
-      getEC(componentName) {
-        return this.externalComponents[componentName]
-      },
-
-      /**
-       * 获取globalDsv对象
-       * @returns {*}
-       */
-      getGlobalDsv() {
-        return this.globalDsv
-      },
-
-      //--------------------- 以上为组件支持外部调用的API方法 end ------------------//
-
+        } else this.$message.error('Set form json failed.')
     },
+    reloadOptionData(e) {
+      let o = []
+      !!e && typeof e == 'string'
+        ? (o = [e])
+        : !!e && Array.isArray(e) && (o = [...e]),
+        this.broadcast('FieldWidget', 'reloadOptionItems', o)
+    },
+    getFormData(e = !0) {
+      if (!e) return this.formDataModel
+      let o = function () {},
+        t = new window.Promise(function (r, n) {
+          o = function (l, i) {
+            i ? n(i) : r(l)
+          }
+        })
+      return (
+        this.$refs.renderForm.validate((r, n) => {
+          r
+            ? this.doCustomValidation()
+              ? o(this.formDataModel)
+              : o(
+                  this.formDataModel,
+                  this.i18nt('render.hint.validationFailed')
+                )
+            : o(this.formDataModel, this.i18nt('render.hint.validationFailed'))
+        }),
+        t
+      )
+    },
+    setFormData(e) {
+      let o = e
+      typeof e == 'string' && (o = JSON.parse(e)),
+        Object.keys(this.formDataModel).forEach((t) => {
+          !!o &&
+            o.hasOwnProperty(t) &&
+            (this.formDataModel[t] = deepClone(o[t]))
+        }),
+        this.broadcast('ContainerItem', 'setFormData', this.formDataModel),
+        this.broadcast('FieldWidget', 'setFormData', this.formDataModel)
+    },
+    getFieldValue(e) {
+      let o = this.getWidgetRef(e)
+      if (!!o && !!o.getValue) return o.getValue()
+      if (!o) {
+        let t = []
+        return (
+          this.findWidgetNameInSubForm(e).forEach((r) => {
+            let n = this.getWidgetRef(r)
+            !!n && !!n.getValue && t.push(n.getValue())
+          }),
+          t
+        )
+      }
+    },
+    setFieldValue(e, o, t = !1) {
+      let r = this.getWidgetRef(e)
+      !!r && !!r.setValue && r.setValue(o, t),
+        r ||
+          this.findWidgetNameInSubForm(e).forEach((n) => {
+            let l = this.getWidgetRef(n)
+            !!l && !!l.setValue && l.setValue(o, t)
+          })
+    },
+    getSubFormValues(e, o = !0) {
+      return this.subFormRefList[e].getSubFormValues(o)
+    },
+    setSubFormValues(e, o) {
+      return this.subFormRefList[e].setSubFormValues(o)
+    },
+    disableForm() {
+      Object.keys(this.widgetRefList).forEach((o) => {
+        let t = this.getWidgetRef(o)
+        t &&
+          (!!t.widget && t.widget.type === 'sub-form'
+            ? t.disableSubForm()
+            : !!t.widget && t.widget.type === 'grid-sub-form'
+            ? t.disableGridSubForm()
+            : !!t.setDisabled && t.setDisabled(!0))
+      })
+    },
+    enableForm() {
+      Object.keys(this.widgetRefList).forEach((o) => {
+        let t = this.getWidgetRef(o)
+        t &&
+          (!!t.widget && t.widget.type === 'sub-form'
+            ? t.enableSubForm()
+            : !!t.widget && t.widget.type === 'grid-sub-form'
+            ? t.enableGridSubForm()
+            : !!t.setDisabled && t.setDisabled(!1))
+      })
+    },
+    resetForm(e = !1) {
+      Object.keys(this.subFormRefList).forEach((r) => {
+        this.subFormRefList[r].resetSubForm &&
+          this.subFormRefList[r].resetSubForm()
+      }),
+        Object.keys(this.widgetRefList).forEach((r) => {
+          let n = this.getWidgetRef(r)
+          !!n && !n.subFormItemFlag && !!n.resetField && n.resetField(e)
+        }),
+        this.$nextTick(() => {
+          this.clearValidate()
+        })
+    },
+    clearValidate(e) {
+      this.$refs.renderForm.clearValidate(e)
+    },
+    validateForm(e) {
+      this.$refs.renderForm.validate((o, t) => {
+        if (o) {
+          let r = this.doCustomValidation()
+          e(r, t)
+        } else e(o, t)
+      })
+    },
+    doCustomValidation() {
+      if (!this.formConfig.onFormValidate) return !0
+      let o = new Function('formModel', this.formConfig.onFormValidate).call(
+        this,
+        this.formDataModel
+      )
+      return o === void 0 ? !0 : o
+    },
+    validateFields() {},
+    disableWidgets(e) {
+      e &&
+        (typeof e == 'string'
+          ? this.findWidgetAndSetDisabled(e, !0)
+          : Array.isArray(e) &&
+            e.forEach((o) => {
+              this.findWidgetAndSetDisabled(o, !0)
+            }))
+    },
+    enableWidgets(e) {
+      e &&
+        (typeof e == 'string'
+          ? this.findWidgetAndSetDisabled(e, !1)
+          : Array.isArray(e) &&
+            e.forEach((o) => {
+              this.findWidgetAndSetDisabled(o, !1)
+            }))
+    },
+    hideWidgets(e) {
+      e &&
+        (typeof e == 'string'
+          ? this.findWidgetAndSetHidden(e, !0)
+          : Array.isArray(e) &&
+            e.forEach((o) => {
+              this.findWidgetAndSetHidden(o, !0)
+            }))
+    },
+    showWidgets(e) {
+      e &&
+        (typeof e == 'string'
+          ? this.findWidgetAndSetHidden(e, !1)
+          : Array.isArray(e) &&
+            e.forEach((o) => {
+              this.findWidgetAndSetHidden(o, !1)
+            }))
+    },
+    setWidgetsRequired(e, o) {
+      e &&
+        (typeof e == 'string'
+          ? this.findWidgetAndSetRequired(e, o)
+          : Array.isArray(e) &&
+            e.forEach((t) => {
+              this.findWidgetAndSetRequired(t, o)
+            }))
+    },
+    findWidgetAndSetRequired(e, o) {
+      let t = this.getWidgetRef(e)
+      !!t && !!t.setRequired
+        ? t.setRequired(o)
+        : this.findWidgetOfSubFormAndSetRequired(e, o)
+    },
+    findWidgetOfSubFormAndSetRequired(e, o) {
+      const t = getFieldWidgetByName(this.formJsonObj.widgetList, e, !0)
+      !!t &&
+        !!t.options &&
+        t.options.hasOwnProperty('required') &&
+        (t.options.required = o),
+        this.findWidgetNameInSubForm(e).forEach((r) => {
+          let n = this.getWidgetRef(r)
+          !!n && !!n.setRequired && n.setRequired(o)
+        })
+    },
+    getSubFormNameOfWidget(e) {
+      let o = null
+      return (
+        Object.keys(this.subFormRefList).forEach((t) => {
+          const r = (l) => {
+              l.options.name === e && (o = t)
+            },
+            n = this.subFormRefList[t]
+          traverseFieldWidgetsOfContainer(n.widget, r)
+        }),
+        o
+      )
+    },
+    getFieldWidgets(e = !1) {
+      return getAllFieldWidgets(this.formJsonObj.widgetList, e)
+    },
+    getContainerWidgets() {
+      return getAllContainerWidgets(this.formJsonObj.widgetList)
+    },
+    addEC(e, o) {
+      this.externalComponents[e] = o
+    },
+    hasEC(e) {
+      return this.externalComponents.hasOwnProperty(e)
+    },
+    getEC(e) {
+      return this.externalComponents[e]
+    },
+    setReadMode(e = !0) {
+      this.readModeFlag = e
+    },
+    getReadMode() {
+      return this.readModeFlag
+    },
+    getGlobalDsv() {
+      return this.globalDsv
+    },
+    async executeDataSource(e, o = {}) {
+      let t = getDSByName(this.formJsonObj.formConfig, e),
+        r = new Object({})
+      return (
+        overwriteObj(r, this.globalDsv),
+        overwriteObj(r, o),
+        await runDataSourceRequest(t, r, this, !1, this.$message)
+      )
+    },
+    getParentFormRef() {
+      return this.parentForm
+    },
+    getTopFormRef() {
+      if (!this.parentForm) return this
+      let e = this.parentForm
+      for (; e.parentForm; ) e = e.parentForm
+      return e
+    },
+    setChildFormRef(e) {
+      this.childFormRef = e
+    },
+    getChildFormRef() {
+      return this.childFormRef
+    },
+    isDynamicCreation() {
+      return this.dynamicCreation
+    },
+    setDialogOrDrawerRef(e) {
+      this.dialogOrDrawerRef = e
+    },
+    getDialogOrDrawerRef() {
+      return this.dialogOrDrawerRef
+    },
+    async showDialog(e, o = {}, t = {}, r = '') {
+      let n = this.getTopFormRef(),
+        l = getContainerWidgetByName(n.widgetList, e)
+      if (!e || l.type !== 'vf-dialog') {
+        this.$message.error(this.i18nt('render.hint.refNotFound') + e)
+        return
+      }
+      const { default: DynamicDialog } = await import('./dynamic-widget/dynamic-dialog.vue');
+     
+      let i = {
+        widgetList: deepClone(l.widgetList),
+        formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+      },
+      a = generateId() + '';
+      if (!document.getElementById('vf-dynamic-dialog-wrapper')) {
+        const dynamicWrapper = document.createElement('div')
+        dynamicWrapper.id = 'vf-dynamic-dialog-wrapper'
+        document.body.appendChild(dynamicWrapper) 
+      }
+      
+      // 创建Vue应用实例并挂载组件
+      const dynamicComponent = createApp(DynamicDialog, {
+          options: l.options,
+          formJson: i,
+          formData: o || {},
+          optionData: n.optionData,
+          globalDsv: n.globalDsv,
+          parentFormRef: this,
+          extraData: t,
+          wrapperId: a,
+          title: r
+      });
+      dynamicComponent.use(ElementPlus);
+      const instance = dynamicComponent.mount(`#vf-dynamic-dialog-wrapper`);
+      instance.show();
+    },
+    showDrawer(e, o = {}, t = {}, r = '') {
+      let n = this.getTopFormRef(),
+        l = getContainerWidgetByName(n.widgetList, e)
+      if (!l || l.type !== 'vf-drawer') {
+        this.$message.error(this.i18nt('render.hint.refNotFound') + e)
+        return
+      }
+      let i = {
+          widgetList: deepClone(l.widgetList),
+          formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+        },
+        a = generateId() + '',
+        s = createVNode(
+          DynamicDrawer,
+          {
+            options: l.options,
+            formJson: i,
+            formData: o || {},
+            optionData: n.optionData,
+            globalDsv: n.globalDsv,
+            parentFormRef: this,
+            extraData: t,
+            wrapperId: a,
+            title: r
+          },
+          this.$slots
+        )
+      s.appContext = this.$root.$.appContext
+      let d = document.createElement('div')
+      return (
+        (d.id = 'vf-dynamic-drawer-wrapper' + a),
+        document.body.appendChild(d),
+        render(s, d),
+        document.body.appendChild(s.el),
+        s.component.ctx.show()
+      )
+    },
+    isPreviewState() {
+      return this.previewState
+    },
+    setFormJsonAndData(e, o, t = null) {
+      this.setFormJson(e),
+        this.$nextTick(() => {
+          o &&
+            (this.setFormData(o),
+            this.$nextTick(() => {
+              t && this.disableForm()
+            }))
+        })
+    },
+    setBlankFormJson() {
+      let e = {
+        widgetList: [],
+        formConfig: getDefaultFormConfig()
+      }
+      this.setFormJson(e)
+    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .el-form :deep(.el-row) {
-    padding: 8px;
-  }
+.el-form :deep(.el-row) {
+  padding: 8px;
+}
+.readonly-mode-form .el-form-item__content {
+    background-color: #f8f8f8
+}
+</style>
+<style>
+.readonly-mode-form .el-form-item__content {
+    background-color: #f8f8f8
+}
 </style>

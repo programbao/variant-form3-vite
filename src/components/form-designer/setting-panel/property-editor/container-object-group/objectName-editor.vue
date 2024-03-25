@@ -28,7 +28,7 @@
 <script>
 import i18n from '@/utils/i18n'
 import SvgIcon from '@/components/svg-icon/index'
-
+import { trimEx } from '@/utils/util'
 export default {
   name: 'objectName-editor',
   mixins: [i18n],

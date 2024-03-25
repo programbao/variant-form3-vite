@@ -42,7 +42,49 @@ export const evalFn = function (fn, DSV = null, VFR = null) {
   let f = new Function('DSV', 'VFR', 'return ' + fn);
   return f(DSV, VFR);
 };
-
+export const  trimEx = function(e, o, t) {
+  return o ? t === "left" ? e.replace(new RegExp("^\\" + o + "+","g"), "") : t === "right" ? e.replace(new RegExp("\\" + o + "+$","g"), "") : e.replace(new RegExp("^\\" + o + "+|\\" + o + "+$","g"), "") : e.replace(/^\s+|\s+$/g, "")
+}
+export const  hasPropertyOfObject = function(e, o) {
+  const t = o.split(".");
+  let r = e
+    , n = !0;
+  for (const l of t)
+      if (r.hasOwnProperty(l))
+          r = r[l];
+      else {
+          n = !1;
+          break
+      }
+  return n
+};
+export function isDef(e) {
+  return e != null
+}
+export const  getObjectValue = function(e, o) {
+  const t = o.split(".");
+  let r = e;
+  return t.forEach(n=>{
+      r = isDef(r) && isDef(r[n]) ? r[n] : null
+  }
+  ),
+  r
+}
+export const  setObjectValue = function(e, o, t) {
+  const r = o.split(".");
+  let n = e;
+  r.forEach((l,i)=>{
+      if (!!l) {
+          if (i === r.length - 1) {
+              n[l] = t;
+              return
+          }
+          n[l] === void 0 && (n[l] = {}),
+          n = n[l]
+      }
+  }
+  )
+}
 export const addWindowResizeHandler = function (handler) {
   let oldHandler = window.onresize
   if (typeof window.onresize != 'function') {
@@ -102,7 +144,16 @@ export const insertGlobalFunctionsToHtml = function (functionsCode, formId = '')
   newScriptEle.innerHTML = functionsCode
   bodyEle.appendChild(newScriptEle)
 }
-
+export const deleteCustomStyleAndScriptNode = function(e, o) {
+  const t = document.getElementsByTagName("head")[0];
+  let r = document.getElementById("vform-custom-css-" + o);
+  e && (r = document.getElementById("vform-custom-css")),
+  r && t.removeChild(r);
+  const n = document.getElementsByTagName("body")[0];
+  let l = document.getElementById("v_form_global_functions-" + o);
+  e && (l = document.getElementById("v_form_global_functions")),
+  l && n.removeChild(l)
+}
 export const optionExists = function(optionsObj, optionName) {
   if (!optionsObj) {
     return false
@@ -316,7 +367,36 @@ export function getAllContainerWidgets(widgetList) {
 
   return result
 }
-
+export function getFieldWidgetByName(e, o, t) {
+  if (!e)
+      return null;
+  let r = null;
+  return traverseFieldWidgets(e, l=>{
+      l.options.name === o && (r = l)
+  }
+  , null, t),
+  r
+}
+export function getFieldWidgetById(e, o, t) {
+  if (!e)
+      return null;
+  let r = null;
+  return traverseFieldWidgets(e, l=>{
+      l.id === o && (r = l)
+  }
+  , null, t),
+  r
+}
+export function getContainerWidgetByName(e, o) {
+  if (!e)
+      return null;
+  let t = null;
+  return traverseContainerWidgets(e, n=>{
+      n.options.name === o && (t = n)
+  }
+  ),
+  t
+}
 export function copyToClipboard(content, clickEvent, $message, successMsg, errorMsg) {
   const clipboard = new Clipboard(clickEvent.target, {
     text: () => content
@@ -374,4 +454,68 @@ export function buildDefaultFormJson() {
     widgetList: [],
     formConfig: deepClone( getDefaultFormConfig() )
   }
+}
+export function cloneFormConfigWithoutEventHandler(e) {
+  let o = deepClone(e);
+  return o.onFormCreated = "",
+  o.onFormMounted = "",
+  o.onFormDataChange = "",
+  o.onFormValidate = "",
+  o
+}
+export function translateOptionItems(e, o, t, r) {
+  if (o === "cascader")
+      return deepClone(e);
+  let n = [];
+  return !!e && e.length > 0 && e.forEach(l=>{
+      l.hasOwnProperty("disabled") ? n.push({
+          label: l[t],
+          value: l[r],
+          disabled: l.disabled
+      }) : n.push({
+          label: l[t],
+          value: l[r]
+      })
+  }
+  ),
+  n
+}
+export function assembleAxiosConfig(e, o, t) {
+  let r = {};
+  return !e || e.length <= 0 || (e.map(n=>{
+      n.type === "String" ? r[n.name] = String(n.value) : n.type === "Number" ? r[n.name] = Number(n.value) : n.type === "Boolean" ? n.value.toLowerCase() === "false" || n.value === "0" ? r[n.name] = !1 : n.value.toLowerCase() === "true" || n.value === "1" ? r[n.name] = !0 : r[n.name] = null : n.type === "Variable" && (r[n.name] = evalFn(n.value, o, t))
+  }
+  ),
+  console.log("test DSV: ", o),
+  console.log("test VFR: ", t)),
+  r
+}
+export function buildRequestConfig(e, o, t, r) {
+  let n = {};
+  return e.requestURLType === "String" ? n.url = e.requestURL : n.url = evalFn(e.requestURL, o, t),
+  n.method = e.requestMethod,
+  n.headers = assembleAxiosConfig(e.headers, o, t),
+  n.params = assembleAxiosConfig(e.params, o, t),
+  n.data = assembleAxiosConfig(e.data, o, t),
+  new Function("config","isSandbox","DSV","VFR",e.configHandlerCode).call(null, n, r, o, t)
+}
+export async function runDataSourceRequest(e, o, t, r, n) {
+  try {
+      let l = buildRequestConfig(e, o, t, r)
+        , i = await axios.request(l);
+      return new Function("result","isSandbox","DSV","VFR",e.dataHandlerCode).call(null, i, r, o, t)
+  } catch (l) {
+      let i = new Function("error","isSandbox","DSV","$message","VFR",e.errorHandlerCode);
+      return console.error(l),
+      i.call(null, l, r, o, n, t)
+  }
+}
+export function getDSByName(e, o) {
+  let t = null;
+  return !!o && !!e.dataSources && e.dataSources.forEach(r=>{
+      r.uniqueName === o && (t = r)
+  }
+  ),
+  t || console.error("DS not found: " + o),
+  t
 }
