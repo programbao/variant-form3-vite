@@ -845,42 +845,41 @@ export default {
       const instance = dynamicComponent.mount(`#vf-dynamic-dialog-wrapper`);
       instance.show();
     },
-    showDrawer(e, o = {}, t = {}, r = '') {
+    async showDrawer(e, o = {}, t = {}, r = '') {
       let n = this.getTopFormRef(),
         l = getContainerWidgetByName(n.widgetList, e)
       if (!l || l.type !== 'vf-drawer') {
         this.$message.error(this.i18nt('render.hint.refNotFound') + e)
         return
       }
+        const { default: DynamicDrawer } = await import('./dynamic-widget/dynamic-drawer.vue');
+     
       let i = {
-          widgetList: deepClone(l.widgetList),
-          formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
-        },
-        a = generateId() + '',
-        s = createVNode(
-          DynamicDrawer,
-          {
-            options: l.options,
-            formJson: i,
-            formData: o || {},
-            optionData: n.optionData,
-            globalDsv: n.globalDsv,
-            parentFormRef: this,
-            extraData: t,
-            wrapperId: a,
-            title: r
-          },
-          this.$slots
-        )
-      s.appContext = this.$root.$.appContext
-      let d = document.createElement('div')
-      return (
-        (d.id = 'vf-dynamic-drawer-wrapper' + a),
-        document.body.appendChild(d),
-        render(s, d),
-        document.body.appendChild(s.el),
-        s.component.ctx.show()
-      )
+        widgetList: deepClone(l.widgetList),
+        formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+      },
+      a = generateId() + '';
+      if (!document.getElementById('vf-dynamic-drawer-wrapper')) {
+        const dynamicWrapper = document.createElement('div')
+        dynamicWrapper.id = 'vf-dynamic-drawer-wrapper'
+        document.body.appendChild(dynamicWrapper) 
+      }
+      
+      // 创建Vue应用实例并挂载组件
+      const dynamicComponent = createApp(DynamicDrawer, {
+          options: l.options,
+          formJson: i,
+          formData: o || {},
+          optionData: n.optionData,
+          globalDsv: n.globalDsv,
+          parentFormRef: this,
+          extraData: t,
+          wrapperId: a,
+          title: r
+      });
+      dynamicComponent.use(ElementPlus);
+      const instance = dynamicComponent.mount(`#vf-dynamic-drawer-wrapper`);
+      instance.show();
     },
     isPreviewState() {
       return this.previewState

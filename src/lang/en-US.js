@@ -36,7 +36,7 @@ export default {
       tree: 'Tree',
       "object-group": "ObjectGroup",
       "vf-dialog": "Dialog",
-
+      "vf-drawer": "Drawer",
 
       input: 'Input',
       textarea: 'Textarea',

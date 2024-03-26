@@ -35,6 +35,7 @@ export default {
       tree: '树形',
       "object-group": "对象容器",
       "vf-dialog": "弹出窗口",
+      "vf-drawer": "侧滑抽屉",
       
       input: '单行输入',
       textarea: '多行输入',

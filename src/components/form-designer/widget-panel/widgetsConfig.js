@@ -226,7 +226,35 @@ export const containers = [
       onDialogOpened: '',
       onDialogBeforeClose: ''
     }
+  },
+
+  {
+    type: "vf-drawer",
+    category: "container",
+    icon: "vf-drawer",
+    widgetList: [],
+    options: {
+      name: "",
+      title: "",
+      size: "50%",
+      showModal: !0,
+      showClose: !0,
+      closeOnClickModal: !1,
+      closeOnPressEscape: !1,
+      direction: "rtl",
+      readMode: !1,
+      disabledMode: !1,
+      okButtonLabel: "",
+      okButtonHidden: !1,
+      cancelButtonLabel: "",
+      cancelButtonHidden: !1,
+      onOkButtonClick: "",
+      onCancelButtonClick: "",
+      onDrawerOpened: "",
+      onDrawerBeforeClose: ""
+    }
   }
+
 ]
 
 export const basicFields = [

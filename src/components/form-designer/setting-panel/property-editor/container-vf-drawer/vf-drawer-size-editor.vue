@@ -1,10 +1,6 @@
 <template>
-  <el-form-item 
-    :label="i18nt('designer.setting.okButtonLabel')">
-    <el-input
-        type="text"
-        v-model="optionModel.okButtonLabel"
-      ></el-input>
+  <el-form-item :label="i18nt('designer.setting.drawSize')">
+    <el-input v-model="optionModel.size"></el-input>
   </el-form-item>
 </template>
 
@@ -13,7 +9,7 @@
   import propertyMixin from "@/components/form-designer/setting-panel/property-editor/propertyMixin"
 
   export default {
-    name: "okButtonLabel-editor",
+    name: "vf-drawer-size-editor",
     mixins: [i18n, propertyMixin],
     props: {
       designer: Object,
