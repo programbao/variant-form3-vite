@@ -138,4 +138,7 @@ export default {
 .object-group-container .object-group {
   min-height: 28px;
 }
+.object-group-drag-drop-zone {
+  min-height: 28px;
+}
 </style>
