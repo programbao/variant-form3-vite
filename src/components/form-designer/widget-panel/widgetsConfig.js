@@ -1,17 +1,77 @@
 export const containers = [
   {
     type: 'grid',
+    alias: 'column-1-grid',
     category: 'container',
-    icon: 'grid',
+    icon: 'column-1-grid',
+    commonFlag: true,
     cols: [],
     options: {
       name: '',
       hidden: false,
       gutter: 12,
-      colHeight: null, //栅格列统一高度属性，用于解决栅格列设置响应式布局浮动后被挂住的问题！！
-      customClass: '' //自定义css类名
+      colHeight: null,
+      customClass: ''
     }
   },
+  {
+    type: 'grid',
+    alias: 'column-2-grid',
+    category: 'container',
+    icon: 'column-2-grid',
+    commonFlag: true,
+    cols: [],
+    options: {
+      name: '',
+      hidden: false,
+      gutter: 12,
+      colHeight: null,
+      customClass: ''
+    }
+  },
+  {
+    type: 'grid',
+    alias: 'column-3-grid',
+    category: 'container',
+    icon: 'column-3-grid',
+    commonFlag: true,
+    cols: [],
+    options: {
+      name: '',
+      hidden: false,
+      gutter: 12,
+      colHeight: null,
+      customClass: ''
+    }
+  },
+  {
+    type: 'grid',
+    alias: 'column-4-grid',
+    category: 'container',
+    icon: 'column-4-grid',
+    commonFlag: true,
+    cols: [],
+    options: {
+      name: '',
+      hidden: false,
+      gutter: 12,
+      colHeight: null,
+      customClass: ''
+    }
+  },
+  // {
+  //   type: 'grid',
+  //   category: 'container',
+  //   icon: 'grid',
+  //   cols: [],
+  //   options: {
+  //     name: '',
+  //     hidden: false,
+  //     gutter: 12,
+  //     colHeight: null, //栅格列统一高度属性，用于解决栅格列设置响应式布局浮动后被挂住的问题！！
+  //     customClass: '' //自定义css类名
+  //   }
+  // },
 
   {
     type: 'table',
@@ -229,32 +289,31 @@ export const containers = [
   },
 
   {
-    type: "vf-drawer",
-    category: "container",
-    icon: "vf-drawer",
+    type: 'vf-drawer',
+    category: 'container',
+    icon: 'vf-drawer',
     widgetList: [],
     options: {
-      name: "",
-      title: "",
-      size: "50%",
+      name: '',
+      title: '',
+      size: '50%',
       showModal: !0,
       showClose: !0,
       closeOnClickModal: !1,
       closeOnPressEscape: !1,
-      direction: "rtl",
+      direction: 'rtl',
       readMode: !1,
       disabledMode: !1,
-      okButtonLabel: "",
+      okButtonLabel: '',
       okButtonHidden: !1,
-      cancelButtonLabel: "",
+      cancelButtonLabel: '',
       cancelButtonHidden: !1,
-      onOkButtonClick: "",
-      onCancelButtonClick: "",
-      onDrawerOpened: "",
-      onDrawerBeforeClose: ""
+      onOkButtonClick: '',
+      onCancelButtonClick: '',
+      onDrawerOpened: '',
+      onDrawerBeforeClose: ''
     }
   }
-
 ]
 
 export const basicFields = [

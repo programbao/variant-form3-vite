@@ -15,7 +15,7 @@
                      :move="checkContainerMove" @end="onContainerDragEnd">
             <template #item="{ element: ctn }">
               <li class="container-widget-item" :title="ctn.displayName" @dblclick="addContainerByDbClick(ctn)">
-                <span><svg-icon :icon-class="ctn.icon" class-name="color-svg-icon" />{{i18n2t(`designer.widgetLabel.${ctn.type}`, `extension.widgetLabel.${ctn.type}`)}}</span>
+                <span><svg-icon :icon-class="ctn.icon" class-name="color-svg-icon" />{{getWidgetLabel(ctn)}}</span>
               </li>
             </template>
           </draggable>
@@ -163,6 +163,9 @@
       })
     },
     methods: {
+      getWidgetLabel(e) {
+          return e.alias ? this.i18n2t(`designer.widgetLabel.${e.alias}`, `extension.widgetLabel.${e.alias}`) : this.i18n2t(`designer.widgetLabel.${e.type}`, `extension.widgetLabel.${e.type}`)
+      },
       isBanned(wName) {
         return this.getBannedWidgets().indexOf(wName) > -1
       },
