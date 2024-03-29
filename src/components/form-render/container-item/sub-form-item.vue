@@ -84,13 +84,38 @@
     props: {
       widget: Object,
     },
-    inject: ['refList', 'sfRefList', 'globalModel'],
+    provide() {
+        return {
+            getSubFormFieldFlag: ()=>!0,
+            getSubFormName: ()=>this.widget.options.name
+        }
+    },
+    inject: ['refList', 'sfRefList', 'globalModel', 'getReadMode'],
     data() {
       return {
         rowIdData: [],
         fieldSchemaData: [],
-        actionDisabled: false,
+        actionDisabled: !1,
+        insertDisabled: !1,
+        deleteDisabled: !1
       }
+    },
+    computed: {
+        isReadMode() {
+            return this.getReadMode()
+        },
+        leftActionColumn() {
+            return (this.widget.options.actionColumnPosition || "left") === "left"
+        },
+        widgetDisabled() {
+            return !!this.widget.options.disabled
+        },
+        disabledClass() {
+            return this.widget.options.disabled ? "sub-form-disabled" : ""
+        },
+        readModeClass() {
+            return this.getReadMode() ? "sub-form-read-mode" : ""
+        }
     },
     created() {
       this.initRefList()
@@ -220,8 +245,13 @@
 
         if (!!this.widget.options.showBlankRow && (this.rowIdData.length === 1)) {
           let oldSubFormData = this.formModel[this.widget.options.name] || []
-          this.handleSubFormRowAdd(oldSubFormData, this.rowIdData[0])
-          this.handleSubFormRowChange(oldSubFormData)
+          // this.handleSubFormRowAdd(oldSubFormData, this.rowIdData[0])
+          // this.handleSubFormRowChange(oldSubFormData)
+          this.$nextTick(()=>{
+              this.handleSubFormRowAdd(oldSubFormData, this.rowIdData[0]),
+              this.handleSubFormRowChange(oldSubFormData),
+              this.widget.options.disabled && this.disableSubForm()
+          })
         }
       },
 
@@ -229,7 +259,9 @@
         let newSubFormDataRow = {}
         this.widget.widgetList.forEach(subFormItem => {
           if (!!subFormItem.formItemFlag) {
-            newSubFormDataRow[subFormItem.options.name] = subFormItem.options.defaultValue
+            let name = subFormItem.options.name;
+            name = subFormItem.options.keyNameEnabled && subFormItem.options.keyName || name;
+            newSubFormDataRow[name] = subFormItem.options.defaultValue
           }
         })
 
@@ -246,7 +278,9 @@
         let newSubFormDataRow = {}
         this.widget.widgetList.forEach(subFormItem => {
           if (!!subFormItem.formItemFlag) {
-            newSubFormDataRow[subFormItem.options.name] = subFormItem.options.defaultValue
+            let name = subFormItem.options.name;
+            name = subFormItem.options.keyNameEnabled && subFormItem.options.keyName || name;
+            newSubFormDataRow[name] = subFormItem.options.defaultValue
           }
         })
 
@@ -304,7 +338,30 @@
           customFunc.call(this, subFormData, deletedDataRow)
         }
       },
-
+      setDisabled(e) {
+            this.widget.options.disabled = e,
+            e ? this.disableSubForm() : this.enableSubForm()
+        },
+        setInsertDisabled(e) {
+            this.insertDisabled = e
+        },
+        setDeleteDisabled(e) {
+            this.deleteDisabled = e
+        },
+        setSubFormValues(e) {
+            this.globalModel.formModel[this.widget.options.name] = e,
+            this.initRowIdData(!1),
+            this.initFieldSchemaData(),
+            setTimeout(()=>{
+                this.handleSubFormRowChange(e)
+            }
+            , 800)
+        },
+        setSubFormFieldValue(e, o, t) {
+            const r = this.globalModel.formModel[this.widget.options.name];
+            r[t][e] = o,
+            this.handleSubFormRowChange(r)
+        }
     },
   }
 </script>

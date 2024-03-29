@@ -2,7 +2,8 @@ import {
   buildActiveTabs,
   buildDefaultValueListFn,
   buildFieldOptionsFn,
-  buildRulesListFn, buildUploadDataFn
+  buildRulesListFn, buildUploadDataFn,
+  sfcTraverseFieldWidgets
 } from "@/utils/vue2js-generator";
 import {traverseFieldWidgets} from "@/utils/util";
 
@@ -11,12 +12,18 @@ export const genVue3JS = function (formConfig, widgetList) {
   let rulesList = []
   let fieldOptions = []
   let uploadData = []
-  traverseFieldWidgets(widgetList, (widget) => {
+  sfcTraverseFieldWidgets(widgetList, (widget) => {
     buildDefaultValueListFn(formConfig, widgetList, defaultValueList)(widget)
     buildRulesListFn(formConfig, widgetList, rulesList)(widget)
     buildFieldOptionsFn(formConfig, widgetList, fieldOptions)(widget)
     buildUploadDataFn(formConfig, widgetList, uploadData)(widget)
   })
+  // traverseFieldWidgets(widgetList, (widget) => {
+  //   buildDefaultValueListFn(formConfig, widgetList, defaultValueList)(widget)
+  //   buildRulesListFn(formConfig, widgetList, rulesList)(widget)
+  //   buildFieldOptionsFn(formConfig, widgetList, fieldOptions)(widget)
+  //   buildUploadDataFn(formConfig, widgetList, uploadData)(widget)
+  // })
 
   const activeTabs = buildActiveTabs(formConfig, widgetList)
 

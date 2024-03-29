@@ -313,6 +313,50 @@ export const containers = [
       onDrawerOpened: '',
       onDrawerBeforeClose: ''
     }
+  },
+
+  {
+    type: 'sub-form',
+    category: 'container',
+    icon: 'sub-form',
+    commonFlag: true,
+    widgetList: [],
+    options: {
+      name: '',
+      label: '',
+      showBlankRow: true,
+      showRowNumber: true,
+      labelAlign: 'label-center-align',
+      hidden: false,
+      disabled: false,
+      actionColumnPosition: 'left',
+      customClass: '',
+      onSubFormRowAdd: '',
+      onSubFormRowInsert: '',
+      onSubFormRowDelete: '',
+      onSubFormRowChange: ''
+    }
+  },
+  {
+    type: 'grid-sub-form',
+    category: 'container',
+    icon: 'grid-sub-form',
+    commonFlag: true,
+    widgetList: [],
+    options: {
+      name: '',
+      label: '',
+      showBlankRow: true,
+      showRowNumber: true,
+      hidden: false,
+      disabled: false,
+      actionColumnPosition: 'left',
+      customClass: '',
+      onSubFormRowAdd: '',
+      onSubFormRowInsert: '',
+      onSubFormRowDelete: '',
+      onSubFormRowChange: ''
+    }
   }
 ]
 

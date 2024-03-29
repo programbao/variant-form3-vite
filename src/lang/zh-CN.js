@@ -31,7 +31,7 @@ export default {
       table: '表格',
       tab: '标签页',
       section: '区块',
-      'sub-form': '子表单',
+      'sub-form': '单行子表单',
       'grid-col': '栅格列',
       'table-cell': '单元格',
       'tab-pane': '选项卡页',

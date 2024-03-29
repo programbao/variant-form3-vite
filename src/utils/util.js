@@ -183,68 +183,103 @@ export const loadRemoteScript = function(srcPath, callback) {  /*加载远程js�
   }
 }
 
-export function traverseFieldWidgets(widgetList, handler, parent = null) {
-  if (!widgetList) {
-    return
+// export function traverseFieldWidgets(widgetList, handler, parent = null) {
+//   if (!widgetList) {
+//     return
+//   }
+
+//   widgetList.map(w => {
+//     if (w.formItemFlag) {
+//       handler(w, parent)
+//     } else if (w.type === 'grid') {
+//       w.cols.map(col => {
+//         traverseFieldWidgets(col.widgetList, handler, w)
+//       })
+//     } else if (w.type === 'table') {
+//       w.rows.map(row => {
+//         row.cols.map(cell => {
+//           traverseFieldWidgets(cell.widgetList, handler, w)
+//         })
+//       })
+//     } else if (w.type === 'tab') {
+//       w.tabs.map(tab => {
+//         traverseFieldWidgets(tab.widgetList, handler, w)
+//       })
+//     } else if (w.type === 'sub-form' || w.type === "grid-sub-form") {
+//       traverseFieldWidgets(w.widgetList, handler, w)
+//     } else if (w.category === 'container') {  //自定义容器
+//       traverseFieldWidgets(w.widgetList, handler, w)
+//     }
+//   })
+// }
+export function traverseFieldWidgets(e, o, t=null, r=false) {
+  !e || e.map(n=>{
+      n.formItemFlag || n.formItemFlag === !1 && r ? o(n, t) : n.type === "grid" ? n.cols.map(l=>{
+          traverseFieldWidgets(l.widgetList, o, n, r)
+      }
+      ) : n.type === "table" ? n.rows.map(l=>{
+          l.cols.map(i=>{
+              traverseFieldWidgets(i.widgetList, o, n, r)
+          }
+          )
+      }
+      ) : n.type === "tab" ? n.tabs.map(l=>{
+          traverseFieldWidgets(l.widgetList, o, n, r)
+      }
+      ) : (n.type === "sub-form" || n.type === "grid-sub-form" || n.category === "container") && traverseFieldWidgets(n.widgetList, o, n, r)
   }
-
-  widgetList.map(w => {
-    if (w.formItemFlag) {
-      handler(w, parent)
-    } else if (w.type === 'grid') {
-      w.cols.map(col => {
-        traverseFieldWidgets(col.widgetList, handler, w)
-      })
-    } else if (w.type === 'table') {
-      w.rows.map(row => {
-        row.cols.map(cell => {
-          traverseFieldWidgets(cell.widgetList, handler, w)
-        })
-      })
-    } else if (w.type === 'tab') {
-      w.tabs.map(tab => {
-        traverseFieldWidgets(tab.widgetList, handler, w)
-      })
-    } else if (w.type === 'sub-form') {
-      traverseFieldWidgets(w.widgetList, handler, w)
-    } else if (w.category === 'container') {  //自定义容器
-      traverseFieldWidgets(w.widgetList, handler, w)
-    }
-  })
+  )
 }
+// export function traverseContainerWidgets(widgetList, handler) {
+//   if (!widgetList) {
+//     return
+//   }
 
-export function traverseContainerWidgets(widgetList, handler) {
-  if (!widgetList) {
-    return
+//   widgetList.map(w => {
+//     if (w.category === 'container') {
+//       handler(w)
+//     }
+
+//     if (w.type === 'grid') {
+//       w.cols.map(col => {
+//         traverseContainerWidgets(col.widgetList, handler)
+//       })
+//     } else if (w.type === 'table') {
+//       w.rows.map(row => {
+//         row.cols.map(cell => {
+//           traverseContainerWidgets(cell.widgetList, handler)
+//         })
+//       })
+//     } else if (w.type === 'tab') {
+//       w.tabs.map(tab => {
+//         traverseContainerWidgets(tab.widgetList, handler)
+//       })
+//     } else if (w.type === 'sub-form') {
+//       traverseContainerWidgets(w.widgetList, handler)
+//     } else if (w.category === 'container') {  //自定义容器
+//       traverseContainerWidgets(w.widgetList, handler)
+//     }
+//   })
+// }
+export function traverseContainerWidgets(e, o) {
+  !e || e.map(t=>{
+      t.category === "container" && o(t),
+      t.type === "grid" ? t.cols.map(r=>{
+          traverseContainerWidgets(r.widgetList, o)
+      }
+      ) : t.type === "table" ? t.rows.map(r=>{
+          r.cols.map(n=>{
+              traverseContainerWidgets(n.widgetList, o)
+          }
+          )
+      }
+      ) : t.type === "tab" ? t.tabs.map(r=>{
+          traverseContainerWidgets(r.widgetList, o)
+      }
+      ) : (t.type === "sub-form" || t.type === "grid-sub-form" || t.category === "container") && traverseContainerWidgets(t.widgetList, o)
   }
-
-  widgetList.map(w => {
-    if (w.category === 'container') {
-      handler(w)
-    }
-
-    if (w.type === 'grid') {
-      w.cols.map(col => {
-        traverseContainerWidgets(col.widgetList, handler)
-      })
-    } else if (w.type === 'table') {
-      w.rows.map(row => {
-        row.cols.map(cell => {
-          traverseContainerWidgets(cell.widgetList, handler)
-        })
-      })
-    } else if (w.type === 'tab') {
-      w.tabs.map(tab => {
-        traverseContainerWidgets(tab.widgetList, handler)
-      })
-    } else if (w.type === 'sub-form') {
-      traverseContainerWidgets(w.widgetList, handler)
-    } else if (w.category === 'container') {  //自定义容器
-      traverseContainerWidgets(w.widgetList, handler)
-    }
-  })
+  )
 }
-
 export function traverseAllWidgets(widgetList, handler) {
   if (!widgetList) {
     return
@@ -269,7 +304,7 @@ export function traverseAllWidgets(widgetList, handler) {
       w.tabs.map(tab => {
         traverseAllWidgets(tab.widgetList, handler)
       })
-    } else if (w.type === 'sub-form') {
+    } else if (w.type === 'sub-form' || w.type === "grid-sub-form") {
       traverseAllWidgets(w.widgetList, handler)
     } else if (w.category === 'container') {  //自定义容器
       traverseAllWidgets(w.widgetList, handler)
@@ -311,7 +346,7 @@ export function traverseFieldWidgetsOfContainer(con, handler) {
         handleWidgetForTraverse(cw, handler)
       })
     })
-  } else if (con.type === 'sub-form') {
+  } else if (con.type === 'sub-form' || con.type === "grid-sub-form") {
     con.widgetList.forEach(cw => {
       handleWidgetForTraverse(cw, handler)
     })
@@ -321,6 +356,42 @@ export function traverseFieldWidgetsOfContainer(con, handler) {
     })
   }
 }
+
+export function handleContainerTraverse(e, o, t) {
+  !!e.category && e.category === "container" ? traverseWidgetsOfContainer(e, o, t) : e.formItemFlag && o(e)
+}
+export function traverseWidgetsOfContainer(e, o, t) {
+  e.category === "container" && t(e),
+  e.type === "grid" ? e.cols.forEach(r=>{
+      r.widgetList.forEach(n=>{
+          handleContainerTraverse(n, o, t)
+      }
+      )
+  }
+  ) : e.type === "table" ? e.rows.forEach(r=>{
+      r.cols.forEach(n=>{
+          n.widgetList.forEach(l=>{
+              handleContainerTraverse(l, o, t)
+          }
+          )
+      }
+      )
+  }
+  ) : e.type === "tab" ? e.tabs.forEach(r=>{
+      r.widgetList.forEach(n=>{
+          handleContainerTraverse(n, o, t)
+      }
+      )
+  }
+  ) : e.type === "sub-form" || e.type === "grid-sub-form" ? e.widgetList.forEach(r=>{
+      handleContainerTraverse(r, o, t)
+  }
+  ) : e.category === "container" && e.widgetList.forEach(r=>{
+      handleContainerTraverse(r, o, t)
+  }
+  )
+}
+
 
 /**
  * 获取所有字段组件
