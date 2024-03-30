@@ -367,109 +367,231 @@
 </script>
 
 <style lang="scss" scoped>
+  // .sub-form-container {
+  //   margin-bottom: 8px;
+  //   text-align: left; //IE浏览器强制居左对齐
+
+  //   :deep(.el-row.header-row) {
+  //     padding-bottom: 0;
+  //   }
+
+  //   :deep(.el-row.sub-form-row) {
+  //     padding-top: 3px;
+  //     padding-bottom: 3px;
+
+  //     .row-number-span {
+  //       margin-left: 16px;
+  //     }
+  //   }
+  // }
+
+  // div.action-header-column {
+  //   display: inline-block;
+  //   width: 120px;
+
+  //   .action-label {
+  //     margin-right: 12px;
+  //   }
+
+  //   .action-button {
+  //     padding-left: 8px;
+  //     padding-right: 8px;
+  //   }
+  // }
+
+  // div.field-header-column {
+  //   display: inline-block;
+  //   //overflow: hidden;
+  //   //white-space: nowrap;  //文字超出长度不自动换行
+  //   //text-overflow: ellipsis;  //文字超出长度显示省略号
+
+  //   span.custom-label i {
+  //     margin: 0 3px;
+  //   }
+  // }
+
+  // div.field-header-column.is-required:before {
+  //   content: '*';
+  //   color: #F56C6C;
+  //   margin-right: 4px;
+  // }
+
+  // div.label-center-left {
+  //   text-align: left;
+  // }
+
+  // div.label-center-align {
+  //   text-align: center;
+  // }
+
+  // div.label-right-align {
+  //   text-align: right;
+  // }
+
+  // div.sub-form-action-column {
+  //   display: inline-block;
+  //   width: 120px;
+
+  //   :deep(.el-form-item) {
+  //     margin-bottom: 0;
+  //   }
+
+  //   :deep(.el-button) {
+  //     font-size: 14px;
+  //     padding: 0;
+  //     background: #DCDFE6;
+  //     border: 4px solid #DCDFE6;
+  //   }
+
+  // }
+
+  // div.sub-form-action-column.hide-label {
+  //   :deep(.el-form-item__label) {
+  //     display: none;
+  //   }
+  // }
+
+  // div.sub-form-table-column {
+  //   display: inline-block;
+  //   //width: 200px;
+
+  //   :deep(.el-form-item) {
+  //     margin-left: 4px;
+  //     margin-right: 4px;
+  //     margin-bottom: 0;
+  //   }
+
+  //   :deep(.el-form-item__content) {
+  //     margin-left: 0 !important;
+  //   }
+  // }
+
+  // div.sub-form-table-column.hide-label {
+  //   :deep(.el-form-item__label) {
+  //     display: none;
+  //   }
+  // }
   .sub-form-container {
     margin-bottom: 8px;
-    text-align: left; //IE浏览器强制居左对齐
+    text-align: left
+}
 
-    :deep(.el-row.header-row) {
-      padding-bottom: 0;
-    }
+.sub-form-container .el-row.header-row,.sub-form-container .el-row.sub-form-row {
+    padding: 0
+}
 
-    :deep(.el-row.sub-form-row) {
-      padding-top: 3px;
-      padding-bottom: 3px;
+.sub-form-container .el-row.sub-form-row .row-number-span {
+    margin-left: 16px
+}
 
-      .row-number-span {
-        margin-left: 16px;
-      }
-    }
-  }
-
-  div.action-header-column {
-    display: inline-block;
+div.action-header-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 120px;
+    border: 1px solid #e1e2e3;
+    background: #f1f2f3;
+    padding: 8px
+}
 
-    .action-label {
-      margin-right: 12px;
-    }
+div.action-header-column .action-label {
+    margin-right: 12px
+}
 
-    .action-button {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-  }
+div.action-header-column .action-button {
+    padding-left: 8px;
+    padding-right: 8px
+}
 
-  div.field-header-column {
-    display: inline-block;
-    //overflow: hidden;
-    //white-space: nowrap;  //文字超出长度不自动换行
-    //text-overflow: ellipsis;  //文字超出长度显示省略号
-
-    span.custom-label i {
-      margin: 0 3px;
-    }
-  }
-
-  div.field-header-column.is-required:before {
-    content: '*';
-    color: #F56C6C;
-    margin-right: 4px;
-  }
-
-  div.label-center-left {
-    text-align: left;
-  }
-
-  div.label-center-align {
+div.row-no-header-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
     text-align: center;
-  }
+    border: 1px solid #e1e2e3;
+    background: #f1f2f3
+}
 
-  div.label-right-align {
-    text-align: right;
-  }
+div.field-header-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e1e2e3;
+    background: #f1f2f3;
+    padding: 8px
+}
 
-  div.sub-form-action-column {
-    display: inline-block;
+div.field-header-column span.custom-label i {
+    margin: 0 3px
+}
+
+div.field-header-column.is-required:before {
+    content: "*";
+    color: #f56c6c;
+    margin-right: 4px
+}
+
+div.label-center-left {
+    text-align: left
+}
+
+div.label-center-align {
+    text-align: center
+}
+
+div.label-right-align {
+    text-align: right
+}
+
+div.sub-form-action-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 120px;
+    border: 1px solid #e1e2e3;
+    padding: 8px
+}
 
-    :deep(.el-form-item) {
-      margin-bottom: 0;
-    }
+div.sub-form-action-column .el-form-item {
+    margin-bottom: 0
+}
 
-    :deep(.el-button) {
-      font-size: 14px;
-      padding: 0;
-      background: #DCDFE6;
-      border: 4px solid #DCDFE6;
-    }
+div.sub-form-action-column .el-button {
+    font-size: 14px;
+    padding: 0;
+    background: #DCDFE6;
+    border: 4px solid #DCDFE6
+}
 
-  }
+div.sub-form-action-column.hide-label .el-form-item__label {
+    display: none
+}
 
-  div.sub-form-action-column.hide-label {
-    :deep(.el-form-item__label) {
-      display: none;
-    }
-  }
+div.row-no-column {
+    display: flex;
+    align-items: center;
+    width: 50px;
+    border: 1px solid #e1e2e3
+}
 
-  div.sub-form-table-column {
+div.sub-form-table-column {
     display: inline-block;
-    //width: 200px;
+    border: 1px solid #e1e2e3;
+    padding: 8px
+}
 
-    :deep(.el-form-item) {
-      margin-left: 4px;
-      margin-right: 4px;
-      margin-bottom: 0;
-    }
+div.sub-form-table-column .el-form-item {
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 0
+}
 
-    :deep(.el-form-item__content) {
-      margin-left: 0 !important;
-    }
-  }
+div.sub-form-table-column .el-form-item__content {
+    margin-left: 0!important
+}
 
-  div.sub-form-table-column.hide-label {
-    :deep(.el-form-item__label) {
-      display: none;
-    }
-  }
-
+div.sub-form-table-column.hide-label .el-form-item__label {
+    display: none
+}
 </style>

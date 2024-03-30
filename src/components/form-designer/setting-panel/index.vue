@@ -193,6 +193,10 @@
       this.designer.handleEvent('form-css-updated', (cssClassList) => {
         this.designer.setCssClassList(cssClassList)
       })
+      this.designer.handleEvent("field-selected", e=>{
+          this.subFormChildWidgetFlag = !!e && e.type === "sub-form"
+      }
+      )
     },
     mounted() {
       if (!this.designer.selectedWidget) {

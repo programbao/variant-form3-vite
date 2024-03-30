@@ -32,6 +32,7 @@ export default {
       tab: '标签页',
       section: '区块',
       'sub-form': '单行子表单',
+      'grid-sub-form': '多行子表单',
       'grid-col': '栅格列',
       'table-cell': '单元格',
       'tab-pane': '选项卡页',

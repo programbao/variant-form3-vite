@@ -134,36 +134,53 @@ export function createDesigner(vueInstance) {
       this.selectedWidgetName = null
       this.selectedWidget = {}  //this.selectedWidget = null
     },
-
-    checkWidgetMove(evt) { /* Only field widget can be dragged into sub-form */
-      if (!!evt.draggedContext && !!evt.draggedContext.element) {
-        let wgCategory = evt.draggedContext.element.category
-        let wgType = evt.draggedContext.element.type + ''
-        if (!!evt.to) {
-          if ((evt.to.className === 'sub-form-table') && (wgCategory === 'container')) {
-            //this.$message.info(this.vueInstance.i18nt('designer.hint.onlyFieldWidgetAcceptable'))
-            return false
-          }
-        }
+    checkWidgetMove(t) {
+      if (!!t.draggedContext && !!t.draggedContext.element) {
+          let r = t.draggedContext.element.category
+            , n = t.draggedContext.element.type + "";
+          if (t.to && (t.to.className === "sub-form-drag-drop-zone" && r === "container" || t.to.className === "grid-sub-form-drag-drop-zone" && n !== "grid" || t.to.className === "vf-dialog-drop-zone" && (n === "vf-dialog" || n === "vf-drawer") || t.to.className === "vf-drawer-drop-zone" && (n === "vf-dialog" || n === "vf-drawer") || t.to.className !== "form-widget-canvas" && t.to.className !== "canvas-drag-drop-zone" && (n === "vf-dialog" || n === "vf-drawer") || t.to.className === "object-group-drag-drop-zone" && (n === "object-group" || n === "sub-form" || n === "grid-sub-form" || n === "table-sub-form" || n === "vf-dialog" || n === "vf-drawer")))
+              return !1
       }
-
-      return true
-    },
-
-    checkFieldMove(evt) {
-      if (!!evt.draggedContext && !!evt.draggedContext.element) {
-        let wgCategory = evt.draggedContext.element.category
-        let wgType = evt.draggedContext.element.type + ''
-        if (!!evt.to) {
-          if ((evt.to.className === 'sub-form-table') && (wgType === 'slot')) {
-            //this.$message.info(this.vueInstance.i18nt('designer.hint.onlyFieldWidgetAcceptable'))
-            return false
-          }
-        }
+      return !0
+  },
+  checkFieldMove(t) {
+      if (!!t.draggedContext && !!t.draggedContext.element) {
+          t.draggedContext.element.category;
+          let r = t.draggedContext.element.type + "";
+          if (t.to && ((t.to.className === "sub-form-table" || t.to.className === "grid-sub-form") && r === "slot" || t.to.className === "grid-sub-form" && r !== "grid"))
+              return !1
       }
+      return !0
+  },
+    // checkWidgetMove(evt) { /* Only field widget can be dragged into sub-form */
+    //   if (!!evt.draggedContext && !!evt.draggedContext.element) {
+    //     let wgCategory = evt.draggedContext.element.category
+    //     let wgType = evt.draggedContext.element.type + ''
+    //     if (!!evt.to) {
+    //       if ((evt.to.className === 'sub-form-table') && (wgCategory === 'container')) {
+    //         //this.$message.info(this.vueInstance.i18nt('designer.hint.onlyFieldWidgetAcceptable'))
+    //         return false
+    //       }
+    //     }
+    //   }
 
-      return true
-    },
+    //   return true
+    // },
+
+    // checkFieldMove(evt) {
+    //   if (!!evt.draggedContext && !!evt.draggedContext.element) {
+    //     let wgCategory = evt.draggedContext.element.category
+    //     let wgType = evt.draggedContext.element.type + ''
+    //     if (!!evt.to) {
+    //       if ((evt.to.className === 'sub-form-table') && (wgType === 'slot')) {
+    //         //this.$message.info(this.vueInstance.i18nt('designer.hint.onlyFieldWidgetAcceptable'))
+    //         return false
+    //       }
+    //     }
+    //   }
+
+    //   return true
+    // },
 
     /**
      * 追加表格新行

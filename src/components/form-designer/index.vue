@@ -136,29 +136,30 @@
     data() {
       return {
         vFormVersion: VARIANT_FORM_VERSION,
-        curLangName: '',
-        curLocale: '',
-
+        curLangName: "",
+        curLocale: "",
         vsCodeFlag: false,
-        caseName: '',
-
-        docUrl: 'https://www.vform666.com/document3.html',
-        gitUrl: 'https://github.com/vform666/variant-form3-vite',
-        chatUrl: 'https://www.vform666.com/pages/chat-group/',
-        subScribeUrl: 'https://www.vform666.com/pages/pro/',
-
-        scrollerHeight: 0,
-
+        caseName: "",
+        docUrl: "https://www.vform666.com/document3.html",
+        gitUrl: "https://github.com/vform666/variant-form3-vite",
+        chatUrl: "https://www.vform666.com/chat-group.html",
+        subScribeUrl: "https://www.vform666.com/subscribe.html",
         designer: createDesigner(this),
-
-        fieldList: []
+        fieldList: [],
+        subFormList: [],
+        optionData: this.testOptionData,
+        externalComponents: {},
+        leftAsideVisible: true,
+        rightAsideVisible: true
       }
     },
     provide() {
       return {
-        serverFieldList: this.fieldList,
-        getDesignerConfig: () => this.designerConfig,
-        getBannedWidgets: () => this.bannedWidgets,
+        getServerFieldList: ()=>this.fieldList,
+        getServerSubFormList: ()=>this.subFormList,
+        getDesignerConfig: ()=>this.designerConfig,
+        getBannedWidgets: ()=>this.bannedWidgets,
+        getTestOptionData: ()=>this.optionData
       }
     },
     created() {
@@ -396,7 +397,81 @@
       },
 
       //TODO: 增加更多方法！！
-
+      addDataSource(e) {
+            this.designer.formConfig.dataSources.push(e)
+        },
+        addEC(e, o) {
+            this.externalComponents[e] = o
+        },
+        hasEC(e) {
+            return this.externalComponents.hasOwnProperty(e)
+        },
+        getEC(e) {
+            return this.externalComponents[e]
+        },
+        buildFormDataSchema() {
+            let e = {}
+              , o = getAllContainerWidgets(this.designer.widgetList)
+              , t = []
+              , r = [];
+            o.forEach(a=>{
+                a.type === "sub-form" || a.type === "grid-sub-form" ? t.push(a.container) : a.type === "object-group" && r.push(a.container)
+            }
+            );
+            let n = [];
+            t.forEach(a=>{
+                let s = {};
+                traverseFieldWidgetsOfContainer(a, d=>{
+                    d.formItemFlag && (s[d.options.name] = d.type,
+                    n.push(d.options.name))
+                }
+                ),
+                e[a.options.name] = s
+            }
+            );
+            let l = [];
+            return r.forEach(a=>{
+                let s = {};
+                traverseFieldWidgetsOfContainer(a, c=>{
+                    c.formItemFlag && (s[c.options.name] = c.type,
+                    l.push(c.options.name))
+                }
+                );
+                let d = a.options.objectName;
+                setObjectValue(e, d, s)
+            }
+            ),
+            getAllFieldWidgets(this.designer.widgetList).forEach(a=>{
+                n.indexOf(a.name) === -1 && l.indexOf(a.name) === -1 && (e[a.name] = a.type)
+            }
+            ),
+            e
+        },
+        getFormTemplates() {
+            return getAllFormTemplates()
+        },
+        clearFormTemplates() {
+            clearFormTemplates()
+        },
+        addFormTemplate(e) {
+            addFormTemplate(e)
+        },
+        toggleLeftAside() {
+            this.leftAsideVisible = !this.leftAsideVisible
+        },
+        toggleRightAside() {
+            this.rightAsideVisible = !this.rightAsideVisible
+        },
+        changePrimaryColor(e) {
+            document.documentElement.style.setProperty("--el-color-primary", e),
+            document.documentElement.style.setProperty("--vf-color-primary", e)
+        },
+        setMetaFields(e) {
+            this.$refs.widgetPanelRef.setMetaFields(e)
+        },
+        setTestOptionData(e) {
+            this.optionData = e
+        }
     }
   }
 </script>
