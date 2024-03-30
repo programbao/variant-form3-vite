@@ -33,6 +33,7 @@ export default {
       insertSubFormRow: 'insert new row',
       deleteSubFormRow: 'delete this row',
       nonSubFormType: 'The type of widget don\'t match sub-form',
+      subFormRowNo: "#"
     }
   }
 }

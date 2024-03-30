@@ -767,52 +767,90 @@ export function createDesigner(vueInstance) {
           t.cols.push(a)
       }
     },
-    copyNewContainerWidget(origin) {
-      let newCon = deepClone(origin)
-      newCon.id = newCon.type.replace(/-/g, '') + generateId()
-      newCon.options.name = newCon.id
-      newCon.options.hasOwnProperty("label") && (newCon.options.label = newCon.id);
-      if (newCon.type === 'grid') {
-        // let newCol = deepClone( this.getContainerByType('grid-col') )
-        // let tmpId = generateId()
-        // newCol.id = 'grid-col-' + tmpId
-        // newCol.options.name = 'gridCol' + tmpId
-        // newCon.cols.push(newCol)
-        // //
-        // newCol = deepClone(newCol)
-        // tmpId = generateId()
-        // newCol.id = 'grid-col-' + tmpId
-        // newCol.options.name = 'gridCol' + tmpId
-        // newCon.cols.push(newCol)
-
-        newCon.alias === "column-1-grid" ? 
-          this.buildColsOfGrid(newCon, 1) : newCon.alias === "column-2-grid" ? 
-          this.buildColsOfGrid(newCon, 2) : newCon.alias === "column-3-grid" ? 
-          this.buildColsOfGrid(newCon, 3) : newCon.alias === "column-4-grid" && this.buildColsOfGrid(newCon, 4);
-      } else if (newCon.type === 'table') {
-        let newRow = {cols: []}
-        newRow.id = 'table-row-' + generateId()
-        newRow.merged = false
-        let newCell = deepClone( this.getContainerByType('table-cell') )
-        newCell.id = 'table-cell-' + generateId()
-        newCell.options.name = newCell.id
-        newCell.merged = false
-        newCell.options.colspan = 1
-        newCell.options.rowspan = 1
-        newRow.cols.push(newCell)
-        newCon.rows.push(newRow)
-      } else if (newCon.type === 'tab') {
-        let newTabPane = deepClone( this.getContainerByType('tab-pane') )
-        newTabPane.id = 'tab-pane-' + generateId()
-        newTabPane.options.name = 'tab1'
-        newTabPane.options.label = 'tab 1'
-        newCon.tabs.push(newTabPane)
+    copyNewContainerWidget(t) {
+      let r = deepClone(t);
+      if (r.id = r.type.replace(/-/g, "") + generateId(),
+      r.options.name = r.id,
+      r.options.hasOwnProperty("label") && (r.options.label = r.id),
+      r.type === "grid")
+          r.alias === "column-1-grid" ? this.buildColsOfGrid(r, 1) : r.alias === "column-2-grid" ? this.buildColsOfGrid(r, 2) : r.alias === "column-3-grid" ? this.buildColsOfGrid(r, 3) : r.alias === "column-4-grid" && this.buildColsOfGrid(r, 4);
+      else if (r.type === "table") {
+          let n = {
+              cols: []
+          };
+          n.id = "table-row-" + generateId(),
+          n.merged = !1;
+          let l = deepClone(this.getContainerByType("table-cell"));
+          l.id = "table-cell-" + generateId(),
+          l.options.name = l.id,
+          l.merged = !1,
+          l.options.colspan = 1,
+          l.options.rowspan = 1,
+          n.cols.push(l),
+          r.rows.push(n)
+      } else if (r.type === "tab") {
+          let n = deepClone(this.getContainerByType("tab-pane"));
+          n.id = "tab-pane-" + generateId(),
+          n.options.name = "tab1",
+          n.options.label = "tab 1",
+          r.tabs.push(n)
+      } else if (r.type === "grid-sub-form") {
+          const n = deepClone(this.getContainerByType("grid"));
+          n.id = r.type.replace(/-/g, "") + generateId(),
+          n.options.name = n.id,
+          this.buildColsOfGrid(n, 4, 12),
+          r.widgetList.push(n)
       }
-      //newCon.options.customClass = []
+      return delete r.displayName,
+      delete r.commonFlag,
+      r
+  },
+    // copyNewContainerWidget(origin) {
+    //   let newCon = deepClone(origin)
+    //   newCon.id = newCon.type.replace(/-/g, '') + generateId()
+    //   newCon.options.name = newCon.id
+    //   newCon.options.hasOwnProperty("label") && (newCon.options.label = newCon.id);
+    //   if (newCon.type === 'grid') {
+    //     // let newCol = deepClone( this.getContainerByType('grid-col') )
+    //     // let tmpId = generateId()
+    //     // newCol.id = 'grid-col-' + tmpId
+    //     // newCol.options.name = 'gridCol' + tmpId
+    //     // newCon.cols.push(newCol)
+    //     // //
+    //     // newCol = deepClone(newCol)
+    //     // tmpId = generateId()
+    //     // newCol.id = 'grid-col-' + tmpId
+    //     // newCol.options.name = 'gridCol' + tmpId
+    //     // newCon.cols.push(newCol)
 
-      delete newCon.displayName
-      return newCon
-    },
+    //     newCon.alias === "column-1-grid" ? 
+    //       this.buildColsOfGrid(newCon, 1) : newCon.alias === "column-2-grid" ? 
+    //       this.buildColsOfGrid(newCon, 2) : newCon.alias === "column-3-grid" ? 
+    //       this.buildColsOfGrid(newCon, 3) : newCon.alias === "column-4-grid" && this.buildColsOfGrid(newCon, 4);
+    //   } else if (newCon.type === 'table') {
+    //     let newRow = {cols: []}
+    //     newRow.id = 'table-row-' + generateId()
+    //     newRow.merged = false
+    //     let newCell = deepClone( this.getContainerByType('table-cell') )
+    //     newCell.id = 'table-cell-' + generateId()
+    //     newCell.options.name = newCell.id
+    //     newCell.merged = false
+    //     newCell.options.colspan = 1
+    //     newCell.options.rowspan = 1
+    //     newRow.cols.push(newCell)
+    //     newCon.rows.push(newRow)
+    //   } else if (newCon.type === 'tab') {
+    //     let newTabPane = deepClone( this.getContainerByType('tab-pane') )
+    //     newTabPane.id = 'tab-pane-' + generateId()
+    //     newTabPane.options.name = 'tab1'
+    //     newTabPane.options.label = 'tab 1'
+    //     newCon.tabs.push(newTabPane)
+    //   }
+    //   //newCon.options.customClass = []
+
+    //   delete newCon.displayName
+    //   return newCon
+    // },
 
     addContainerByDbClick(container) {
       let newCon = this.copyNewContainerWidget(container)

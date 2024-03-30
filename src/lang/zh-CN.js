@@ -157,7 +157,7 @@ export default {
       colspanNotConsistentForDeleteEntireColumn:
         '存在列宽不一致的单元格, 不可删除整列.',
       lastColCannotBeDeleted: '最后一列不可删除.',
-      lastRowCannotBeDeleted: '最后一行不可删除.'
+      lastRowCannotBeDeleted: '最后一行不可删除.',
     },
 
     toolbar: {

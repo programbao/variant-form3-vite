@@ -33,6 +33,7 @@ export default {
       insertSubFormRow: '插入行',
       deleteSubFormRow: '删除行',
       nonSubFormType: '组件类型不是子表单',
+      subFormRowNo: "序号"
     }
   }
 }
