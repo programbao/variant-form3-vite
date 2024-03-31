@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <form-item-wrapper :designer="designer" :field="field" :rules="rules" :design-state="designState"
                      :parent-widget="parentWidget" :parent-list="parentList" :index-of-parent-list="indexOfParentList"
                      :sub-form-row-index="subFormRowIndex" :sub-form-col-index="subFormColIndex" :sub-form-row-id="subFormRowId">
@@ -20,8 +20,63 @@
       </template>
     </el-input>
   </form-item-wrapper>
+</template> -->
+<template>
+  <form-item-wrapper
+    :designer="designer"
+    :field="field"
+    :rules="rules"
+    :design-state="designState"
+    :parent-widget="parentWidget"
+    :parent-list="parentList"
+    :index-of-parent-list="indexOfParentList"
+    :sub-form-row-index="subFormRowIndex"
+    :sub-form-col-index="subFormColIndex"
+    :sub-form-row-id="subFormRowId"
+  >
+    <template v-if="!isReadMode">
+      <el-input
+        ref="fieldEditor"
+        v-model="fieldModel"
+        :disabled="field.options.disabled"
+        :readonly="field.options.readonly"
+        :size="field.options.size"
+        class="hide-spin-button"
+        :type="inputType"
+        :show-password="field.options.showPassword"
+        :placeholder="field.options.placeholder"
+        :clearable="field.options.clearable"
+        :minlength="field.options.minLength"
+        :maxlength="field.options.maxLength"
+        :show-word-limit="field.options.showWordLimit"
+        :prefix-icon="field.options.prefixIcon"
+        :suffix-icon="field.options.suffixIcon"
+        @focus="handleFocusCustomEvent"
+        @blur="handleBlurCustomEvent"
+        @input="handleInputCustomEvent"
+        @change="handleChangeEvent"
+      >
+        <template v-if="field.options.appendButton" #append>
+          <el-button
+            :disabled="field.options.disabled || field.options.appendButtonDisabled"
+            @click="emitAppendButtonClick"
+          >
+            <el-icon>
+              <component :is="field.options.buttonIcon" />
+            </el-icon>
+          </el-button>
+        </template>
+        <template v-else-if="field.options.appendText" #append>
+          {{ field.options.textForAppend }}
+        </template>
+      </el-input>
+    </template>
+    <template v-else>
+      <span v-if="field.options.type === 'password'" class="readonly-mode-field">********</span>
+      <span v-else class="readonly-mode-field">{{ contentForReadMode }}</span>
+    </template>
+  </form-item-wrapper>
 </template>
-
 <script>
   import FormItemWrapper from './form-item-wrapper'
   import emitter from '@/utils/emitter'
@@ -71,14 +126,19 @@
       }
     },
     computed: {
+      // inputType() {
+      //   if (this.field.options.type === 'number') {
+      //     return 'text'  //当input的type设置为number时，如果输入非数字字符，则v-model拿到的值为空字符串，无法实现输入校验！故屏蔽之！！
+      //   }
+
+      //   return this.field.options.type
+      // },
       inputType() {
-        if (this.field.options.type === 'number') {
-          return 'text'  //当input的type设置为number时，如果输入非数字字符，则v-model拿到的值为空字符串，无法实现输入校验！故屏蔽之！！
+            return this.field.options.type === "number" ? "text" : this.field.options.type
+        },
+        contentForReadMode() {
+            return this.fieldModel ? this.fieldModel : "--"
         }
-
-        return this.field.options.type
-      },
-
     },
     beforeCreate() {
       /* 这里不能访问方法和属性！！ */
@@ -87,12 +147,11 @@
     created() {
       /* 注意：子组件mounted在父组件created之后、父组件mounted之前触发，故子组件mounted需要用到的prop
          需要在父组件created中初始化！！ */
-      this.initFieldModel()
-      this.registerToRefList()
-      this.initEventHandler()
-      this.buildFieldRules()
-
-      this.handleOnCreated()
+        this.registerToRefList(),
+        this.initFieldModel(),
+        this.initEventHandler(),
+        this.buildFieldRules(),
+        this.handleOnCreated()
     },
 
     mounted() {

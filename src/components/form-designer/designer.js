@@ -43,7 +43,6 @@ export function createDesigner(vueInstance) {
           "color:#999;font-size: 12px",
           "color:#333"
       )
-
       if (!resetFormJson) {
         this.initHistoryData()
       }
@@ -56,7 +55,6 @@ export function createDesigner(vueInstance) {
       this.selectedWidgetName = null
       this.selectedWidget = {}  //this.selectedWidget = null
       overwriteObj(this.formConfig, defaultFormConfig) //
-
       if (!!skipHistoryChange) {
         //什么也不做！！
       } else if (!emptyWidgetListFlag) {
@@ -1017,7 +1015,6 @@ export function createDesigner(vueInstance) {
       if (!!widgetListBackup) {
         this.widgetList = JSON.parse(widgetListBackup)
       }
-
       let formConfigBackup = window.localStorage.getItem('form__config__backup')
       if (!!formConfigBackup) {
         //this.formConfig = JSON.parse(formConfigBackup)

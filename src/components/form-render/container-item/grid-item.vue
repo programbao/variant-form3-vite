@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <container-item-wrapper :widget="widget">
 
     <el-row :key="widget.id" :gutter="widget.options.gutter" class="grid-container"
@@ -8,7 +8,6 @@
         <grid-col-item :widget="colWidget" :parent-list="widget.cols"
                        :index-of-parent-list="colIdx" :parent-widget="widget"
                        :col-height="widget.options.colHeight">
-          <!-- 递归传递插槽！！！ -->
           <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
             <slot :name="slot" v-bind="scope"/>
           </template>
@@ -17,8 +16,36 @@
     </el-row>
 
   </container-item-wrapper>
+</template> -->
+<template>
+  <container-item-wrapper :widget="widget">
+    <template v-if="!widget.options.hidden">
+      <el-row
+        :key="widget.id"
+        :gutter="widget.options.gutter"
+        :class="['grid-container', customClass]"
+        :ref="widget.id"
+      >
+        <grid-col-item
+          v-for="(col, index) in widget.cols"
+          :key="index"
+          :widget="col"
+          :parent-list="widget.cols"
+          :index-of-parent-list="index"
+          :parent-widget="widget"
+          :col-height="widget.options.colHeight"
+          :sub-form-row-id="subFormRowId"
+          :sub-form-row-index="subFormRowIndex"
+          :sub-form-col-index="subFormColIndex"
+        >
+          <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
+            <slot :name="slot" v-bind="scope"/>
+          </template>
+        </grid-col-item>
+      </el-row>
+    </template>
+  </container-item-wrapper>
 </template>
-
 <script>
   import emitter from '@/utils/emitter'
   import i18n from "../../../utils/i18n"
@@ -37,6 +64,18 @@
     },
     props: {
       widget: Object,
+      subFormRowIndex: {
+          type: Number,
+          default: -1
+      },
+      subFormColIndex: {
+          type: Number,
+          default: -1
+      },
+      subFormRowId: {
+          type: String,
+          default: ""
+      }
     },
     inject: ['refList', 'sfRefList', 'globalModel'],
     created() {

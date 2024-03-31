@@ -57,138 +57,247 @@
       },
     },
     provide() {
-      return {
-        refList: this.widgetRefList,
-        getFormConfig: () => this.formConfig,  /* 解决provide传递formConfig属性的响应式更新问题！！ */
-        getGlobalDsv: () => this.globalDsv, // 全局数据源变量
-        globalOptionData: this.optionData,
-        getOptionData: () => this.optionData,
-        globalModel: {
-          formModel: this.formModel,
+        return {
+            refList: this.widgetRefList,
+            getFormConfig: ()=>this.formConfig,
+            getGlobalDsv: ()=>this.globalDsv,
+            globalOptionData: this.optionData,
+            getOptionData: ()=>this.optionData,
+            getReadMode: ()=>!1,
+            globalModel: {
+                formModel: this.formModel
+            },
+            getSubFormFieldFlag: ()=>!1,
+            getSubFormName: ()=>"",
+            getObjectFieldFlag: ()=>!1,
+            getObjectName: ()=>"",
+            getDSResultCache: ()=>this.dsResultCache
         }
-      }
     },
-    inject: ['getDesignerConfig'],
+    inject: ["getDesignerConfig"],
     data() {
-      return {
-        formModel: {},
-        widgetRefList: {},
-      }
+        return {
+            formModel: {},
+            widgetRefList: {},
+            dsResultCache: {}
+        }
     },
     computed: {
-      labelPosition() {
-        if (!!this.designer.formConfig && !!this.designer.formConfig.labelPosition) {
-          return this.designer.formConfig.labelPosition
+        labelPosition() {
+            return !!this.designer.formConfig && !!this.designer.formConfig.labelPosition ? this.designer.formConfig.labelPosition : "left"
+        },
+        size() {
+            return !!this.designer.formConfig && !!this.designer.formConfig.size ? this.designer.formConfig.size : "default"
+        },
+        customClass() {
+            return this.designer.formConfig.customClass || ""
+        },
+        layoutType() {
+            return this.designer.getLayoutType()
         }
-
-        return 'left'
-      },
-
-      size() {
-        if (!!this.designer.formConfig && !!this.designer.formConfig.size) {
-          return this.designer.formConfig.size
-        }
-
-        return 'default'
-      },
-
-      customClass() {
-        return this.designer.formConfig.customClass || ''
-      },
-
-      layoutType() {
-        return this.designer.getLayoutType()
-      },
-
     },
     watch: {
-      'designer.widgetList': {
-        deep: true,
-        handler(val) {
-          //
+        "designer.widgetList": {
+            deep: !0,
+            handler(e) {}
+        },
+        "designer.formConfig": {
+            deep: !0,
+            handler(e) {}
         }
-      },
-
-      'designer.formConfig': {
-        deep: true,
-        handler(val) {
-          //
-        }
-      },
-
     },
     created() {
-      this.designer.initDesigner( !!this.getDesignerConfig().resetFormJson );
-      this.designer.loadPresetCssCode( this.getDesignerConfig().presetCssCode )
+        this.designer.loadPresetCssCode(this.getDesignerConfig().presetCssCode)
     },
     mounted() {
-      this.disableFirefoxDefaultDrop()  /* 禁用Firefox默认拖拽搜索功能!! */
-      this.designer.registerFormWidget(this)
+        this.disableFirefoxDefaultDrop(),
+        this.designer.registerFormWidget(this)
     },
     methods: {
-      getWidgetName(widget) {
-        return widget.type + '-widget'
-      },
-
-      disableFirefoxDefaultDrop() {
-        let isFirefox = (navigator.userAgent.toLowerCase().indexOf("firefox") !== -1)
-        if (isFirefox) {
-          document.body.ondrop = function (event) {
-            event.stopPropagation();
-            event.preventDefault();
-          }
+        getWidgetName(e) {
+            return e.type + "-widget"
+        },
+        disableFirefoxDefaultDrop() {
+            navigator.userAgent.toLowerCase().indexOf("firefox") !== -1 && (document.body.ondrop = function(o) {
+                o.stopPropagation(),
+                o.preventDefault()
+            }
+            )
+        },
+        onDragEnd(e) {},
+        onDragAdd(e) {
+            const o = e.newIndex;
+            this.designer.widgetList[o] && this.designer.setSelected(this.designer.widgetList[o]),
+            this.designer.emitHistoryChange(),
+            this.designer.emitEvent("field-selected", null)
+        },
+        onDragUpdate() {
+            this.designer.emitHistoryChange()
+        },
+        checkMove(e) {
+            return this.designer.checkWidgetMove(e)
+        },
+        getFormData() {
+            return this.formModel
+        },
+        getWidgetRef(e, o=!1) {
+            let t = this.widgetRefList[e];
+            return !t && !!o && this.$message.error(this.i18nt("designer.hint.refNotFound") + e),
+            t
+        },
+        getSelectedWidgetRef() {
+            let e = this.designer.selectedWidgetName;
+            return this.getWidgetRef(e)
+        },
+        clearWidgetRefList() {
+            Object.keys(this.widgetRefList).forEach(e=>{
+                delete this.widgetRefList[e]
+            }
+            )
+        },
+        deleteWidgetRef(e) {
+            delete this.widgetRefList[e]
+        },
+        deletedChildrenRef(e) {
+            e.forEach(o=>{
+                delete this.widgetRefList[o]
+            }
+            )
         }
-      },
-
-      onDragEnd(evt) {
-        //console.log('drag end000', evt)
-      },
-
-      onDragAdd(evt) {
-        const newIndex = evt.newIndex
-        if (!!this.designer.widgetList[newIndex]) {
-          this.designer.setSelected( this.designer.widgetList[newIndex] )
-        }
-
-        this.designer.emitHistoryChange()
-      },
-
-      onDragUpdate() {  /* 在VueDraggable内拖拽组件发生位置变化时会触发update，未发生组件位置变化不会触发！！ */
-        this.designer.emitHistoryChange()
-      },
-
-      checkMove(evt) {
-        return this.designer.checkWidgetMove(evt)
-      },
-
-      getFormData() {
-        return this.formModel
-      },
-
-      getWidgetRef(widgetName, showError = false) {
-        let foundRef = this.widgetRefList[widgetName]
-        if (!foundRef && !!showError) {
-          this.$message.error(this.i18nt('designer.hint.refNotFound') + widgetName)
-        }
-        return foundRef
-      },
-
-      getSelectedWidgetRef() {
-        let wName = this.designer.selectedWidgetName
-        return this.getWidgetRef(wName)
-      },
-
-      clearWidgetRefList() {
-        Object.keys(this.widgetRefList).forEach(key => {
-          delete this.widgetRefList[key]
-        })
-      },
-
-      deleteWidgetRef(widgetRefName) {
-        delete this.widgetRefList[widgetRefName]
-      },
-
     }
+    // provide() {
+    //   return {
+    //     refList: this.widgetRefList,
+    //     getFormConfig: () => this.formConfig,  /* 解决provide传递formConfig属性的响应式更新问题！！ */
+    //     getGlobalDsv: () => this.globalDsv, // 全局数据源变量
+    //     globalOptionData: this.optionData,
+    //     getOptionData: () => this.optionData,
+    //     globalModel: {
+    //       formModel: this.formModel,
+    //     }
+    //   }
+    // },
+    // inject: ['getDesignerConfig'],
+    // data() {
+    //   return {
+    //     formModel: {},
+    //     widgetRefList: {},
+    //   }
+    // },
+    // computed: {
+    //   labelPosition() {
+    //     if (!!this.designer.formConfig && !!this.designer.formConfig.labelPosition) {
+    //       return this.designer.formConfig.labelPosition
+    //     }
+
+    //     return 'left'
+    //   },
+
+    //   size() {
+    //     if (!!this.designer.formConfig && !!this.designer.formConfig.size) {
+    //       return this.designer.formConfig.size
+    //     }
+
+    //     return 'default'
+    //   },
+
+    //   customClass() {
+    //     return this.designer.formConfig.customClass || ''
+    //   },
+
+    //   layoutType() {
+    //     return this.designer.getLayoutType()
+    //   },
+
+    // },
+    // watch: {
+    //   'designer.widgetList': {
+    //     deep: true,
+    //     handler(val) {
+    //       //
+    //     }
+    //   },
+
+    //   'designer.formConfig': {
+    //     deep: true,
+    //     handler(val) {
+    //       //
+    //     }
+    //   },
+
+    // },
+    // created() {
+    //   this.designer.initDesigner( !!this.getDesignerConfig().resetFormJson );
+    //   this.designer.loadPresetCssCode( this.getDesignerConfig().presetCssCode )
+    // },
+    // mounted() {
+    //   this.disableFirefoxDefaultDrop()  /* 禁用Firefox默认拖拽搜索功能!! */
+    //   this.designer.registerFormWidget(this)
+    // },
+    // methods: {
+    //   getWidgetName(widget) {
+    //     return widget.type + '-widget'
+    //   },
+
+    //   disableFirefoxDefaultDrop() {
+    //     let isFirefox = (navigator.userAgent.toLowerCase().indexOf("firefox") !== -1)
+    //     if (isFirefox) {
+    //       document.body.ondrop = function (event) {
+    //         event.stopPropagation();
+    //         event.preventDefault();
+    //       }
+    //     }
+    //   },
+
+    //   onDragEnd(evt) {
+    //     //console.log('drag end000', evt)
+    //   },
+
+    //   onDragAdd(evt) {
+    //     const newIndex = evt.newIndex
+    //     if (!!this.designer.widgetList[newIndex]) {
+    //       this.designer.setSelected( this.designer.widgetList[newIndex] )
+    //     }
+
+    //     this.designer.emitHistoryChange()
+    //   },
+
+    //   onDragUpdate() {  /* 在VueDraggable内拖拽组件发生位置变化时会触发update，未发生组件位置变化不会触发！！ */
+    //     this.designer.emitHistoryChange()
+    //   },
+
+    //   checkMove(evt) {
+    //     return this.designer.checkWidgetMove(evt)
+    //   },
+
+    //   getFormData() {
+    //     return this.formModel
+    //   },
+
+    //   getWidgetRef(widgetName, showError = false) {
+    //     let foundRef = this.widgetRefList[widgetName]
+    //     if (!foundRef && !!showError) {
+    //       this.$message.error(this.i18nt('designer.hint.refNotFound') + widgetName)
+    //     }
+    //     return foundRef
+    //   },
+
+    //   getSelectedWidgetRef() {
+    //     let wName = this.designer.selectedWidgetName
+    //     return this.getWidgetRef(wName)
+    //   },
+
+    //   clearWidgetRefList() {
+    //     Object.keys(this.widgetRefList).forEach(key => {
+    //       delete this.widgetRefList[key]
+    //     })
+    //   },
+
+    //   deleteWidgetRef(widgetRefName) {
+    //     delete this.widgetRefList[widgetRefName]
+    //   },
+
+    // }
   }
 </script>
 

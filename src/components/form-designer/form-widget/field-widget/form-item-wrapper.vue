@@ -97,129 +97,197 @@
 
       rules: Array,
     },
-    inject: ['getFormConfig'],
+    inject: ["getFormConfig", "getSubFormFieldFlag", "getSubFormName", "getObjectFieldFlag", "getObjectName"],
     computed: {
-      formConfig() {
-        return this.getFormConfig()
-      },
-
-      selected() {
-        return !!this.designer && this.field.id === this.designer.selectedId
-      },
-
-      label() {
-        if (!!this.field.options.labelHidden) {
-          return ''
+        formConfig() {
+            return this.getFormConfig()
+        },
+        selected() {
+            return !!this.designer && this.field.id === this.designer.selectedId
+        },
+        label() {
+            return this.field.options.labelHidden ? "" : this.field.options.label
+        },
+        labelWidth() {
+            return this.field.options.labelHidden ? 0 : this.field.options.labelWidth ? this.field.options.labelWidth : this.designer ? this.designer.formConfig.labelWidth : this.formConfig.labelWidth
+        },
+        labelAlign() {
+            return this.field.options.labelAlign ? this.field.options.labelAlign : this.designer ? this.designer.formConfig.labelAlign || "label-left-align" : this.formConfig.labelAlign || "label-left-align"
+        },
+        customClass() {
+            return this.field.options.customClass ? this.field.options.customClass.join(" ") : ""
+        },
+        subFormName() {
+            return this.getSubFormName ? this.getSubFormName() : ""
+        },
+        subFormItemFlag() {
+            return this.getSubFormFieldFlag ? this.getSubFormFieldFlag() : !1
         }
-
-        return this.field.options.label
-      },
-
-      labelWidth() {
-        if (!!this.field.options.labelHidden) {
-          return 0
-        }
-
-        if (!!this.field.options.labelWidth) {
-          return this.field.options.labelWidth
-        }
-
-        if (!!this.designer) {
-          return this.designer.formConfig.labelWidth
-        } else {
-          return this.formConfig.labelWidth
-        }
-      },
-
-      labelAlign() {
-        if (!!this.field.options.labelAlign) {
-          return this.field.options.labelAlign
-        }
-
-        if (!!this.designer) {
-          return this.designer.formConfig.labelAlign || 'label-left-align'
-        } else {
-          return this.formConfig.labelAlign || 'label-left-align'
-        }
-      },
-
-      customClass() {
-        return !!this.field.options.customClass ? this.field.options.customClass.join(' ') : ''
-      },
-
-      subFormName() {
-        return !!this.parentWidget ? this.parentWidget.options.name : ''
-      },
-
-      subFormItemFlag() {
-        return !!this.parentWidget ? this.parentWidget.type === 'sub-form' : false
-      },
-
     },
-    created() {
-      //
-    },
+    created() {},
     methods: {
-
-      selectField(field) {
-        if (!!this.designer) {
-          this.designer.setSelected(field)
-          this.designer.emitEvent('field-selected', this.parentWidget)  //发送选中组件的父组件对象
-        }
-      },
-
-      selectParentWidget() {
-        if (this.parentWidget) {
-          this.designer.setSelected(this.parentWidget)
-        } else {
-          this.designer.clearSelected()
-        }
-      },
-
-      moveUpWidget() {
-        this.designer.moveUpWidget(this.parentList, this.indexOfParentList)
-        this.designer.emitHistoryChange()
-      },
-
-      moveDownWidget() {
-        this.designer.moveDownWidget(this.parentList, this.indexOfParentList)
-        this.designer.emitHistoryChange()
-      },
-
-      removeFieldWidget() {
-        if (!!this.parentList) {
-          const fieldRefName = this.designer.selectedWidgetName
-          let nextSelected = null
-          if (this.parentList.length === 1) {
-            if (!!this.parentWidget) {
-              nextSelected = this.parentWidget
-            }
-          } else if (this.parentList.length === (1 + this.indexOfParentList)) {
-            nextSelected = this.parentList[this.indexOfParentList - 1]
-          } else {
-            nextSelected = this.parentList[this.indexOfParentList + 1]
-          }
-
-          this.$nextTick(() => {
-            this.parentList.splice(this.indexOfParentList, 1)
-            this.designer.setSelected(nextSelected)
-
-            this.designer.formWidget.deleteWidgetRef(fieldRefName)  //删除组件ref！！！
+        selectField(e) {
+            this.designer && (this.designer.setSelected(e),
+            this.designer.emitEvent("field-selected", this.parentWidget))
+        },
+        selectParentWidget() {
+            this.parentWidget ? this.designer.setSelected(this.parentWidget) : this.designer.clearSelected()
+        },
+        moveUpWidget() {
+            this.designer.moveUpWidget(this.parentList, this.indexOfParentList),
             this.designer.emitHistoryChange()
-          })
+        },
+        moveDownWidget() {
+            this.designer.moveDownWidget(this.parentList, this.indexOfParentList),
+            this.designer.emitHistoryChange()
+        },
+        cloneField(e) {
+            this.designer.cloneFieldWidget(e, this.parentList),
+            this.designer.emitHistoryChange()
+        },
+        removeFieldWidget() {
+            if (this.parentList) {
+                const e = this.designer.selectedWidgetName;
+                let o = null;
+                this.parentList.length === 1 ? this.parentWidget && (o = this.parentWidget) : this.parentList.length === 1 + this.indexOfParentList ? o = this.parentList[this.indexOfParentList - 1] : o = this.parentList[this.indexOfParentList + 1],
+                this.$nextTick(()=>{
+                    this.parentList.splice(this.indexOfParentList, 1),
+                    this.designer.setSelected(o),
+                    this.designer.formWidget.deleteWidgetRef(e),
+                    this.designer.emitHistoryChange(),
+                    this.designer.emitEvent("canvas-remove-field", e)
+                }
+                )
+            }
+        },
+        getPropName() {
+            let e = this.field.options.name;
+            return e = this.field.options.keyNameEnabled && this.field.options.keyName || e,
+            this.subFormItemFlag && !this.designState ? this.subFormName + "." + this.subFormRowIndex + "." + e : this.getObjectFieldFlag() && !this.designState ? this.getObjectName() + "." + e : e
         }
-      },
-
-      getPropName() {
-        if (this.subFormItemFlag && !this.designState) {
-          return this.subFormName + "." + this.subFormRowIndex + "." + this.field.options.name + ""
-        } else {
-          return this.field.options.name
-        }
-      },
-
-
     }
+    // computed: {
+    //   formConfig() {
+    //     return this.getFormConfig()
+    //   },
+
+    //   selected() {
+    //     return !!this.designer && this.field.id === this.designer.selectedId
+    //   },
+
+    //   label() {
+    //     if (!!this.field.options.labelHidden) {
+    //       return ''
+    //     }
+
+    //     return this.field.options.label
+    //   },
+
+    //   labelWidth() {
+    //     if (!!this.field.options.labelHidden) {
+    //       return 0
+    //     }
+
+    //     if (!!this.field.options.labelWidth) {
+    //       return this.field.options.labelWidth
+    //     }
+
+    //     if (!!this.designer) {
+    //       return this.designer.formConfig.labelWidth
+    //     } else {
+    //       return this.formConfig.labelWidth
+    //     }
+    //   },
+
+    //   labelAlign() {
+    //     if (!!this.field.options.labelAlign) {
+    //       return this.field.options.labelAlign
+    //     }
+
+    //     if (!!this.designer) {
+    //       return this.designer.formConfig.labelAlign || 'label-left-align'
+    //     } else {
+    //       return this.formConfig.labelAlign || 'label-left-align'
+    //     }
+    //   },
+
+    //   customClass() {
+    //     return !!this.field.options.customClass ? this.field.options.customClass.join(' ') : ''
+    //   },
+
+    //   subFormName() {
+    //     return !!this.parentWidget ? this.parentWidget.options.name : ''
+    //   },
+
+    //   subFormItemFlag() {
+    //     return !!this.parentWidget ? this.parentWidget.type === 'sub-form' : false
+    //   },
+
+    // },
+    // created() {
+    //   //
+    // },
+    // methods: {
+
+    //   selectField(field) {
+    //     if (!!this.designer) {
+    //       this.designer.setSelected(field)
+    //       this.designer.emitEvent('field-selected', this.parentWidget)  //发送选中组件的父组件对象
+    //     }
+    //   },
+
+    //   selectParentWidget() {
+    //     if (this.parentWidget) {
+    //       this.designer.setSelected(this.parentWidget)
+    //     } else {
+    //       this.designer.clearSelected()
+    //     }
+    //   },
+
+    //   moveUpWidget() {
+    //     this.designer.moveUpWidget(this.parentList, this.indexOfParentList)
+    //     this.designer.emitHistoryChange()
+    //   },
+
+    //   moveDownWidget() {
+    //     this.designer.moveDownWidget(this.parentList, this.indexOfParentList)
+    //     this.designer.emitHistoryChange()
+    //   },
+
+    //   removeFieldWidget() {
+    //     if (!!this.parentList) {
+    //       const fieldRefName = this.designer.selectedWidgetName
+    //       let nextSelected = null
+    //       if (this.parentList.length === 1) {
+    //         if (!!this.parentWidget) {
+    //           nextSelected = this.parentWidget
+    //         }
+    //       } else if (this.parentList.length === (1 + this.indexOfParentList)) {
+    //         nextSelected = this.parentList[this.indexOfParentList - 1]
+    //       } else {
+    //         nextSelected = this.parentList[this.indexOfParentList + 1]
+    //       }
+
+    //       this.$nextTick(() => {
+    //         this.parentList.splice(this.indexOfParentList, 1)
+    //         this.designer.setSelected(nextSelected)
+
+    //         this.designer.formWidget.deleteWidgetRef(fieldRefName)  //删除组件ref！！！
+    //         this.designer.emitHistoryChange()
+    //       })
+    //     }
+    //   },
+
+    //   getPropName() {
+    //     if (this.subFormItemFlag && !this.designState) {
+    //       return this.subFormName + "." + this.subFormRowIndex + "." + this.field.options.name + ""
+    //     } else {
+    //       return this.field.options.name
+    //     }
+    //   },
+
+
+    // }
   }
 </script>
 
