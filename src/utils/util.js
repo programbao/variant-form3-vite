@@ -501,22 +501,39 @@ export function getQueryParam(variable) {
 
 export function getDefaultFormConfig() {
   return {
-    modelName: 'formData',
-    refName: 'vForm',
-    rulesName: 'rules',
-    labelWidth: 80,
-    labelPosition: 'left',
-    size: '',
-    labelAlign: 'label-left-align',
-    cssCode: '',
-    customClass: [],
-    functions: '',  //全局函数
-    layoutType: 'PC',
-    jsonVersion: 3,
+    // modelName: 'formData',
+    // refName: 'vForm',
+    // rulesName: 'rules',
+    // labelWidth: 80,
+    // labelPosition: 'left',
+    // size: '',
+    // labelAlign: 'label-left-align',
+    // cssCode: '',
+    // customClass: [],
+    // functions: '',  //全局函数
+    // layoutType: 'PC',
+    // jsonVersion: 3,
 
-    onFormCreated: '',
-    onFormMounted: '',
-    onFormDataChange: '',
+    // onFormCreated: '',
+    // onFormMounted: '',
+    // onFormDataChange: '',
+    modelName: "formData",
+    refName: "vForm",
+    rulesName: "rules",
+    labelWidth: 80,
+    labelPosition: "left",
+    size: "",
+    labelAlign: "label-left-align",
+    cssCode: "",
+    customClass: [],
+    functions: "",
+    layoutType: "PC",
+    jsonVersion: 3,
+    dataSources: [],
+    onFormCreated: "",
+    onFormMounted: "",
+    onFormDataChange: "",
+    onFormValidate: ""
   }
 }
 

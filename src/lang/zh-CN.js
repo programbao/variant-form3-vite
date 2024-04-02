@@ -9,8 +9,9 @@ export default {
     deployment: '私有部署',
     subscription: '订阅Pro'
   },
-
   designer: {
+    chartLib: '图表',
+    metadataLib: '元数据',
     componentLib: '组件库',
     formLib: '表单模板',
     containerTitle: '容器',
@@ -19,15 +20,14 @@ export default {
     basicFieldTitle: '基础字段',
     advancedFieldTitle: '高级字段',
     customFieldTitle: '自定义扩展字段',
-
+    chartTitle: '图表组件',
     noWidgetHint: '请从左侧列表中选择一个组件, 然后用鼠标拖动组件放置于此处.',
-
     widgetLabel: {
       grid: '栅格',
-      "column-1-grid": "单列栅格",
-      "column-2-grid": "双列栅格",
-      "column-3-grid": "三列栅格",
-      "column-4-grid": "四列栅格",
+      'column-1-grid': '单列栅格',
+      'column-2-grid': '双列栅格',
+      'column-3-grid': '三列栅格',
+      'column-4-grid': '四列栅格',
       table: '表格',
       tab: '标签页',
       section: '区块',
@@ -38,10 +38,10 @@ export default {
       'tab-pane': '选项卡页',
       'data-table': '数据表格',
       tree: '树形',
-      "object-group": "对象容器",
-      "vf-dialog": "弹出窗口",
-      "vf-drawer": "侧滑抽屉",
-      
+      'button-group': '按钮组',
+      'object-group': '对象容器',
+      'vf-dialog': '弹出窗口',
+      'vf-drawer': '侧滑抽屉',
       input: '单行输入',
       textarea: '多行输入',
       number: '计数器',
@@ -60,17 +60,89 @@ export default {
       'html-text': 'HTML',
       button: '按钮',
       divider: '分隔线',
-
       'picture-upload': '图片',
       'file-upload': '文件',
       'rich-editor': '富文本',
       cascader: '级联选择',
       slot: '插槽',
-
       custom: 'Custom Component'
     },
-
     hint: {
+      formulaSetting: '公式设置',
+      formulaModel: '模式',
+      formulaModelView: '查看',
+      formulaModelEdit: '编辑',
+      formulaSize: '大小',
+      formulaSizeLarge: '大',
+      formulaSizeMedium: '中',
+      formulaSizeSmall: '小',
+      formulaSizeMini: '迷你',
+      formulaClear: '清除',
+      formulaNum: '数字',
+      formulaStr: '字符',
+      formulaOK: '确定',
+      formulaSearch: '搜索...',
+      formulaWidgetList: '组件列表',
+      formulaFunctionList: '函数列表',
+      formulaFunctionExplain: '函数说明',
+      formulaFunctionMaths: '数学函数',
+      formulaFunctionLogic: '逻辑函数',
+      formulaFunctionTime: '时间函数',
+      formulaFunctionString: '字符串函数',
+      formulaNumber: '数字',
+      formulaObject: '对象',
+      formulaDate: '日期',
+      formulaChar: '文字',
+      formulaPleaseSelect: '请选择组件名和函数',
+      formulaSample: '公式编辑举例',
+      formulaPara: '参数',
+      formulaINT: '将数值去掉小数，举例：INT(-8.9)=-9',
+      formulaSUM: '返回一组数据的和，举例：SUM(1,2,3,...)=6',
+      formulaAVERAGE: '返回一组数据的平均数，举例：AVERAGE(1,2,3,...)=2',
+      formulaMAX: '返回一组数中的最大值，举例：MAX(1,2,3,...)=3',
+      formulaMIN: '返回一组数中的最小值，举例：MIN(1,2,3,...)=1',
+      formulaABS: '求一个数的绝对值，举例：ABS(-5)=5',
+      formulaROUND: '将数值保留指定小数位，举例：ROUND(8.999,2)=9.00',
+      formulaCEILING: '将一个数向上取整，举例：CEILING(8.9)=9',
+      formulaLOG:
+        '返回以参数2为底参数1的对数，举例：LOG(8,2)=3，以2为底8的对数为3',
+      formulaMOD: '求两数相除的余数，举例：MOD(2,6)=2',
+      formulaPOWER: '求数字的N次方，举例：POWER(5, 3)=125',
+      formulaAND:
+        '当所有条件都符合时，返回true，否则返回false，举例：AND(1>0,2>1,...)=TRUE',
+      formulaIF:
+        '判断一个条件能否满足，如果满足则返回一个值，如果不满足则返回另一个值，举例：IF(1>2,1,0)=0',
+      formulaIFS: "举例：IFS(false, 'Hello!', true, 'Goodbye!')=Goodbye!",
+      formulaIFERROR: "举例：IFERROR('#DIV/0!', 'Error')",
+      formulaIFNA: "举例：IFNA('#N/A', 'Error')",
+      formulaNOT: '举例：NOT(true)=false',
+      formulaOR: '举例: OR (true, false, true)=true',
+      formulaSWITCH:
+        "SWITCH(参数值,条件1,'条件值1',条件2,'条件值2'[,条件N,'条件值N',])，举例：SWITCH(7, 9, 'Nine', 7, 'Seven')=Seven",
+      formulaXOR: '举例：XOR(true, false, true)=false',
+      formulaYEAR: '举例：YEAR("2022-10-1")=2022',
+      formulaMONTH: '举例：MONTH("2022-10-1")=10',
+      formulaDAY: '举例：DAY("2022-10-11")=11',
+      formulaTODAY: '举例: TODAY()="2022-10-11"',
+      formulaNOW: '举例: NOW="2022-10-11 17:04:33"',
+      formulaEMONTH: "举例: EMONTH ('2022-12-13  ', -1)='2022-11-13 '",
+      formulaEDAY: "举例: EMONTH ('2022-12-13  ', -1)='2022-12-12 '",
+      formulaFIND:
+        "查找字符串(参数：\n1、查找句柄 2、查找目标字符串 3、开始查找下标)，\n举例：FIND('M', 'Miriam McGovern', 3)=8",
+      formulaLEFT:
+        "获取字符串左侧N个字符，LEFT(字符串,截取长度)，举例：LEFT('Sale Price', 4)=Sale",
+      formulaRIGHT:
+        "获取字符串右侧N个字符 RIGHT(字符串,截取长度)，举例：RIGHT('Sale Price', 5)=Price",
+      formulaLEN: "统计字符串长度，举例：LEN('abcdefgh')=8",
+      formulaLOWER:
+        "字符串转小写，举例：LOWER('E. E. Cummings')=e. e. cummings",
+      formulaUPPER: "字符串转大写，举例：UPPER('total')=TOTAL",
+      formulaMID:
+        "截取字符串 MID(字符串,开始下标,截取长度)，举例：MID('Fluid Flow', 7, 20)=Flow",
+      formulaTRIM:
+        "字符串去除多余空格 TRIM(字符串)，举例：TRIM('     First     Quarter  ')=First Quarter",
+      formulaDateError: '日期格式不正确',
+      formulaDateErrorMsg: '日期转换错误明细',
       selectParentWidget: '选中父组件',
       moveUpWidget: '上移组件',
       moveDownWidget: '下移组件',
@@ -84,7 +156,6 @@ export default {
       onlyFieldWidgetAcceptable: '子表单只能接收字段组件',
       moveUpFirstChildHint: '已经移动到最上面',
       moveDownLastChildHint: '已经移动到最下面',
-
       closePreview: '关闭',
       copyJson: '复制JSON',
       saveFormJson: '保存为文件',
@@ -105,6 +176,7 @@ export default {
       resetForm: '重置表单',
       disableForm: '禁用编辑',
       enableForm: '恢复编辑',
+      switchReadMode: '只读查看',
       exportFormData: '表单数据',
       copyFormData: '复制JSON',
       saveFormData: '保存为文件',
@@ -125,20 +197,20 @@ export default {
       loadFormTemplateSuccess: '表单模板加载成功',
       loadFormTemplateFailed: '表单模板加载失败',
       currentNodeCannotBeSelected: '当前组件节点不可选择',
-
+      noSelectedWidgetHint: '当前没有选中设置的组件',
       widgetSetting: '组件设置',
-      formSetting: '表单设置',
-
+      formSetting: '全局设置',
       prompt: '提示',
       confirm: '确定',
       cancel: '取消',
       import: '导入',
       importJsonHint: '导入的JSON内容须符合下述格式，以保证顺利导入.',
+      importDSHint: '导入的数据源格式须符合规范，以保证顺利导入.',
       invalidOptionsData: '无效的选项数据:',
       lastPaneCannotBeDeleted: '仅剩一个选项卡页不可删除.',
       duplicateName: '组件名称已存在: ',
       nameRequired: '组件名称不可为空',
-
+      objectNameRequired: '对象名称不可为空',
       numberValidator: '数字',
       letterValidator: '字母',
       letterAndNumberValidator: '数字字母',
@@ -147,7 +219,6 @@ export default {
       urlValidator: '网址',
       noChineseValidator: '非中文字符',
       chineseValidator: '仅中文字符',
-
       rowspanNotConsistentForMergeEntireRow:
         '存在行高不一致的单元格, 无法合并整行.',
       colspanNotConsistentForMergeEntireColumn:
@@ -157,9 +228,8 @@ export default {
       colspanNotConsistentForDeleteEntireColumn:
         '存在列宽不一致的单元格, 不可删除整列.',
       lastColCannotBeDeleted: '最后一列不可删除.',
-      lastRowCannotBeDeleted: '最后一行不可删除.',
+      lastRowCannotBeDeleted: '最后一行不可删除.'
     },
-
     toolbar: {
       undoHint: '撤销',
       redoHint: '重做',
@@ -176,7 +246,6 @@ export default {
       generateCode: '生成代码',
       generateSFC: '生成SFC'
     },
-
     setting: {
       basicSetting: '基本属性',
       attributeSetting: '属性设置',

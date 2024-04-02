@@ -165,6 +165,7 @@
   import i18n, { changeLocale } from "@/utils/i18n"
   import axios from 'axios'
   import SvgIcon from "@/components/svg-icon/index"
+  import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 
   export default {
     name: "VFormDesigner",
@@ -176,6 +177,8 @@
       ToolbarPanel,
       SettingPanel,
       VFormWidget,
+      CaretLeft,
+      CaretRight
     },
     props: {
       fieldListApi: {
@@ -926,35 +929,273 @@
 </script>
 
 <style lang="scss" scoped>
-  .el-container.main-container {
+
+$primary-color: var(--vf-color-primary, #409EFF);
+
+.primary-color {
+    color: $primary-color;
+}
+
+.background-opacity {
+    background: rgba($primary-color, 0.6);
+}
+
+.form-widget-list .ghost,
+.drag-drop-zone .ghost {
+    content: "";
+    font-size: 0;
+    height: 3px;
+    box-sizing: border-box;
+    background: $primary-color;
+    border: 2px solid $primary-color;
+    outline-width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.el-form-item {
+    .el-rate {
+        margin-top: 8px;
+    }
+
+    &--medium {
+        .el-radio {
+            line-height: 36px !important;
+        }
+
+        .el-rate {
+            margin-top: 8px;
+        }
+    }
+
+    &--small {
+        .el-radio {
+            line-height: 32px !important;
+        }
+
+        .el-rate {
+            margin-top: 6px;
+        }
+    }
+
+    &--mini {
+        .el-radio {
+            line-height: 28px !important;
+        }
+
+        .el-rate {
+            margin-top: 4px;
+        }
+    }
+}
+
+.el-card {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+:deep(.readonly-mode-form) .el-form-item__content {
+    background-color: #f8f8f8;
+}
+
+input[type="password"]::-ms-reveal {
+    display: none;
+}
+
+.auto-full-width.el-date-editor.el-input,
+:deep(.auto-full-width.el-date-editor).el-input__inner {
+    width: 100% !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    width: 8px;
+    background: rgba(16, 31, 28, 0.1);
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #101f1c59;
+    background-clip: padding-box;
+    min-height: 28px;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+
+    &:hover {
+        background-color: #101f1cd9;
+    }
+}
+
+* {
+    scrollbar-color: #e5e5e5 #f7f7f9;
+    scrollbar-width: thin;
+}
+
+.el-container.main-container {
+    &.full-height {
+        display: flex;
+    }
+
+    .el-container.main-content {
+        display: inline-flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: row;
+        flex-shrink: 1;
+        overflow: hidden;
+        position: relative;
+
+        .el-aside.side-panel,
+        .el-main.form-widget-main :deep(.el-scrollbar) .el-scrollbar__view {
+            height: 100%;
+        }
+
+        .el-main.form-widget-main {
+            .form-widget-container {
+                overflow-y: hidden;
+                height: 100%;
+                box-sizing: border-box;
+
+                .el-form.full-height-width {
+                    box-sizing: border-box;
+                    overflow-y: auto;
+                }
+
+                .form-widget-canvas {
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .el-aside.setting-panel {
+            height: 100%;
+            overflow-y: hidden;
+            display: flex;
+            flex-basis: auto;
+
+            .panel-container {
+                padding: 0;
+
+                .el-tabs {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+
+            :deep(.panel-container) {
+                .el-tabs__header {
+                    padding: 0 8px;
+                }
+
+                .el-tabs__content,
+                .el-tab-pane {
+                    height: calc(100% - 40px);
+                    flex-grow: 1;
+                }
+
+                .el-scrollbar__wrap {
+                    padding-left: 8px;
+                    padding-right: 12px;
+                }
+            }
+        }
+
+        .left-aside-toggle-bar {
+            display: block;
+            cursor: pointer;
+            height: 36px;
+            width: 12px;
+            position: absolute;
+            top: calc(50% - 18px);
+            left: 258px;
+            border-radius: 0 8px 8px 0;
+            background: #fff;
+            z-index: 8;
+            padding-top: 16px;
+
+            i {
+                font-size: 18px;
+                color: #909399;
+                margin-left: -3px;
+            }
+
+            &:hover i {
+                color: $primary-color;
+            }
+
+            &.aside-hidden {
+                left: -2px;
+            }
+        }
+
+        .right-aside-toggle-bar {
+            display: block;
+            cursor: pointer;
+            height: 36px;
+            width: 12px;
+            position: absolute;
+            top: calc(50% - 18px);
+            right: 298px;
+            border-radius: 8px 0 0 8px;
+            background: #fff;
+            z-index: 8;
+            padding-top: 16px;
+            padding-right: -5px !important;
+
+            i {
+                font-size: 18px;
+                color: #909399;
+                position: relative;
+                top: 3px;
+                left: -4px;
+            }
+
+            &:hover i {
+                color: $primary-color;
+            }
+
+            &.aside-hidden {
+                right: -2px;
+            }
+        }
+    }
+
     background: #fff;
 
-    :deep(aside) {  /* 防止aside样式被外部样式覆盖！！ */
-      margin: 0;
-      padding: 0;
-      background: inherit;
+    aside {
+        margin: 0;
+        padding: 0;
+        background: inherit;
     }
-  }
+}
 
-  .el-container.full-height {
+.el-container.full-height {
     height: 100%;
     overflow-y: hidden;
-  }
+}
 
-  .el-container.center-layout-container {
+.el-container.center-layout-container {
     min-width: 680px;
     border-left: 2px dotted #EBEEF5;
     border-right: 2px dotted #EBEEF5;
-  }
+}
 
-  .el-header.main-header {
+.el-header.main-header {
     border-bottom: 2px dotted #EBEEF5;
     height: 48px !important;
     line-height: 48px !important;
     min-width: 800px;
-  }
+}
 
-  div.main-title {
+div.main-title {
     font-size: 18px;
     color: #242424;
     display: flex;
@@ -962,71 +1203,173 @@
     justify-items: center;
 
     img {
-      cursor: pointer;
-      width: 36px;
-      height: 36px;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
     }
 
     span.bold {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 0 6px 0 6px;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 6px;
     }
 
     span.version-span {
-      font-size: 14px;
-      color: #101F1C;
-      margin-left: 6px;
+        font-size: 14px;
+        color: #101f1c;
+        margin-left: 6px;
     }
-  }
+}
 
-  .float-left {
+.float-left {
     float: left;
-  }
+}
 
-  .float-right {
+.float-right {
     float: right;
-  }
+}
 
-  .el-dropdown-link {
+.el-dropdown-link {
     margin-right: 12px;
     cursor: pointer;
-  }
+}
 
-  div.external-link {
+div.external-link {
     display: flex;
     align-items: center;
+    justify-content: center;
 
     a {
-      font-size: 13px;
-      text-decoration: none;
-      margin-right: 10px;
-      color: #606266;
+        font-size: 13px;
+        text-decoration: none;
+        margin-right: 10px;color: #606266;
     }
-  }
+}
 
-  .el-header.toolbar-header {
+.el-header.toolbar-header {
     font-size: 14px;
     border-bottom: 1px dotted #CCCCCC;
     height: 42px !important;
-    //line-height: 42px !important;
-  }
+}
 
-  .el-aside.side-panel {
+.el-aside.side-panel {
     width: 260px !important;
     overflow-y: hidden;
-  }
+}
 
-  .el-main.form-widget-main {
+.el-main.form-widget-main {
     padding: 0;
-
     position: relative;
     overflow-x: hidden;
-  }
+}
 
-  .container-scroll-bar {
-    :deep(.el-scrollbar__wrap), :deep(.el-scrollbar__view) {
-      overflow-x: hidden;
+:deep(.container-scroll-bar) {
+    .el-scrollbar__wrap,
+    .el-scrollbar__view {
+        overflow-x: hidden;
     }
-  }
+}
+  // .el-container.main-container {
+  //   background: #fff;
+
+  //   :deep(aside) {  /* 防止aside样式被外部样式覆盖！！ */
+  //     margin: 0;
+  //     padding: 0;
+  //     background: inherit;
+  //   }
+  // }
+
+  // .el-container.full-height {
+  //   height: 100%;
+  //   overflow-y: hidden;
+  // }
+
+  // .el-container.center-layout-container {
+  //   min-width: 680px;
+  //   border-left: 2px dotted #EBEEF5;
+  //   border-right: 2px dotted #EBEEF5;
+  // }
+
+  // .el-header.main-header {
+  //   border-bottom: 2px dotted #EBEEF5;
+  //   height: 48px !important;
+  //   line-height: 48px !important;
+  //   min-width: 800px;
+  // }
+
+  // div.main-title {
+  //   font-size: 18px;
+  //   color: #242424;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-items: center;
+
+  //   img {
+  //     cursor: pointer;
+  //     width: 36px;
+  //     height: 36px;
+  //   }
+
+  //   span.bold {
+  //     font-size: 20px;
+  //     font-weight: bold;
+  //     margin: 0 6px 0 6px;
+  //   }
+
+  //   span.version-span {
+  //     font-size: 14px;
+  //     color: #101F1C;
+  //     margin-left: 6px;
+  //   }
+  // }
+
+  // .float-left {
+  //   float: left;
+  // }
+
+  // .float-right {
+  //   float: right;
+  // }
+
+  // .el-dropdown-link {
+  //   margin-right: 12px;
+  //   cursor: pointer;
+  // }
+
+  // div.external-link {
+  //   display: flex;
+  //   align-items: center;
+
+  //   a {
+  //     font-size: 13px;
+  //     text-decoration: none;
+  //     margin-right: 10px;
+  //     color: #606266;
+  //   }
+  // }
+
+  // .el-header.toolbar-header {
+  //   font-size: 14px;
+  //   border-bottom: 1px dotted #CCCCCC;
+  //   height: 42px !important;
+  //   //line-height: 42px !important;
+  // }
+
+  // .el-aside.side-panel {
+  //   width: 260px !important;
+  //   overflow-y: hidden;
+  // }
+
+  // .el-main.form-widget-main {
+  //   padding: 0;
+
+  //   position: relative;
+  //   overflow-x: hidden;
+  // }
+
+  // .container-scroll-bar {
+  //   :deep(.el-scrollbar__wrap), :deep(.el-scrollbar__view) {
+  //     overflow-x: hidden;
+  //   }
+  // }
 </style>
