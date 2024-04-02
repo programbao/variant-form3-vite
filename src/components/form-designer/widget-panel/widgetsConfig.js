@@ -59,20 +59,6 @@ export const containers = [
       customClass: ''
     }
   },
-  // {
-  //   type: 'grid',
-  //   category: 'container',
-  //   icon: 'grid',
-  //   cols: [],
-  //   options: {
-  //     name: '',
-  //     hidden: false,
-  //     gutter: 12,
-  //     colHeight: null, //栅格列统一高度属性，用于解决栅格列设置响应式布局浮动后被挂住的问题！！
-  //     customClass: '' //自定义css类名
-  //   }
-  // },
-
   {
     type: 'table',
     category: 'container',
@@ -81,23 +67,67 @@ export const containers = [
     options: {
       name: '',
       hidden: false,
-      customClass: '' //自定义css类名
+      customClass: ''
     }
   },
-
   {
     type: 'tab',
     category: 'container',
     icon: 'tab',
-    displayType: 'border-card',
+    commonFlag: true,
     tabs: [],
     options: {
       name: '',
+      tabType: 'border-card',
+      tabPosition: 'top',
       hidden: false,
-      customClass: '' //自定义css类名
+      customClass: '',
+      onTabClick: ''
     }
   },
-
+  {
+    type: 'sub-form',
+    category: 'container',
+    icon: 'sub-form',
+    commonFlag: true,
+    widgetList: [],
+    options: {
+      name: '',
+      label: '',
+      showBlankRow: true,
+      showRowNumber: true,
+      labelAlign: 'label-center-align',
+      hidden: false,
+      disabled: false,
+      actionColumnPosition: 'left',
+      customClass: '',
+      onSubFormRowAdd: '',
+      onSubFormRowInsert: '',
+      onSubFormRowDelete: '',
+      onSubFormRowChange: ''
+    }
+  },
+  {
+    type: 'grid-sub-form',
+    category: 'container',
+    icon: 'grid-sub-form',
+    commonFlag: true,
+    widgetList: [],
+    options: {
+      name: '',
+      label: '',
+      showBlankRow: true,
+      showRowNumber: true,
+      hidden: false,
+      disabled: false,
+      actionColumnPosition: 'left',
+      customClass: '',
+      onSubFormRowAdd: '',
+      onSubFormRowInsert: '',
+      onSubFormRowDelete: '',
+      onSubFormRowChange: ''
+    }
+  },
   {
     type: 'grid-col',
     category: 'container',
@@ -111,14 +141,13 @@ export const containers = [
       offset: 0,
       push: 0,
       pull: 0,
-      responsive: false, //是否开启响应式布局
+      responsive: false,
       md: 12,
       sm: 12,
       xs: 12,
-      customClass: '' //自定义css类名
+      customClass: ''
     }
   },
-
   {
     type: 'table-cell',
     category: 'container',
@@ -132,11 +161,10 @@ export const containers = [
       cellHeight: '',
       colspan: 1,
       rowspan: 1,
-      wordBreak: false, //是否自动换行
-      customClass: '' //自定义css类名
+      wordBreak: false,
+      customClass: ''
     }
   },
-
   {
     type: 'tab-pane',
     category: 'container',
@@ -149,10 +177,308 @@ export const containers = [
       hidden: false,
       active: false,
       disabled: false,
-      customClass: '' //自定义css类名
+      customClass: ''
     }
   },
-
+  {
+    type: 'data-table',
+    category: 'container',
+    icon: 'data-table',
+    widgetList: [],
+    options: {
+      name: '',
+      label: 'data-table',
+      hidden: false,
+      rowSpacing: 8,
+      tableHeight: '300px',
+      tableWidth: '100%',
+      customClass: '',
+      stripe: true,
+      showIndex: false,
+      showCheckBox: true,
+      showPagination: true,
+      paginationAlign: 'left',
+      smallPagination: false,
+      showSummary: false,
+      border: true,
+      tableSize: 'default',
+      autoColumnWidthDisabled: false,
+      tableColumns: [
+        {
+          columnId: 1,
+          prop: 'name',
+          label: '姓名',
+          width: '100',
+          show: true,
+          align: 'left',
+          fixed: 'left',
+          sortable: true
+        },
+        {
+          columnId: 2,
+          prop: 'date',
+          label: '日期1',
+          width: '160',
+          show: true,
+          align: 'left',
+          formatS: 'd1'
+        },
+        {
+          columnId: 3,
+          prop: 'date2',
+          label: '日期2',
+          width: '160',
+          show: true,
+          align: 'left',
+          formatS: 'd4'
+        },
+        {
+          columnId: 4,
+          prop: 'date3',
+          label: '日期3',
+          width: '160',
+          show: true,
+          align: 'left',
+          formatS: 'd5'
+        },
+        {
+          columnId: 5,
+          prop: 'f1',
+          label: '基金',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n1'
+        },
+        {
+          columnId: 6,
+          prop: 'f2',
+          label: '股票',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n2'
+        },
+        {
+          columnId: 7,
+          prop: 'f3',
+          label: '存款',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n3'
+        },
+        {
+          columnId: 8,
+          prop: 'f4',
+          label: '基金2',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n4'
+        },
+        {
+          columnId: 9,
+          prop: 'f5',
+          label: '股票2',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n5'
+        },
+        {
+          columnId: 10,
+          prop: 'f6',
+          label: '存款2',
+          width: '150',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n6'
+        },
+        {
+          columnId: 11,
+          prop: 'f7',
+          label: '成功率',
+          width: '140',
+          show: true,
+          align: 'right',
+          sortable: true,
+          formatS: 'n7'
+        },
+        {
+          columnId: 12,
+          prop: 'add',
+          label: '地址',
+          width: '250',
+          show: true,
+          render: ''
+        },
+        {
+          columnId: 13,
+          prop: 'ss',
+          label: '秘密',
+          width: '100',
+          show: false
+        },
+        {
+          columnId: 14,
+          prop: '~',
+          headerFlag: true,
+          label: '表头1',
+          align: 'center',
+          children: [
+            {
+              columnId: 15,
+              prop: '~',
+              headerFlag: true,
+              label: '表头2',
+              align: 'center',
+              children: [
+                {
+                  columnId: 16,
+                  prop: '~',
+                  headerFlag: true,
+                  label: '表头3',
+                  align: 'center',
+                  children: []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      showButtonsColumn: false,
+      buttonsColumnFixed: 'right',
+      buttonsColumnTitle: '操作',
+      buttonsColumnWidth: 120,
+      operationButtons: [
+        {
+          name: 'detail',
+          label: '详情',
+          type: 'text',
+          size: 'small',
+          round: false,
+          hidden: true,
+          disabled: false
+        },
+        {
+          name: 'edit',
+          label: '编辑',
+          type: 'text',
+          size: 'small',
+          round: false,
+          hidden: false,
+          disabled: false
+        },
+        {
+          name: 'delete',
+          label: '删除',
+          type: 'text',
+          size: 'small',
+          round: false,
+          hidden: false,
+          disabled: false
+        }
+      ],
+      pagination: {
+        currentPage: 1,
+        pageSizes: [10, 15, 20, 30, 50, 100, 200],
+        pageSize: 20,
+        total: 366
+      },
+      dsEnabled: false,
+      dsName: '',
+      dataSetName: '',
+      treeDataEnabled: false,
+      rowKey: 'id',
+      childrenKey: 'children',
+      tableData: [
+        {
+          date: '2016-05-02',
+          date2: '2016-05-02 23:12:12',
+          date3: '2016-05-02 9:11:12',
+          name: '小二',
+          f1: 10001000.2,
+          f2: 10001000.239567,
+          f3: 10001000.239567,
+          f4: 10001000.239567,
+          f5: 10001000.239567,
+          f6: 10001000.239567,
+          f7: 0.25,
+          add: '上海市普陀区金沙江路 1518 弄',
+          ss: 100
+        },
+        {
+          date: '2016-05-04',
+          date2: '2016-05-02 11:12:12',
+          date3: '2016-05-02 9:11:12',
+          name: '王小虎2',
+          f1: 10001000.23,
+          f2: 10001000.23,
+          f3: 10001000.239567,
+          f4: 10001000.239567,
+          f5: 10001000.239567,
+          f6: 10001000.239567,
+          f7: 0.256,
+          add: '上海市普陀区金沙江路 1518 弄',
+          ss: 100
+        },
+        {
+          date: '2016-05-01',
+          date2: '2016-05-02 12:12:12',
+          date3: '2016-05-02 9:11:12',
+          name: '王小虎3',
+          f1: 10001000.239,
+          f2: 10001000.239,
+          f3: 10001000.239567,
+          f4: 10001000.239567,
+          f5: 10001000.239567,
+          f6: 10001000.239567,
+          f7: 0.2569,
+          add: '上海市普陀区金沙江路 1518 弄',
+          ss: 100
+        },
+        {
+          date: '2016-05-03',
+          date2: '2016-05-02 12:12:12',
+          date3: '2016-05-02 9:11:12',
+          name: '王小虎4',
+          f1: 10001000.239567,
+          f2: 10001000.239567,
+          f3: 10001000.239567,
+          f4: 10001000.239567,
+          f5: 10001000.239567,
+          f6: 10001000.239567,
+          f7: 1.9527102,
+          add: '上海市普陀区金沙江路 1518 弄',
+          ss: 100
+        }
+      ],
+      onCreated: '',
+      onMounted: '',
+      onPageSizeChange: '',
+      onCurrentPageChange: '',
+      onSortChange: '',
+      onSelectionChange: '',
+      onHideOperationButton: '',
+      onDisableOperationButton: '',
+      onGetOperationButtonLabel: '',
+      onOperationButtonClick: '',
+      onHeaderClick: '',
+      onRowClick: '',
+      onRowDoubleClick: '',
+      onCellClick: '',
+      onCellDoubleClick: '',
+      onGetRowClassName: '',
+      onGetSpanMethod: ''
+    }
+  },
   {
     type: 'tree',
     icon: 'tree',
@@ -244,7 +570,51 @@ export const containers = [
       ]
     }
   },
-
+  {
+    type: 'button-group',
+    icon: 'button-group',
+    category: 'container',
+    widgetList: [],
+    options: {
+      name: '',
+      size: 'default',
+      hidden: false,
+      disabled: false,
+      customClass: '',
+      buttons: [
+        {
+          name: 'detail',
+          label: '详情',
+          icon: '',
+          type: '',
+          round: false,
+          hidden: true,
+          disabled: false
+        },
+        {
+          name: 'edit',
+          label: '编辑',
+          icon: '',
+          type: '',
+          round: false,
+          hidden: false,
+          disabled: false
+        },
+        {
+          name: 'delete',
+          label: '删除',
+          icon: '',
+          type: '',
+          round: false,
+          hidden: false,
+          disabled: false
+        }
+      ],
+      onCreated: '',
+      onMounted: '',
+      onButtonGroupClick: ''
+    }
+  },
   {
     type: 'object-group',
     category: 'container',
@@ -259,7 +629,6 @@ export const containers = [
       onMounted: ''
     }
   },
-
   {
     type: 'vf-dialog',
     category: 'container',
@@ -287,7 +656,6 @@ export const containers = [
       onDialogBeforeClose: ''
     }
   },
-
   {
     type: 'vf-drawer',
     category: 'container',
@@ -297,65 +665,21 @@ export const containers = [
       name: '',
       title: '',
       size: '50%',
-      showModal: !0,
-      showClose: !0,
-      closeOnClickModal: !1,
-      closeOnPressEscape: !1,
+      showModal: true,
+      showClose: true,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
       direction: 'rtl',
-      readMode: !1,
-      disabledMode: !1,
+      readMode: false,
+      disabledMode: false,
       okButtonLabel: '',
-      okButtonHidden: !1,
+      okButtonHidden: false,
       cancelButtonLabel: '',
-      cancelButtonHidden: !1,
+      cancelButtonHidden: false,
       onOkButtonClick: '',
       onCancelButtonClick: '',
       onDrawerOpened: '',
       onDrawerBeforeClose: ''
-    }
-  },
-
-  {
-    type: 'sub-form',
-    category: 'container',
-    icon: 'sub-form',
-    commonFlag: true,
-    widgetList: [],
-    options: {
-      name: '',
-      label: '',
-      showBlankRow: true,
-      showRowNumber: true,
-      labelAlign: 'label-center-align',
-      hidden: false,
-      disabled: false,
-      actionColumnPosition: 'left',
-      customClass: '',
-      onSubFormRowAdd: '',
-      onSubFormRowInsert: '',
-      onSubFormRowDelete: '',
-      onSubFormRowChange: ''
-    }
-  },
-  {
-    type: 'grid-sub-form',
-    category: 'container',
-    icon: 'grid-sub-form',
-    commonFlag: true,
-    widgetList: [],
-    options: {
-      name: '',
-      label: '',
-      showBlankRow: true,
-      showRowNumber: true,
-      hidden: false,
-      disabled: false,
-      actionColumnPosition: 'left',
-      customClass: '',
-      onSubFormRowAdd: '',
-      onSubFormRowInsert: '',
-      onSubFormRowDelete: '',
-      onSubFormRowChange: ''
     }
   }
 ]
@@ -363,10 +687,13 @@ export const containers = [
 export const basicFields = [
   {
     type: 'input',
+    alias: '',
     icon: 'text-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       type: 'text',
@@ -376,6 +703,7 @@ export const basicFields = [
       size: '',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
@@ -385,8 +713,7 @@ export const basicFields = [
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
@@ -398,7 +725,8 @@ export const basicFields = [
       appendButton: false,
       appendButtonDisabled: false,
       buttonIcon: 'custom-search',
-      //-------------------
+      appendText: false,
+      textForAppend: '',
       onCreated: '',
       onMounted: '',
       onInput: '',
@@ -409,22 +737,25 @@ export const basicFields = [
       onAppendButtonClick: ''
     }
   },
-
   {
     type: 'textarea',
     icon: 'textarea-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       rows: 3,
+      autosize: false,
       defaultValue: '',
       placeholder: '',
       columnWidth: '200px',
       size: '',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
@@ -432,15 +763,13 @@ export const basicFields = [
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
       minLength: null,
       maxLength: null,
       showWordLimit: false,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onInput: '',
@@ -450,29 +779,33 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'number',
     icon: 'number-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: 0,
       placeholder: '',
       columnWidth: '200px',
       size: '',
+      controls: true,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      formulaEnabled: false,
+      formula: '',
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
@@ -481,7 +814,6 @@ export const basicFields = [
       precision: 0,
       step: 1,
       controlsPosition: 'right',
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
@@ -490,13 +822,14 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'radio',
     icon: 'radio-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
@@ -507,36 +840,51 @@ export const basicFields = [
       border: false,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
+      dsEnabled: false,
+      dsName: '',
+      dataSetName: '',
+      labelKey: 'label',
+      valueKey: 'value',
+      optionValueType: '',
       optionItems: [
-        { label: 'radio 1', value: 1 },
-        { label: 'radio 2', value: 2 },
-        { label: 'radio 3', value: 3 }
+        {
+          label: 'radio 1',
+          value: 1
+        },
+        {
+          label: 'radio 2',
+          value: 2
+        },
+        {
+          label: 'radio 3',
+          value: 3
+        }
       ],
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'checkbox',
     icon: 'checkbox-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: [],
@@ -547,36 +895,51 @@ export const basicFields = [
       border: false,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
+      dsEnabled: false,
+      dsName: '',
+      dataSetName: '',
+      labelKey: 'label',
+      valueKey: 'value',
+      optionValueType: '',
       optionItems: [
-        { label: 'check 1', value: 1 },
-        { label: 'check 2', value: 2 },
-        { label: 'check 3', value: 3 }
+        {
+          label: 'check 1',
+          value: 1
+        },
+        {
+          label: 'check 2',
+          value: 2
+        },
+        {
+          label: 'check 3',
+          value: 3
+        }
       ],
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'select',
     icon: 'select-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: '',
@@ -585,30 +948,45 @@ export const basicFields = [
       size: '',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
       clearable: true,
       filterable: false,
       allowCreate: false,
       remote: false,
-      automaticDropdown: false, //自动下拉
+      automaticDropdown: false,
       multiple: false,
       multipleLimit: 0,
+      collapseTags: false,
+      dsEnabled: false,
+      dsName: '',
+      dataSetName: '',
+      labelKey: 'label',
+      valueKey: 'value',
+      optionValueType: '',
       optionItems: [
-        { label: 'select 1', value: 1 },
-        { label: 'select 2', value: 2 },
-        { label: 'select 3', value: 3 }
+        {
+          label: 'select 1',
+          value: 1
+        },
+        {
+          label: 'select 2',
+          value: 2
+        },
+        {
+          label: 'select 3',
+          value: 3
+        }
       ],
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onRemoteQuery: '',
@@ -618,13 +996,14 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'time',
     icon: 'time-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
@@ -634,22 +1013,21 @@ export const basicFields = [
       autoFullWidth: true,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
       clearable: true,
       editable: false,
-      format: 'HH:mm:ss', //时间格式
+      format: 'HH:mm:ss',
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
@@ -658,13 +1036,14 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'time-range',
     icon: 'time-range-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
@@ -675,22 +1054,21 @@ export const basicFields = [
       autoFullWidth: true,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
       clearable: true,
       editable: false,
-      format: 'HH:mm:ss', //时间格式
+      format: 'HH:mm:ss',
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
@@ -699,13 +1077,14 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'date',
     icon: 'date-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       type: 'date',
@@ -716,23 +1095,22 @@ export const basicFields = [
       autoFullWidth: true,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
       clearable: true,
       editable: false,
-      format: 'YYYY-MM-DD', //日期显示格式
-      valueFormat: 'YYYY-MM-DD', //日期对象格式
+      format: 'YYYY-MM-DD',
+      valueFormat: 'YYYY-MM-DD',
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
@@ -741,13 +1119,14 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'date-range',
     icon: 'date-range-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       type: 'daterange',
@@ -759,23 +1138,22 @@ export const basicFields = [
       autoFullWidth: true,
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       readonly: false,
       disabled: false,
       hidden: false,
       clearable: true,
       editable: false,
-      format: 'YYYY-MM-DD', //日期显示格式
-      valueFormat: 'YYYY-MM-DD', //日期对象格式
+      format: 'YYYY-MM-DD',
+      valueFormat: 'YYYY-MM-DD',
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
@@ -784,23 +1162,24 @@ export const basicFields = [
       onValidate: ''
     }
   },
-
   {
     type: 'switch',
     icon: 'switch-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
       columnWidth: '200px',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
@@ -809,34 +1188,34 @@ export const basicFields = [
       inactiveText: '',
       activeColor: null,
       inactiveColor: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'rate',
     icon: 'rate-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
       columnWidth: '200px',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
@@ -846,20 +1225,20 @@ export const basicFields = [
       allowHalf: false,
       showText: false,
       showScore: false,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'color',
     icon: 'color-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: null,
@@ -867,31 +1246,31 @@ export const basicFields = [
       size: '',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'slider',
     icon: 'slider-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       columnWidth: '200px',
@@ -899,14 +1278,14 @@ export const basicFields = [
       size: '',
       labelWidth: null,
       labelHidden: false,
+      labelWrap: false,
       disabled: false,
       hidden: false,
       required: false,
       requiredHint: '',
       validation: '',
       validationHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
@@ -914,16 +1293,13 @@ export const basicFields = [
       max: 100,
       step: 10,
       range: false,
-      //vertical: false,
       height: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onValidate: ''
     }
   },
-
   {
     type: 'static-text',
     icon: 'static-text',
@@ -935,15 +1311,12 @@ export const basicFields = [
       textContent: 'static text',
       textAlign: 'left',
       fontSize: '13px',
-      preWrap: false, //是否自动换行
-      //-------------------
-      customClass: '', //自定义css类名
-      //-------------------
+      preWrap: false,
+      customClass: '',
       onCreated: '',
       onMounted: ''
     }
   },
-
   {
     type: 'html-text',
     icon: 'html-text',
@@ -953,14 +1326,11 @@ export const basicFields = [
       columnWidth: '200px',
       hidden: false,
       htmlContent: '<b>html text</b>',
-      //-------------------
-      customClass: '', //自定义css类名
-      //-------------------
+      customClass: '',
       onCreated: '',
       onMounted: ''
     }
   },
-
   {
     type: 'button',
     icon: 'button',
@@ -978,15 +1348,12 @@ export const basicFields = [
       round: false,
       circle: false,
       icon: null,
-      //-------------------
-      customClass: '', //自定义css类名
-      //-------------------
+      customClass: '',
       onCreated: '',
       onMounted: '',
       onClick: ''
     }
   },
-
   {
     type: 'divider',
     icon: 'divider',
@@ -998,17 +1365,12 @@ export const basicFields = [
       direction: 'horizontal',
       contentPosition: 'center',
       hidden: false,
-      //-------------------
-      customClass: '', //自定义css类名
-      //-------------------
+      customClass: '',
       onCreated: '',
       onMounted: ''
     }
   }
-
-  //
 ]
-
 export const advancedFields = [
   {
     type: 'picture-upload',
@@ -1016,6 +1378,8 @@ export const advancedFields = [
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       labelWidth: null,
@@ -1027,22 +1391,18 @@ export const advancedFields = [
       requiredHint: '',
       customRule: '',
       customRuleHint: '',
-      //-------------------
       uploadURL: '',
       uploadTip: '',
       withCredentials: false,
       multipleSelect: false,
       showFileList: true,
       limit: 3,
-      fileMaxSize: 5, //MB
+      fileMaxSize: 5,
       fileTypes: ['jpg', 'jpeg', 'png'],
-      //headers: [],
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onBeforeUpload: '',
@@ -1050,16 +1410,16 @@ export const advancedFields = [
       onUploadError: '',
       onFileRemove: '',
       onValidate: ''
-      //onFileChange: '',
     }
   },
-
   {
     type: 'file-upload',
     icon: 'file-upload-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       labelWidth: null,
@@ -1071,22 +1431,18 @@ export const advancedFields = [
       requiredHint: '',
       customRule: '',
       customRuleHint: '',
-      //-------------------
       uploadURL: '',
       uploadTip: '',
       withCredentials: false,
       multipleSelect: false,
       showFileList: true,
       limit: 3,
-      fileMaxSize: 5, //MB
+      fileMaxSize: 5,
       fileTypes: ['doc', 'docx', 'xls', 'xlsx'],
-      //headers: [],
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onBeforeUpload: '',
@@ -1094,16 +1450,16 @@ export const advancedFields = [
       onUploadError: '',
       onFileRemove: '',
       onValidate: ''
-      //onFileChange: '',
     }
   },
-
   {
     type: 'rich-editor',
     icon: 'rich-editor-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       placeholder: '',
@@ -1117,27 +1473,25 @@ export const advancedFields = [
       requiredHint: '',
       customRule: '',
       customRuleHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
       minLength: null,
       maxLength: null,
-      showWordLimit: false,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onValidate: ''
     }
   },
-
   {
     type: 'cascader',
     icon: 'cascader-field',
     formItemFlag: true,
     options: {
       name: '',
+      keyNameEnabled: false,
+      keyName: '',
       label: '',
       labelAlign: '',
       defaultValue: '',
@@ -1151,33 +1505,60 @@ export const advancedFields = [
       clearable: true,
       filterable: false,
       multiple: false,
-      checkStrictly: false, //可选择任意一级选项，默认不开启
-      showAllLevels: true, //显示完整路径
+      checkStrictly: false,
+      showAllLevels: true,
+      dsEnabled: false,
+      dsName: '',
+      dataSetName: '',
+      labelKey: 'label',
+      valueKey: 'value',
+      childrenKey: 'children',
+      areaDataEnabled: false,
+      areaDataType: 0,
       optionItems: [
         {
           label: 'select 1',
           value: 1,
-          children: [{ label: 'child 1', value: 11 }]
+          children: [
+            {
+              label: 'child 1',
+              value: 11
+            }
+          ]
         },
-        { label: 'select 2', value: 2 },
-        { label: 'select 3', value: 3 }
+        {
+          label: 'select 2',
+          value: 2
+        },
+        {
+          label: 'select 3',
+          value: 3
+        }
       ],
       required: false,
       requiredHint: '',
       customRule: '',
       customRuleHint: '',
-      //-------------------
-      customClass: '', //自定义css类名
+      customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
       labelTooltip: null,
-      //-------------------
       onCreated: '',
       onMounted: '',
       onChange: '',
       onFocus: '',
       onBlur: '',
       onValidate: ''
+    }
+  },
+  {
+    type: 'slot',
+    icon: 'slot-field',
+    formItemFlag: false,
+    options: {
+      name: '',
+      label: '',
+      customClass: ''
     }
   }
 ]

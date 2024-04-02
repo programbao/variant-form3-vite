@@ -34,58 +34,54 @@
       selectedWidget: Object,
       optionModel: Object,
     },
-    inject: ['serverFieldList', 'getDesignerConfig'],
+    inject: ["getServerFieldList", "getDesignerConfig"],
     data() {
-      return {
-        nameRequiredRule: [{required: true, message: 'name required'}],
-      }
+        return {
+            nameRequiredRule: [{
+                required: !0,
+                message: "name required"
+            }]
+        }
     },
     computed: {
-      noFieldList() {
-        return !this.serverFieldList || (this.serverFieldList.length <= 0)
-      },
-
-      widgetNameReadonly() {
-        return !!this.getDesignerConfig().widgetNameReadonly
-      },
-
+        serverFieldList() {
+            return this.getServerFieldList()
+        },
+        noFieldList() {
+            return !this.serverFieldList || this.serverFieldList.length <= 0
+        },
+        widgetNameReadonly() {
+            return !!this.getDesignerConfig().widgetNameReadonly || !!this.selectedWidget.nameReadonly
+        }
     },
     methods: {
-      updateWidgetNameAndRef(newName) {
-        let oldName = this.designer.selectedWidgetName
-        if (isEmptyStr(newName)) {
-          this.selectedWidget.options.name = oldName
-          this.$message.info(this.i18nt('designer.hint.nameRequired'))
-          return
+        updateWidgetNameAndRef(e) {
+            let o = this.designer.selectedWidgetName;
+            if (isEmptyStr(e)) {
+                this.selectedWidget.options.name = o,
+                this.$message.info(this.i18nt("designer.hint.nameRequired"));
+                return
+            }
+            if (this.designer.formWidget) {
+                if (this.designer.formWidget.getWidgetRef(e)) {
+                    this.selectedWidget.options.name = o,
+                    this.$message.info(this.i18nt("designer.hint.duplicateName") + e);
+                    return
+                }
+                let r = this.designer.formWidget.getWidgetRef(o);
+                if (!!r && !!r.registerToRefList) {
+                    r.registerToRefList(o);
+                    let n = this.getLabelByFieldName(e);
+                    this.designer.updateSelectedWidgetNameAndLabel(this.selectedWidget, e, n)
+                }
+            }
+        },
+        getLabelByFieldName(e) {
+            for (let o = 0; o < this.serverFieldList.length; o++)
+                if (this.serverFieldList[o].name === e)
+                    return this.serverFieldList[o].label;
+            return null
         }
-
-        if (!!this.designer.formWidget) {
-          let foundRef = this.designer.formWidget.getWidgetRef(newName) // 检查newName是否已存在！！
-          if (!!foundRef) {
-            this.selectedWidget.options.name = oldName
-            this.$message.info(this.i18nt('designer.hint.duplicateName') + newName)
-            return
-          }
-
-          let widgetInDesign = this.designer.formWidget.getWidgetRef(oldName)
-          if (!!widgetInDesign && !!widgetInDesign.registerToRefList) {
-            widgetInDesign.registerToRefList(oldName)  //注册组件新的ref名称并删除老的ref！！
-            let newLabel = this.getLabelByFieldName(newName)
-            this.designer.updateSelectedWidgetNameAndLabel(this.selectedWidget, newName, newLabel)
-          }
-        }
-      },
-
-      getLabelByFieldName(fieldName) {
-        for (let i = 0; i < this.serverFieldList.length; i++) {
-          if (this.serverFieldList[i].name === fieldName) {
-            return this.serverFieldList[i].label
-          }
-        }
-
-        return null
-      },
-
     }
   }
 </script>
