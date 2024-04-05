@@ -185,7 +185,7 @@
 </template>
 
 <script>
-  import VFormRender from '@/components/form-render/index'
+  // import VFormRender from '@/components/form-render/index'
   import CodeEditor from '@/components/code-editor/index'
   import Clipboard from 'clipboard'
   import {
@@ -207,7 +207,7 @@
     name: "ToolbarPanel",
     mixins: [i18n],
     components: {
-      VFormRender,
+      // VFormRender,
       CodeEditor,
       Clipboard,
       SvgIcon,

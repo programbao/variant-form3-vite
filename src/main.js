@@ -15,6 +15,7 @@ import ContainerItems from '@/components/form-render/container-item/index'
 import { addDirective } from '@/utils/directive'
 import { installI18n } from '@/utils/i18n'
 import { loadExtension } from '@/extension/extension-loader'
+import VFormRender from '@/components/form-render/index'
 
 if (typeof window !== 'undefined') {
   window.axios = axios
@@ -25,6 +26,7 @@ const vfApp = createApp(App)
 vfApp.use(ElementPlus)
 registerIcon(vfApp)
 vfApp.component('draggable', Draggable)
+vfApp.component("VFormRender", VFormRender);
 addDirective(vfApp)
 installI18n(vfApp)
 

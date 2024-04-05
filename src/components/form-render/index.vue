@@ -73,9 +73,10 @@
 //import ElForm from 'element-ui/packages/form/src/form.vue'  /* 用于源码调试Element UI */
 import emitter from '@/utils/emitter'
 import './container-item/index'
-// import DynamicDialog from './dynamic-widget/dynamic-dialog.vue'
+import DynamicDialog from './dynamic-widget/dynamic-dialog.vue'
+import DynamicDrawer from './dynamic-widget/dynamic-drawer.vue'
 import FieldComponents from '@/components/form-designer/form-widget/field-widget/index'
-import { createApp ,render, nextTick } from 'vue'
+import { createApp ,render, nextTick, createVNode } from 'vue'
 import {
   generateId,
   deepClone,
@@ -810,76 +811,100 @@ export default {
       return this.dialogOrDrawerRef
     },
     async showDialog(e, o = {}, t = {}, r = '') {
-      let n = this.getTopFormRef(),
-        l = getContainerWidgetByName(n.widgetList, e)
-      if (!e || l.type !== 'vf-dialog') {
-        this.$message.error(this.i18nt('render.hint.refNotFound') + e)
-        return
-      }
-      const { default: DynamicDialog } = await import('./dynamic-widget/dynamic-dialog.vue');
-     
-      let i = {
-        widgetList: deepClone(l.widgetList),
-        formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
-      },
-      a = generateId() + '';
-      if (!document.getElementById('vf-dynamic-dialog-wrapper')) {
-        const dynamicWrapper = document.createElement('div')
-        dynamicWrapper.id = 'vf-dynamic-dialog-wrapper'
-        document.body.appendChild(dynamicWrapper) 
-      }
-      
-      // 创建Vue应用实例并挂载组件
-      const dynamicComponent = createApp(DynamicDialog, {
-          options: l.options,
-          formJson: i,
-          formData: o || {},
-          optionData: n.optionData,
-          globalDsv: n.globalDsv,
-          parentFormRef: this,
-          extraData: t,
-          wrapperId: a,
-          title: r
-      });
-      dynamicComponent.use(ElementPlus);
-      const instance = dynamicComponent.mount(`#vf-dynamic-dialog-wrapper`);
-      instance.show();
+      let n = this.getTopFormRef()
+              , l = getContainerWidgetByName(n.widgetList, e);
+            if (!e || l.type !== "vf-dialog") {
+                this.$message.error(this.i18nt("render.hint.refNotFound") + e);
+                return
+            }
+            let i = {
+                widgetList: deepClone(l.widgetList),
+                formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+            }
+              , a = generateId() + ""
+              , s = createVNode(DynamicDialog, {
+                options: l.options,
+                formJson: i,
+                formData: o || {},
+                optionData: n.optionData,
+                globalDsv: n.globalDsv,
+                parentFormRef: this,
+                extraData: t,
+                wrapperId: a,
+                title: r
+            }, this.$slots);
+            s.appContext = this.$root.$.appContext;
+            let d = document.createElement("div");
+            return d.id = "vf-dynamic-dialog-wrapper" + a,
+            document.body.appendChild(d),
+            render(s, d),
+            document.body.appendChild(s.el),
+            s.component.ctx.show()
     },
     async showDrawer(e, o = {}, t = {}, r = '') {
-      let n = this.getTopFormRef(),
-        l = getContainerWidgetByName(n.widgetList, e)
-      if (!l || l.type !== 'vf-drawer') {
-        this.$message.error(this.i18nt('render.hint.refNotFound') + e)
-        return
-      }
-        const { default: DynamicDrawer } = await import('./dynamic-widget/dynamic-drawer.vue');
+      let n = this.getTopFormRef()
+            , l = getContainerWidgetByName(n.widgetList, e);
+          if (!l || l.type !== "vf-drawer") {
+              this.$message.error(this.i18nt("render.hint.refNotFound") + e);
+              return
+          }
+          let i = {
+              widgetList: deepClone(l.widgetList),
+              formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+          }
+            , a = generateId() + ""
+            , s = createVNode(DynamicDrawer, {
+              options: l.options,
+              formJson: i,
+              formData: o || {},
+              optionData: n.optionData,
+              globalDsv: n.globalDsv,
+              parentFormRef: this,
+              extraData: t,
+              wrapperId: a,
+              title: r
+          }, this.$slots);
+          s.appContext = this.$root.$.appContext;
+          let d = document.createElement("div");
+          return d.id = "vf-dynamic-drawer-wrapper" + a,
+          document.body.appendChild(d),
+          render(s, d),
+          document.body.appendChild(s.el),
+          s.component.ctx.show()
+      // let n = this.getTopFormRef(),
+      //   l = getContainerWidgetByName(n.widgetList, e)
+      // if (!l || l.type !== 'vf-drawer') {
+      //   this.$message.error(this.i18nt('render.hint.refNotFound') + e)
+      //   return
+      // }
+      //   // const { default: DynamicDrawer } = await import('./dynamic-widget/dynamic-drawer.vue');
      
-      let i = {
-        widgetList: deepClone(l.widgetList),
-        formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
-      },
-      a = generateId() + '';
-      if (!document.getElementById('vf-dynamic-drawer-wrapper')) {
-        const dynamicWrapper = document.createElement('div')
-        dynamicWrapper.id = 'vf-dynamic-drawer-wrapper'
-        document.body.appendChild(dynamicWrapper) 
-      }
+      // let i = {
+      //   widgetList: deepClone(l.widgetList),
+      //   formConfig: cloneFormConfigWithoutEventHandler(n.formConfig)
+      // },
+      // a = generateId() + '';
+      // if (!document.getElementById('vf-dynamic-drawer-wrapper')) {
+      //   const dynamicWrapper = document.createElement('div')
+      //   dynamicWrapper.id = 'vf-dynamic-drawer-wrapper'
+      //   document.body.appendChild(dynamicWrapper) 
+      // }
       
-      // 创建Vue应用实例并挂载组件
-      const dynamicComponent = createApp(DynamicDrawer, {
-          options: l.options,
-          formJson: i,
-          formData: o || {},
-          optionData: n.optionData,
-          globalDsv: n.globalDsv,
-          parentFormRef: this,
-          extraData: t,
-          wrapperId: a,
-          title: r
-      });
-      dynamicComponent.use(ElementPlus);
-      const instance = dynamicComponent.mount(`#vf-dynamic-drawer-wrapper`);
-      instance.show();
+      // // 创建Vue应用实例并挂载组件
+      // const dynamicComponent = createApp(DynamicDrawer, {
+      //     options: l.options,
+      //     formJson: i,
+      //     formData: o || {},
+      //     optionData: n.optionData,
+      //     globalDsv: n.globalDsv,
+      //     parentFormRef: this,
+      //     extraData: t,
+      //     wrapperId: a,
+      //     title: r
+      // });
+      // dynamicComponent.use(ElementPlus);
+      // const instance = dynamicComponent.mount(`#vf-dynamic-drawer-wrapper`);
+      // instance.show();
     },
     isPreviewState() {
       return this.previewState

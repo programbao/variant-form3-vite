@@ -41,13 +41,13 @@
     <template #footer>
       <div>
         <el-button
-          v-if="options.cancelButtonHidden"
+          v-if="!options.cancelButtonHidden"
           @click="handleCancelClick"
           >{{ cancelBtnLabel }}</el-button
         >
         <el-button
           type="primary"
-          v-if="options.okButtonHidden"
+          v-if="!options.okButtonHidden"
           @click="handleOkClick"
           >{{ okBtnLabel }}</el-button
         >
@@ -58,13 +58,13 @@
 
 <script>
 import i18n from '@/utils/i18n'
-import VFormRender from '@/components/form-render/index'
+// import VFormRender from '@/components/form-render/index'
 export default {
   name: 'dynamic-dialog',
   mixins: [i18n],
-  components: {
-    VFormRender
-  },
+  // components: {
+  //   VFormRender
+  // },
   props: {
     options: {
       type: Object,

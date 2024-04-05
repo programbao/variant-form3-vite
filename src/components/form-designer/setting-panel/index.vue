@@ -446,7 +446,6 @@ export default {
     getPropEditor(e, o) {
       let t = e.replace(this.selectedWidget.type + '-', ''),
         r = `${this.selectedWidget.type}-${t}-editor`
-      console.log(t, r, '2830948234')
       return this.$options.components[r] ||
         this.$root.$.appContext.components[r]
         ? r
