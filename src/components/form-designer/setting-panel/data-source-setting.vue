@@ -140,10 +140,10 @@
         prop="requestMethod"
       >
         <el-radio-group v-model="dsModel.requestMethod">
-          <el-radio-button label="get">get</el-radio-button>
-          <el-radio-button label="post">post</el-radio-button>
-          <el-radio-button label="put">put</el-radio-button>
-          <el-radio-button label="delete">delete</el-radio-button>
+          <el-radio-button value="get">get</el-radio-button>
+          <el-radio-button value="post">post</el-radio-button>
+          <el-radio-button value="put">put</el-radio-button>
+          <el-radio-button value="delete">delete</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="i18nt('designer.setting.dsRequestHeaders')">

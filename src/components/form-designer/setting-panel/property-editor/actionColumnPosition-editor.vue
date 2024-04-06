@@ -1,8 +1,8 @@
 <template>
   <el-form-item :label="i18nt('designer.setting.actionColumnPosition')">
     <el-radio-group class="radio-group-custom" v-model="optionModel.actionColumnPosition">
-      <el-radio-button label="left">{{ i18nt("designer.setting.leftAlign") }}</el-radio-button>
-      <el-radio-button label="right">{{ i18nt("designer.setting.rightAlign") }}</el-radio-button>
+      <el-radio-button value="left">{{ i18nt("designer.setting.leftAlign") }}</el-radio-button>
+      <el-radio-button value="right">{{ i18nt("designer.setting.rightAlign") }}</el-radio-button>
     </el-radio-group>
   </el-form-item>
 </template>

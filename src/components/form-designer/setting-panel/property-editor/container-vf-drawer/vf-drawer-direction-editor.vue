@@ -1,16 +1,16 @@
 <template>
   <el-form-item :label="i18nt('designer.setting.drawDirection')">
     <el-radio-group v-model="optionModel.direction" class="radio-group-custom">
-      <el-radio-button label="rtl">
+      <el-radio-button value="rtl">
         <el-icon><Back /></el-icon>
       </el-radio-button>
-      <el-radio-button label="ltr">
+      <el-radio-button value="ltr">
         <el-icon><Right /></el-icon>
       </el-radio-button>
-      <el-radio-button label="ttb">
+      <el-radio-button value="ttb">
         <el-icon><Bottom /></el-icon>
       </el-radio-button>
-      <el-radio-button label="btt">
+      <el-radio-button value="btt">
         <el-icon><Top /></el-icon>
       </el-radio-button>
     </el-radio-group>

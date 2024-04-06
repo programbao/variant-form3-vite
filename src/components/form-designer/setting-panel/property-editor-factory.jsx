@@ -89,7 +89,7 @@ export const createRadioGroupEditor = function (propName, propLabelKey, configs)
           <el-radio-group v-model={this.optionModel[propName]}>
             {
               configs.optionItems.map(item => {
-                return <el-radio label={item.value}>{item.label}</el-radio>
+                return <el-radio value={item.value}>{item.label}</el-radio>
               })
             }
           </el-radio-group>
@@ -110,7 +110,7 @@ export const createRadioButtonGroupEditor = function (propName, propLabelKey, co
             <el-radio-group v-model={this.optionModel[propName]}>
               {
                 configs.optionItems.map(item => {
-                  return <el-radio-button label={item.value}>{item.label}</el-radio-button>
+                  return <el-radio-button value={item.value}>{item.label}</el-radio-button>
                 })
               }
             </el-radio-group>

@@ -38,13 +38,13 @@
       v-model="optionModel.paginationAlign"
       class="radio-group-custom"
     >
-      <el-radio-button label="left">{{
+      <el-radio-button value="left">{{
         i18nt('designer.setting.leftAlign')
       }}</el-radio-button>
-      <el-radio-button label="center">{{
+      <el-radio-button value="center">{{
         i18nt('designer.setting.centerAlign')
       }}</el-radio-button>
-      <el-radio-button label="right">{{
+      <el-radio-button value="right">{{
         i18nt('designer.setting.rightAlign')
       }}</el-radio-button>
     </el-radio-group>
