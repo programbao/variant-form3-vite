@@ -54,28 +54,10 @@ export default {
       },
       fieldListData: {
         fieldList: [
-          {
-            label: '\u5BA2\u6237\u540D\u79F0',
-            name: 'accountName'
-          },
-          {
-            label: '\u624B\u673A\u53F7',
-            name: 'mobilePhone'
-          },
-          {
-            label: '\u8BA2\u5355\u660E\u7EC6.\u4EA7\u54C1\u7F16\u53F7',
-            name: 'productNo'
-          }
+          
         ],
         subFormList: [
-          {
-            label: '\u8BA2\u5355\u660E\u7EC6',
-            name: 'orderDetail'
-          },
-          {
-            label: '\u53D1\u8D27\u660E\u7EC6',
-            name: 'deliveryDetail'
-          }
+          
         ]
       },
       globalDsv: {

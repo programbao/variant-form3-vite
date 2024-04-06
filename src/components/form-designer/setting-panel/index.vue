@@ -356,6 +356,12 @@ export default {
       default: () => ({})
     }
   },
+  provide() {
+      return {
+          isSubFormChildWidget: ()=>this.subFormChildWidgetFlag,
+          getGlobalDsv: ()=>this.globalDsv
+      }
+  },
   inject: ['getDesignerConfig'],
   data() {
     return {
@@ -458,7 +464,6 @@ export default {
           o = !0
           break
         }
-      console.log(o, e, '2803498234234')
       return o
     },
     editEventHandler(e, o) {

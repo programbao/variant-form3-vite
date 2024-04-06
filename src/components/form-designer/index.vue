@@ -65,7 +65,7 @@
   <el-container class="main-container full-height">
     <el-header v-if="designerConfig.logoHeader !== false" class="main-header">
       <div class="float-left main-title">
-        <img :src="logoImgSrc" @click="openHome" />
+        <!-- <img :src="logoImgSrc" @click="openHome" /> -->
         <span class="bold">{{ vfProductName }}</span>
         {{ vfProductTitle }}
         <span class="version-span">Ver {{ vFormVersion }}</span>
@@ -214,7 +214,7 @@
                 logoHeader: !0,
                 toolbarMaxWidth: 450,
                 toolbarMinWidth: 300,
-                productName: "",
+                productName: "作业票",
                 productTitle: "",
                 presetCssCode: "",
                 languageName: "zh-CN",
@@ -1054,7 +1054,10 @@ input[type="password"]::-ms-reveal {
 
         .el-aside.side-panel,
         .el-main.form-widget-main :deep(.el-scrollbar) .el-scrollbar__view {
-            height: 100%;
+            height: 102%;
+        }
+        .el-aside.side-panel {
+            height: 98%;
         }
 
         .el-main.form-widget-main {

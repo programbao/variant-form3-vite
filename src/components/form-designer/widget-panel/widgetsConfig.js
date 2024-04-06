@@ -180,305 +180,305 @@ export const containers = [
       customClass: ''
     }
   },
-  {
-    type: 'data-table',
-    category: 'container',
-    icon: 'data-table',
-    widgetList: [],
-    options: {
-      name: '',
-      label: 'data-table',
-      hidden: false,
-      rowSpacing: 8,
-      tableHeight: '300px',
-      tableWidth: '100%',
-      customClass: '',
-      stripe: true,
-      showIndex: false,
-      showCheckBox: true,
-      showPagination: true,
-      paginationAlign: 'left',
-      smallPagination: false,
-      showSummary: false,
-      border: true,
-      tableSize: 'default',
-      autoColumnWidthDisabled: false,
-      tableColumns: [
-        {
-          columnId: 1,
-          prop: 'name',
-          label: '姓名',
-          width: '100',
-          show: true,
-          align: 'left',
-          fixed: 'left',
-          sortable: true
-        },
-        {
-          columnId: 2,
-          prop: 'date',
-          label: '日期1',
-          width: '160',
-          show: true,
-          align: 'left',
-          formatS: 'd1'
-        },
-        {
-          columnId: 3,
-          prop: 'date2',
-          label: '日期2',
-          width: '160',
-          show: true,
-          align: 'left',
-          formatS: 'd4'
-        },
-        {
-          columnId: 4,
-          prop: 'date3',
-          label: '日期3',
-          width: '160',
-          show: true,
-          align: 'left',
-          formatS: 'd5'
-        },
-        {
-          columnId: 5,
-          prop: 'f1',
-          label: '基金',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n1'
-        },
-        {
-          columnId: 6,
-          prop: 'f2',
-          label: '股票',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n2'
-        },
-        {
-          columnId: 7,
-          prop: 'f3',
-          label: '存款',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n3'
-        },
-        {
-          columnId: 8,
-          prop: 'f4',
-          label: '基金2',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n4'
-        },
-        {
-          columnId: 9,
-          prop: 'f5',
-          label: '股票2',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n5'
-        },
-        {
-          columnId: 10,
-          prop: 'f6',
-          label: '存款2',
-          width: '150',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n6'
-        },
-        {
-          columnId: 11,
-          prop: 'f7',
-          label: '成功率',
-          width: '140',
-          show: true,
-          align: 'right',
-          sortable: true,
-          formatS: 'n7'
-        },
-        {
-          columnId: 12,
-          prop: 'add',
-          label: '地址',
-          width: '250',
-          show: true,
-          render: ''
-        },
-        {
-          columnId: 13,
-          prop: 'ss',
-          label: '秘密',
-          width: '100',
-          show: false
-        },
-        {
-          columnId: 14,
-          prop: '~',
-          headerFlag: true,
-          label: '表头1',
-          align: 'center',
-          children: [
-            {
-              columnId: 15,
-              prop: '~',
-              headerFlag: true,
-              label: '表头2',
-              align: 'center',
-              children: [
-                {
-                  columnId: 16,
-                  prop: '~',
-                  headerFlag: true,
-                  label: '表头3',
-                  align: 'center',
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      showButtonsColumn: false,
-      buttonsColumnFixed: 'right',
-      buttonsColumnTitle: '操作',
-      buttonsColumnWidth: 120,
-      operationButtons: [
-        {
-          name: 'detail',
-          label: '详情',
-          type: 'text',
-          size: 'small',
-          round: false,
-          hidden: true,
-          disabled: false
-        },
-        {
-          name: 'edit',
-          label: '编辑',
-          type: 'text',
-          size: 'small',
-          round: false,
-          hidden: false,
-          disabled: false
-        },
-        {
-          name: 'delete',
-          label: '删除',
-          type: 'text',
-          size: 'small',
-          round: false,
-          hidden: false,
-          disabled: false
-        }
-      ],
-      pagination: {
-        currentPage: 1,
-        pageSizes: [10, 15, 20, 30, 50, 100, 200],
-        pageSize: 20,
-        total: 366
-      },
-      dsEnabled: false,
-      dsName: '',
-      dataSetName: '',
-      treeDataEnabled: false,
-      rowKey: 'id',
-      childrenKey: 'children',
-      tableData: [
-        {
-          date: '2016-05-02',
-          date2: '2016-05-02 23:12:12',
-          date3: '2016-05-02 9:11:12',
-          name: '小二',
-          f1: 10001000.2,
-          f2: 10001000.239567,
-          f3: 10001000.239567,
-          f4: 10001000.239567,
-          f5: 10001000.239567,
-          f6: 10001000.239567,
-          f7: 0.25,
-          add: '上海市普陀区金沙江路 1518 弄',
-          ss: 100
-        },
-        {
-          date: '2016-05-04',
-          date2: '2016-05-02 11:12:12',
-          date3: '2016-05-02 9:11:12',
-          name: '王小虎2',
-          f1: 10001000.23,
-          f2: 10001000.23,
-          f3: 10001000.239567,
-          f4: 10001000.239567,
-          f5: 10001000.239567,
-          f6: 10001000.239567,
-          f7: 0.256,
-          add: '上海市普陀区金沙江路 1518 弄',
-          ss: 100
-        },
-        {
-          date: '2016-05-01',
-          date2: '2016-05-02 12:12:12',
-          date3: '2016-05-02 9:11:12',
-          name: '王小虎3',
-          f1: 10001000.239,
-          f2: 10001000.239,
-          f3: 10001000.239567,
-          f4: 10001000.239567,
-          f5: 10001000.239567,
-          f6: 10001000.239567,
-          f7: 0.2569,
-          add: '上海市普陀区金沙江路 1518 弄',
-          ss: 100
-        },
-        {
-          date: '2016-05-03',
-          date2: '2016-05-02 12:12:12',
-          date3: '2016-05-02 9:11:12',
-          name: '王小虎4',
-          f1: 10001000.239567,
-          f2: 10001000.239567,
-          f3: 10001000.239567,
-          f4: 10001000.239567,
-          f5: 10001000.239567,
-          f6: 10001000.239567,
-          f7: 1.9527102,
-          add: '上海市普陀区金沙江路 1518 弄',
-          ss: 100
-        }
-      ],
-      onCreated: '',
-      onMounted: '',
-      onPageSizeChange: '',
-      onCurrentPageChange: '',
-      onSortChange: '',
-      onSelectionChange: '',
-      onHideOperationButton: '',
-      onDisableOperationButton: '',
-      onGetOperationButtonLabel: '',
-      onOperationButtonClick: '',
-      onHeaderClick: '',
-      onRowClick: '',
-      onRowDoubleClick: '',
-      onCellClick: '',
-      onCellDoubleClick: '',
-      onGetRowClassName: '',
-      onGetSpanMethod: ''
-    }
-  },
+  // {
+  //   type: 'data-table',
+  //   category: 'container',
+  //   icon: 'data-table',
+  //   widgetList: [],
+  //   options: {
+  //     name: '',
+  //     label: 'data-table',
+  //     hidden: false,
+  //     rowSpacing: 8,
+  //     tableHeight: '300px',
+  //     tableWidth: '100%',
+  //     customClass: '',
+  //     stripe: true,
+  //     showIndex: false,
+  //     showCheckBox: true,
+  //     showPagination: true,
+  //     paginationAlign: 'left',
+  //     smallPagination: false,
+  //     showSummary: false,
+  //     border: true,
+  //     tableSize: 'default',
+  //     autoColumnWidthDisabled: false,
+  //     tableColumns: [
+  //       {
+  //         columnId: 1,
+  //         prop: 'name',
+  //         label: '姓名',
+  //         width: '100',
+  //         show: true,
+  //         align: 'left',
+  //         fixed: 'left',
+  //         sortable: true
+  //       },
+  //       {
+  //         columnId: 2,
+  //         prop: 'date',
+  //         label: '日期1',
+  //         width: '160',
+  //         show: true,
+  //         align: 'left',
+  //         formatS: 'd1'
+  //       },
+  //       {
+  //         columnId: 3,
+  //         prop: 'date2',
+  //         label: '日期2',
+  //         width: '160',
+  //         show: true,
+  //         align: 'left',
+  //         formatS: 'd4'
+  //       },
+  //       {
+  //         columnId: 4,
+  //         prop: 'date3',
+  //         label: '日期3',
+  //         width: '160',
+  //         show: true,
+  //         align: 'left',
+  //         formatS: 'd5'
+  //       },
+  //       {
+  //         columnId: 5,
+  //         prop: 'f1',
+  //         label: '基金',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n1'
+  //       },
+  //       {
+  //         columnId: 6,
+  //         prop: 'f2',
+  //         label: '股票',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n2'
+  //       },
+  //       {
+  //         columnId: 7,
+  //         prop: 'f3',
+  //         label: '存款',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n3'
+  //       },
+  //       {
+  //         columnId: 8,
+  //         prop: 'f4',
+  //         label: '基金2',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n4'
+  //       },
+  //       {
+  //         columnId: 9,
+  //         prop: 'f5',
+  //         label: '股票2',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n5'
+  //       },
+  //       {
+  //         columnId: 10,
+  //         prop: 'f6',
+  //         label: '存款2',
+  //         width: '150',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n6'
+  //       },
+  //       {
+  //         columnId: 11,
+  //         prop: 'f7',
+  //         label: '成功率',
+  //         width: '140',
+  //         show: true,
+  //         align: 'right',
+  //         sortable: true,
+  //         formatS: 'n7'
+  //       },
+  //       {
+  //         columnId: 12,
+  //         prop: 'add',
+  //         label: '地址',
+  //         width: '250',
+  //         show: true,
+  //         render: ''
+  //       },
+  //       {
+  //         columnId: 13,
+  //         prop: 'ss',
+  //         label: '秘密',
+  //         width: '100',
+  //         show: false
+  //       },
+  //       {
+  //         columnId: 14,
+  //         prop: '~',
+  //         headerFlag: true,
+  //         label: '表头1',
+  //         align: 'center',
+  //         children: [
+  //           {
+  //             columnId: 15,
+  //             prop: '~',
+  //             headerFlag: true,
+  //             label: '表头2',
+  //             align: 'center',
+  //             children: [
+  //               {
+  //                 columnId: 16,
+  //                 prop: '~',
+  //                 headerFlag: true,
+  //                 label: '表头3',
+  //                 align: 'center',
+  //                 children: []
+  //               }
+  //             ]
+  //           }
+  //         ]
+  //       }
+  //     ],
+  //     showButtonsColumn: false,
+  //     buttonsColumnFixed: 'right',
+  //     buttonsColumnTitle: '操作',
+  //     buttonsColumnWidth: 120,
+  //     operationButtons: [
+  //       {
+  //         name: 'detail',
+  //         label: '详情',
+  //         type: 'text',
+  //         size: 'small',
+  //         round: false,
+  //         hidden: true,
+  //         disabled: false
+  //       },
+  //       {
+  //         name: 'edit',
+  //         label: '编辑',
+  //         type: 'text',
+  //         size: 'small',
+  //         round: false,
+  //         hidden: false,
+  //         disabled: false
+  //       },
+  //       {
+  //         name: 'delete',
+  //         label: '删除',
+  //         type: 'text',
+  //         size: 'small',
+  //         round: false,
+  //         hidden: false,
+  //         disabled: false
+  //       }
+  //     ],
+  //     pagination: {
+  //       currentPage: 1,
+  //       pageSizes: [10, 15, 20, 30, 50, 100, 200],
+  //       pageSize: 20,
+  //       total: 366
+  //     },
+  //     dsEnabled: false,
+  //     dsName: '',
+  //     dataSetName: '',
+  //     treeDataEnabled: false,
+  //     rowKey: 'id',
+  //     childrenKey: 'children',
+  //     tableData: [
+  //       {
+  //         date: '2016-05-02',
+  //         date2: '2016-05-02 23:12:12',
+  //         date3: '2016-05-02 9:11:12',
+  //         name: '小二',
+  //         f1: 10001000.2,
+  //         f2: 10001000.239567,
+  //         f3: 10001000.239567,
+  //         f4: 10001000.239567,
+  //         f5: 10001000.239567,
+  //         f6: 10001000.239567,
+  //         f7: 0.25,
+  //         add: '上海市普陀区金沙江路 1518 弄',
+  //         ss: 100
+  //       },
+  //       {
+  //         date: '2016-05-04',
+  //         date2: '2016-05-02 11:12:12',
+  //         date3: '2016-05-02 9:11:12',
+  //         name: '王小虎2',
+  //         f1: 10001000.23,
+  //         f2: 10001000.23,
+  //         f3: 10001000.239567,
+  //         f4: 10001000.239567,
+  //         f5: 10001000.239567,
+  //         f6: 10001000.239567,
+  //         f7: 0.256,
+  //         add: '上海市普陀区金沙江路 1518 弄',
+  //         ss: 100
+  //       },
+  //       {
+  //         date: '2016-05-01',
+  //         date2: '2016-05-02 12:12:12',
+  //         date3: '2016-05-02 9:11:12',
+  //         name: '王小虎3',
+  //         f1: 10001000.239,
+  //         f2: 10001000.239,
+  //         f3: 10001000.239567,
+  //         f4: 10001000.239567,
+  //         f5: 10001000.239567,
+  //         f6: 10001000.239567,
+  //         f7: 0.2569,
+  //         add: '上海市普陀区金沙江路 1518 弄',
+  //         ss: 100
+  //       },
+  //       {
+  //         date: '2016-05-03',
+  //         date2: '2016-05-02 12:12:12',
+  //         date3: '2016-05-02 9:11:12',
+  //         name: '王小虎4',
+  //         f1: 10001000.239567,
+  //         f2: 10001000.239567,
+  //         f3: 10001000.239567,
+  //         f4: 10001000.239567,
+  //         f5: 10001000.239567,
+  //         f6: 10001000.239567,
+  //         f7: 1.9527102,
+  //         add: '上海市普陀区金沙江路 1518 弄',
+  //         ss: 100
+  //       }
+  //     ],
+  //     onCreated: '',
+  //     onMounted: '',
+  //     onPageSizeChange: '',
+  //     onCurrentPageChange: '',
+  //     onSortChange: '',
+  //     onSelectionChange: '',
+  //     onHideOperationButton: '',
+  //     onDisableOperationButton: '',
+  //     onGetOperationButtonLabel: '',
+  //     onOperationButtonClick: '',
+  //     onHeaderClick: '',
+  //     onRowClick: '',
+  //     onRowDoubleClick: '',
+  //     onCellClick: '',
+  //     onCellDoubleClick: '',
+  //     onGetRowClassName: '',
+  //     onGetSpanMethod: ''
+  //   }
+  // },
   {
     type: 'tree',
     icon: 'tree',
@@ -570,51 +570,51 @@ export const containers = [
       ]
     }
   },
-  {
-    type: 'button-group',
-    icon: 'button-group',
-    category: 'container',
-    widgetList: [],
-    options: {
-      name: '',
-      size: 'default',
-      hidden: false,
-      disabled: false,
-      customClass: '',
-      buttons: [
-        {
-          name: 'detail',
-          label: '详情',
-          icon: '',
-          type: '',
-          round: false,
-          hidden: true,
-          disabled: false
-        },
-        {
-          name: 'edit',
-          label: '编辑',
-          icon: '',
-          type: '',
-          round: false,
-          hidden: false,
-          disabled: false
-        },
-        {
-          name: 'delete',
-          label: '删除',
-          icon: '',
-          type: '',
-          round: false,
-          hidden: false,
-          disabled: false
-        }
-      ],
-      onCreated: '',
-      onMounted: '',
-      onButtonGroupClick: ''
-    }
-  },
+  // {
+  //   type: 'button-group',
+  //   icon: 'button-group',
+  //   category: 'container',
+  //   widgetList: [],
+  //   options: {
+  //     name: '',
+  //     size: 'default',
+  //     hidden: false,
+  //     disabled: false,
+  //     customClass: '',
+  //     buttons: [
+  //       {
+  //         name: 'detail',
+  //         label: '详情',
+  //         icon: '',
+  //         type: '',
+  //         round: false,
+  //         hidden: true,
+  //         disabled: false
+  //       },
+  //       {
+  //         name: 'edit',
+  //         label: '编辑',
+  //         icon: '',
+  //         type: '',
+  //         round: false,
+  //         hidden: false,
+  //         disabled: false
+  //       },
+  //       {
+  //         name: 'delete',
+  //         label: '删除',
+  //         icon: '',
+  //         type: '',
+  //         round: false,
+  //         hidden: false,
+  //         disabled: false
+  //       }
+  //     ],
+  //     onCreated: '',
+  //     onMounted: '',
+  //     onButtonGroupClick: ''
+  //   }
+  // },
   {
     type: 'object-group',
     category: 'container',

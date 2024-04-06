@@ -47,7 +47,21 @@ export default defineConfig({
         /* 自动引入全局scss文件 */
         additionalData: '@import "./src/styles/global.scss";'
       }
-    }
+    },
+    postcss: {
+      plugins: [
+        {
+          postcssPlugin: "internal:charset-removal",
+          AtRule: {
+            charset: (atRule) => {
+              if (atRule.name === "charset") {
+                atRule.remove();
+              }
+            },
+          },
+        },
+      ],
+    },
   },
 
   build: {
@@ -55,7 +69,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'install.js'),
       name: 'VFormDesigner',
-      fileName: (format) => `designer.${format}.js`
+      fileName: (format) => `designer.${format}.js`,
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖

@@ -44,7 +44,10 @@ export default {
         fieldKeyName() {
             let e = this.field.options.name;
             return this.field.options.keyNameEnabled && this.field.options.keyName || e
-        }
+        },
+        widgetSize() {
+            return this.field.options.size || 'default'
+        },
     },
     methods: {
         findInArray(e, o) {
