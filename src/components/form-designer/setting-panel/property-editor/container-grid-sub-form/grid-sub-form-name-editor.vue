@@ -62,8 +62,8 @@ export default {
     return {
       nameRequiredRule: [
         {
-          required: true,
-          message: 'name required'
+          // required: true,
+          // message: 'name required'
         }
       ]
     }

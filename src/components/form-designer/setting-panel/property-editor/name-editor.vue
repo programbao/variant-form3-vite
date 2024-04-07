@@ -38,8 +38,8 @@
     data() {
         return {
             nameRequiredRule: [{
-                required: !0,
-                message: "name required"
+                // required: true,
+                // message: "name required"
             }]
         }
     },
