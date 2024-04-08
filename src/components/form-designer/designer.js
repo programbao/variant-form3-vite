@@ -6,7 +6,7 @@
  * remark: 如果要分发VForm源码，需在本文件顶部保留此文件头信息！！
  */
 
-import {deepClone, generateId, getDefaultFormConfig, overwriteObj} from "@/utils/util"
+import {deepClone, generateId, getDefaultFormConfig, overwriteObj, getQueryString} from "@/utils/util"
 import {containers, advancedFields, basicFields, customFields} from "@/components/form-designer/widget-panel/widgetsConfig.js"
 import {VARIANT_FORM_VERSION} from "@/utils/config"
 import eventBus from "@/utils/event-bus"
@@ -948,7 +948,7 @@ export function createDesigner(vueInstance) {
       this.historyData.steps[this.historyData.index] = ({
         widgetList: deepClone(this.widgetList),
         formConfig: deepClone(this.formConfig)
-      })
+      });
     },
 
     emitHistoryChange() {
@@ -1006,16 +1006,18 @@ export function createDesigner(vueInstance) {
     },
 
     saveFormContentToStorage() {
-      window.localStorage.setItem('widget__list__backup', JSON.stringify(this.widgetList))
-      window.localStorage.setItem('form__config__backup', JSON.stringify(this.formConfig))
+      const identifiyId = getQueryString('id');
+      window.localStorage.setItem(`widget__list__backup${identifiyId ? '_' + identifiyId : ''}`, JSON.stringify(this.widgetList))
+      window.localStorage.setItem(`form__config__backup${identifiyId ? '_' + identifiyId : ''}`, JSON.stringify(this.formConfig))
     },
 
     loadFormContentFromStorage() {
-      let widgetListBackup = window.localStorage.getItem('widget__list__backup')
+      const identifiyId = getQueryString('id');
+      let widgetListBackup = window.localStorage.getItem(`widget__list__backup${identifiyId ? '_' + identifiyId : ''}`)
       if (!!widgetListBackup) {
         this.widgetList = JSON.parse(widgetListBackup)
       }
-      let formConfigBackup = window.localStorage.getItem('form__config__backup')
+      let formConfigBackup = window.localStorage.getItem(`form__config__backup${identifiyId ? '_' + identifiyId : ''}`)
       if (!!formConfigBackup) {
         //this.formConfig = JSON.parse(formConfigBackup)
         overwriteObj(this.formConfig, JSON.parse(formConfigBackup))  /* 用=赋值，会导致inject依赖注入的formConfig属性变成非响应式 */

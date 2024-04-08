@@ -1123,7 +1123,7 @@ input[type="password"]::-ms-reveal {
             background: #fff;
             z-index: 8;
             padding-top: 16px;
-
+            box-sizing: content-box;
             i {
                 font-size: 18px;
                 color: #909399;

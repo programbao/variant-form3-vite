@@ -607,3 +607,13 @@ export function getDSByName(e, o) {
   t || console.error("DS not found: " + o),
   t
 }
+
+export function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var param = '?' + window.location.href.split('?')[1];
+    var r = param.substr(1).match(reg);
+    if (r !== null) {
+      return decodeURI(r[2]);
+    }
+    return null;
+  }

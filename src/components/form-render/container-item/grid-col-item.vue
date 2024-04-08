@@ -47,8 +47,6 @@
           :sub-form-row-id="subFormRowId"
           :sub-form-row-index="subFormRowIndex"
           :sub-form-col-index="subFormColIndex"
-          v-bind="$attrs"
-          v-on="$listeners"
         >
           <template v-for="(_, slot) in $slots" :key="slot" v-slot:[slot]="scope">
             <slot :name="slot" v-bind="scope" />
@@ -65,8 +63,6 @@
           :sub-form-row-id="subFormRowId"
           :sub-form-row-index="subFormRowIndex"
           :sub-form-col-index="subFormColIndex"
-          v-bind="$attrs"
-          v-on="$listeners"
         >
           <template v-for="(_, slot) in $slots" :key="slot" v-slot:[slot]="scope">
             <slot :name="slot" v-bind="scope" />
