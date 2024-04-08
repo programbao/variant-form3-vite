@@ -1054,7 +1054,7 @@ input[type="password"]::-ms-reveal {
 
         .el-aside.side-panel,
         .el-main.form-widget-main :deep(.el-scrollbar) .el-scrollbar__view {
-            height: 102%;
+            height: 100%;
         }
         .el-aside.side-panel {
             height: 98%;
@@ -1062,9 +1062,9 @@ input[type="password"]::-ms-reveal {
 
         .el-main.form-widget-main {
             .form-widget-container {
-                overflow-y: hidden;
-                height: 100%;
-                box-sizing: border-box;
+                overflow-y: auto;
+                // height: 100%;
+                // box-sizing: border-box;
 
                 .el-form.full-height-width {
                     box-sizing: border-box;
@@ -1152,7 +1152,7 @@ input[type="password"]::-ms-reveal {
             z-index: 8;
             padding-top: 16px;
             padding-right: -5px !important;
-
+            box-sizing: content-box;
             i {
                 font-size: 18px;
                 color: #909399;

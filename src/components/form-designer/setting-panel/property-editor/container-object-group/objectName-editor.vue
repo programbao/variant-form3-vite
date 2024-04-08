@@ -1,7 +1,6 @@
 <template>
   <el-form-item
     prop="objectName"
-    :rules="objectNameRequiredRule"
   >
     <template #label>
       <span

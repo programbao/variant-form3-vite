@@ -1,7 +1,6 @@
 <template>
   <el-form-item
     prop="name"
-    :rules="nameRequiredRule"
   >
     <template #label>
       <span>{{ i18nt('designer.setting.uniqueName') }}</span>
@@ -60,12 +59,6 @@ export default {
   inject: ['getServerSubFormList', 'getDesignerConfig'],
   data() {
     return {
-      nameRequiredRule: [
-        {
-          required: true,
-          message: 'name required'
-        }
-      ]
     }
   },
   computed: {

@@ -1,5 +1,5 @@
 <template>
-  <el-form-item prop="name" :rules="nameRequiredRule">
+  <el-form-item prop="name">
     <template #label>
       <span>{{i18nt('designer.setting.uniqueName')}}
         <el-tooltip effect="light" :content="i18nt('designer.setting.editNameHelp')">
@@ -37,10 +37,6 @@
     inject: ["getServerFieldList", "getDesignerConfig"],
     data() {
         return {
-            nameRequiredRule: [{
-                // required: true,
-                // message: "name required"
-            }]
         }
     },
     computed: {
