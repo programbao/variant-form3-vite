@@ -4,7 +4,7 @@
       v-if="formConfig.dataSources && formConfig.dataSources.length > 0"
       v-for="(dataSource, index) in formConfig.dataSources"
       :key="index"
-      column="1"
+      :column="1"
       size="small"
       border=""
     >
@@ -419,7 +419,7 @@
           ></el-alert>
           <code-editor
             mode="javascript"
-            readonly="false"
+            :readonly="false"
             v-model="dsModel.configHandlerCode"
             ref="chEditor"
           ></code-editor>
@@ -440,7 +440,7 @@
           ></el-alert>
           <code-editor
             mode="javascript"
-            readonly="false"
+            :readonly="false"
             v-model="dsModel.dataHandlerCode"
             ref="dhEditor"
           ></code-editor>
@@ -461,7 +461,7 @@
           ></el-alert>
           <code-editor
             mode="javascript"
-            readonly="false"
+            :readonly="false"
             v-model="dsModel.errorHandlerCode"
             ref="ehEditor"
           ></code-editor>
@@ -586,7 +586,7 @@
       ></el-alert>
       <code-editor
         mode="json"
-        readonly="false"
+        :readonly="false"
         v-model="dsvJson"
         class="dsv-json-editor"
       ></code-editor>
@@ -613,7 +613,7 @@
       ></el-alert>
       <code-editor
         mode="json"
-        readonly="true"
+        :readonly="true"
         v-model="dsResultJson"
         ref="dsResultEditor"
       ></code-editor>
@@ -644,7 +644,7 @@
       ></el-alert>
       <code-editor
         mode="json"
-        readonly="false"
+        :readonly="false"
         v-model="importDSTemplate"
       ></code-editor>
       <el-switch
@@ -700,7 +700,7 @@
             <el-descriptions
               v-for="(dataSource, index) in exportDSArray"
               :key="index"
-              column="1"
+              :column="1"
               size="small"
               border=""
             >

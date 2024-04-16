@@ -64,6 +64,7 @@
 
 <script>
   import i18n from "@/utils/i18n"
+  import {deepClone} from "@/utils/util";
 
   export default {
     name: "tree-customClass-editor",

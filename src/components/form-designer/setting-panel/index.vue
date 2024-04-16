@@ -286,14 +286,14 @@
         show-close
         class="drag-dialog small-padding-dialog"
         append-to-body
-        close-on-click-modal="false"
-        close-on-press-escape="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
         destroy-on-close
       >
         <el-alert
           type="info"
           :title="eventHeader"
-          closable="false"
+          :closable="false"
         ></el-alert>
         <code-editor
           mode="javascript"
@@ -304,7 +304,7 @@
         <el-alert
           type="info"
           :title="'}'"
-          closable="false"
+          :closable="false"
         ></el-alert>
         <template #footer>
           <div class="dialog-footer">

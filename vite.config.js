@@ -30,7 +30,15 @@ export default defineConfig({
     }),
 
   ],
-
+  server: {
+    proxy: {
+      '/security': {
+        target: 'http://192.168.91.50:10101',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/security/, ''),
+      }
+    }
+  },
   resolve: {
     alias: {
         "@": resolve(__dirname, 'src'), // 路径别名

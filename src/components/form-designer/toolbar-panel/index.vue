@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div v-if="showPreviewDialogFlag" class="" v-drag="['.drag-dialog.el-dialog', '.drag-dialog .el-dialog__header']">
+    <div v-if="showPreviewDialogFlag" class="">
       <el-dialog :title="i18nt('designer.toolbar.preview')" v-model="showPreviewDialogFlag"
                  :show-close="true" :close-on-click-modal="false" :close-on-press-escape="false" center
                  :destroy-on-close="true" :append-to-body="true" class="drag-dialog small-padding-dialog" width="75%"
