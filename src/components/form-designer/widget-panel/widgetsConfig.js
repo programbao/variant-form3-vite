@@ -1438,7 +1438,7 @@ export const advancedFields = [
       showFileList: true,
       limit: 3,
       fileMaxSize: 5,
-      fileTypes: ['doc', 'docx', 'xls', 'xlsx'],
+      fileTypes: ['doc', 'docx', 'xls', 'xlsx', 'pdf'],
       customClass: '',
       labelIconClass: null,
       labelIconPosition: 'rear',
