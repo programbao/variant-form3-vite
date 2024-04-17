@@ -62,7 +62,7 @@ export default {
       },
       globalDsv: {
         testApiHost: 'http://www.test.com/api',
-        token: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2tleSI6ImE3MDUxNGNjLTgwZjktNGUwZS1iMmUzLTE3YWJlNTg1Mzc5MCIsInVzZXJuYW1lIjoiaXdpcCJ9.FJtuiVYRJ9DSkZLvxAQWlUe-NuZaAHhZlq9XsmCVRvdJ-C74rNRrsqpp7UNExMO-zszkwgjv0OP0Njz-SJp2RA`
+        token: ``
       }
     }
   },
