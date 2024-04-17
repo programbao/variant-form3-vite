@@ -62,7 +62,7 @@ export default {
       },
       globalDsv: {
         testApiHost: 'http://www.test.com/api',
-        token: ``
+        token: `111`
       }
     }
   },
