@@ -129,6 +129,7 @@ export default {
 <style lang="scss" scoped>
 .object-group-container {
   border: 2px dashed #cccccc;
+  padding: 10px;
 }
 
 .object-group-container.selected {

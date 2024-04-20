@@ -46,7 +46,7 @@
     <div v-if="showPreviewDialogFlag" class="">
       <el-dialog :title="i18nt('designer.toolbar.preview')" v-model="showPreviewDialogFlag"
                  :show-close="true" :close-on-click-modal="false" :close-on-press-escape="false" center
-                 :destroy-on-close="true" :append-to-body="true" class="drag-dialog small-padding-dialog" width="75%"
+                 :destroy-on-close="true" :append-to-body="true" class="drag-dialog small-padding-dialog" width="85%" top="2vh"
                  :fullscreen="(layoutType === 'H5') || (layoutType === 'Pad')">
         <div>
           <div class="form-render-wrapper" :class="[layoutType === 'H5' ? 'h5-layout' : (layoutType === 'Pad' ? 'pad-layout' : '')]">
@@ -775,25 +775,7 @@
     margin-right: 3px;
   }
 
-  .small-padding-dialog {
-    :deep(.el-dialog__header) {
-      //padding-top: 3px;
-      //padding-bottom: 3px;
-      background: #f1f2f3;
-    }
-
-    :deep(.el-dialog__body) {
-      padding: 12px 15px 12px 15px;
-
-      .el-alert.alert-padding {
-        padding: 0 10px;
-      }
-    }
-
-    :deep(.ace-container) {
-      border: 1px solid #DCDFE6;
-    }
-  }
+  
 
   .dialog-title-light-bg {
     :deep(.el-dialog__header) {
@@ -935,4 +917,30 @@
     }
 
   }
+</style>
+<style lang="scss">
+.small-padding-dialog {
+  .el-dialog__header {
+    background: #f1f2f3;
+    padding: 10px;
+    padding-right: 30px;
+    .el-dialog__headerbtn {
+      top: 15px;
+    right: 17px;
+    }
+  }
+
+  .el-dialog__body {
+    padding: 12px 15px 12px 15px;
+    max-height: 80vh;
+    overflow-y: auto;
+    .el-alert.alert-padding {
+      padding: 0 10px;
+    }
+  }
+
+  .ace-container {
+    border: 1px solid #DCDFE6;
+  }
+}
 </style>
