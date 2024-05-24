@@ -1013,11 +1013,12 @@ export function createDesigner(vueInstance) {
 
     loadFormContentFromStorage() {
       const identifiyId = getQueryString('id');
-      let widgetListBackup = window.localStorage.getItem(`widget__list__backup${identifiyId ? '_' + identifiyId : ''}`)
+      const typePlatform = getQueryString('type');
+      let widgetListBackup = window.localStorage.getItem(`widget__list__backup${identifiyId ? '_' + identifiyId : ''}${typePlatform ? '_' + typePlatform : ''}`)
       if (!!widgetListBackup) {
         this.widgetList = JSON.parse(widgetListBackup)
       }
-      let formConfigBackup = window.localStorage.getItem(`form__config__backup${identifiyId ? '_' + identifiyId : ''}`)
+      let formConfigBackup = window.localStorage.getItem(`form__config__backup${identifiyId ? '_' + identifiyId : ''}${typePlatform ? '_' + typePlatform : ''}`)
       if (!!formConfigBackup) {
         //this.formConfig = JSON.parse(formConfigBackup)
         overwriteObj(this.formConfig, JSON.parse(formConfigBackup))  /* 用=赋值，会导致inject依赖注入的formConfig属性变成非响应式 */
